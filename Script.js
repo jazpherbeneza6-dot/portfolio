@@ -15,7 +15,7 @@ function smoothScrollTo(targetId) {
 
     const timeElapsed = currentTime - startTime;
     const t = Math.min(timeElapsed / duration, 1);
-
+    
     const ease = t < 0.5
       ? 4 * t * t * t
       : 1 - Math.pow(-2 * t + 2, 3) / 2;

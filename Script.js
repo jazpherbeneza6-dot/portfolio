@@ -2,17 +2,17 @@ function smoothScrollTo(targetId) {
   const target = document.querySelector(targetId);
   if (!target) return;
 
-  const headerOffset = 10; // ← UPDATED
+  const headerOffset = 10;
   const startPosition = window.scrollY;
   const targetPosition = target.offsetTop - headerOffset;
   const distance = targetPosition - startPosition;
 
-  const duration = 800; 
+  const duration = 800;
   let startTime = null;
 
   function animation(currentTime) {
     if (startTime === null) startTime = currentTime;
-    
+
     const timeElapsed = currentTime - startTime;
     const t = Math.min(timeElapsed / duration, 1);
 
@@ -30,11 +30,18 @@ function smoothScrollTo(targetId) {
   requestAnimationFrame(animation);
 }
 
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', function(e) {
-    const href = this.getAttribute('href');
+// SELECT BOTH NAV LINKS + GHOST BUTTONS
+const scrollLinks = [
+  ...document.querySelectorAll('.nav-links a'),
+  ...document.querySelectorAll('.ghost-btn'),
+  ...document.querySelectorAll('.hero-actions button'),
+];
 
-    if (href.startsWith('#')) {
+scrollLinks.forEach(link => {
+  link.addEventListener('click', function(e) {
+    const href = this.getAttribute('href') || this.dataset.target;
+
+    if (href && href.startsWith('#')) {
       e.preventDefault();
       smoothScrollTo(href);
     }

@@ -280,6 +280,8 @@
   // ─── SMOOTH SCROLL FOR ALL ANCHOR LINKS ───
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
+      // Skip the modal link so it can navigate to the real URL
+      if (this.id === 'modalLink') return;
       e.preventDefault();
       const target = document.querySelector(this.getAttribute('href'));
       if (target) {
@@ -307,4 +309,75 @@
       }, 500);
     });
   }
+
+  // ─── PROJECT DETAIL MODAL ───
+  const modal = document.getElementById('projectModal');
+  const modalImage = document.getElementById('modalImage');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalDescription = document.getElementById('modalDescription');
+  const modalLink = document.getElementById('modalLink');
+  const modalClose = document.getElementById('modalClose');
+
+  function openModal(card) {
+    const title = card.getAttribute('data-title');
+    const description = card.getAttribute('data-description');
+    const image = card.getAttribute('data-image');
+    const link = card.getAttribute('data-link');
+
+    modalTitle.textContent = title;
+    modalDescription.textContent = description;
+    modalImage.src = image;
+    modalImage.alt = title + ' preview';
+    modalLink.href = link;
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // Open modal from "View Project" button or card overlay click
+  document.querySelectorAll('.project-card').forEach(card => {
+    // Clicking the "View Project" button
+    const viewBtn = card.querySelector('.view-project-btn');
+    if (viewBtn) {
+      viewBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openModal(card);
+      });
+    }
+
+    // Clicking the overlay / thumbnail area
+    const thumb = card.querySelector('.project-thumb');
+    if (thumb) {
+      thumb.addEventListener('click', () => {
+        openModal(card);
+      });
+    }
+  });
+
+  // Close modal — X button
+  if (modalClose) {
+    modalClose.addEventListener('click', closeModal);
+  }
+
+  // Close modal — click outside
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+  }
+
+  // Close modal — Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
 })();

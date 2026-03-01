@@ -288,30 +288,6 @@
     });
   });
 
-  // ─── CONTACT FORM (simple handler) ───
-  const contactForm = document.getElementById('contactForm');
-  if (contactForm) {
-    contactForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const btn = this.querySelector('button[type="submit"]');
-      const originalHTML = btn.innerHTML;
-
-      btn.innerHTML = '<span>Message Sent! ✓</span>';
-      btn.style.background = 'linear-gradient(135deg, #22c55e, #15803d)';
-      btn.style.boxShadow = '0 8px 24px rgba(34, 197, 94, 0.4)';
-      btn.disabled = true;
-
-      setTimeout(() => {
-        btn.innerHTML = originalHTML;
-        btn.style.background = '';
-        btn.style.boxShadow = '';
-        btn.disabled = false;
-        contactForm.reset();
-      }, 2500);
-    });
-  }
-
   // ─── TILT EFFECT ON HERO IMAGE ───
   const heroImageWrapper = document.querySelector('.hero-image-wrapper');
   if (heroImageWrapper && window.matchMedia('(hover: hover)').matches) {

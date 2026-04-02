@@ -310,26 +310,76 @@
     });
   }
 
-  // ─── PROJECT DETAIL MODAL ───
+  // ─── PROJECT DETAIL MODAL + SLIDER ───
   const modal = document.getElementById('projectModal');
   const modalImage = document.getElementById('modalImage');
   const modalTitle = document.getElementById('modalTitle');
   const modalDescription = document.getElementById('modalDescription');
   const modalLink = document.getElementById('modalLink');
   const modalClose = document.getElementById('modalClose');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const sliderDots = document.getElementById('sliderDots');
+
+  let currentImages = [];
+  let currentImgIndex = 0;
+
+  function updateSlider() {
+    if (currentImages.length > 0) {
+      modalImage.src = currentImages[currentImgIndex];
+      // Update dots
+      const dots = sliderDots.querySelectorAll('.dot');
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentImgIndex);
+      });
+
+      // Show/hide buttons based on number of images
+      prevBtn.style.display = currentImages.length > 1 ? 'flex' : 'none';
+      nextBtn.style.display = currentImages.length > 1 ? 'flex' : 'none';
+    } else {
+      prevBtn.style.display = 'none';
+      nextBtn.style.display = 'none';
+      sliderDots.innerHTML = '';
+    }
+  }
 
   function openModal(card) {
     const title = card.getAttribute('data-title');
     const description = card.getAttribute('data-description');
-    const image = card.getAttribute('data-image');
+    const mainImage = card.getAttribute('data-image');
+    const extraImages = card.getAttribute('data-images');
     const link = card.getAttribute('data-link');
+
+    // Combine all images
+    currentImages = [];
+    if (mainImage) currentImages.push(mainImage);
+    if (extraImages) {
+      const additional = extraImages.split(',').map(img => img.trim());
+      currentImages = [...currentImages, ...additional];
+    }
+    
+    currentImgIndex = 0;
 
     modalTitle.textContent = title;
     modalDescription.textContent = description;
-    modalImage.src = image;
-    modalImage.alt = title + ' preview';
     modalLink.href = link;
 
+    // Create dots
+    sliderDots.innerHTML = '';
+    if (currentImages.length > 1) {
+      currentImages.forEach((_, idx) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (idx === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+          currentImgIndex = idx;
+          updateSlider();
+        });
+        sliderDots.appendChild(dot);
+      });
+    }
+
+    updateSlider();
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
@@ -337,6 +387,21 @@
   function closeModal() {
     modal.classList.remove('active');
     document.body.style.overflow = '';
+  }
+
+  // Slider controls
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      currentImgIndex = (currentImgIndex - 1 + currentImages.length) % currentImages.length;
+      updateSlider();
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      currentImgIndex = (currentImgIndex + 1) % currentImages.length;
+      updateSlider();
+    });
   }
 
   // Open modal from "View Project" button or card overlay click

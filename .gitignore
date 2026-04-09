@@ -35,3 +35,6 @@ yarn-error.log*
 # AI related folders
 .gemini/
 .agents/
+
+.vercel
+.env*.local

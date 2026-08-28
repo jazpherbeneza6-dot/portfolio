@@ -1071,11 +1071,38 @@ button {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  background: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
+  background: #080a10;
   border-radius: 10px;
   margin: 8px 0 16px 0;
-  border: 1px dashed rgba(245, 158, 11, 0.25);
+  border: 1px dashed rgba(245, 158, 11, 0.35);
   overflow: hidden;
+}
+
+/* Dock Background Flame Video */
+.dock-bg-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.85;
+  filter: contrast(1.15) brightness(0.9) saturate(1.1);
+}
+
+/* Dock Video Vignette Overlay for Clear Foreground Portrait Readability */
+.dock-video-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(8, 10, 16, 0.15) 0%, rgba(8, 10, 16, 0.6) 70%, rgba(6, 8, 14, 0.95) 100%),
+    linear-gradient(180deg, rgba(8, 10, 16, 0.25) 0%, transparent 40%, rgba(6, 8, 14, 0.85) 100%);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .dock-portrait-img {
@@ -1108,10 +1135,11 @@ button {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(245, 158, 11, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(245, 158, 11, 0.06) 1px, transparent 1px);
+    linear-gradient(rgba(245, 158, 11, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245, 158, 11, 0.08) 1px, transparent 1px);
   background-size: 24px 24px;
   pointer-events: none;
+  z-index: 2;
 }
 
 .dock-radar-ring {
@@ -1119,11 +1147,12 @@ button {
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  border: 1px solid rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.2);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
+  z-index: 2;
   animation: radarExpand 4s infinite linear;
 }
 

@@ -10,19 +10,19 @@
   // Pause heavy resources (video, CSS animations) when they leave the viewport
   if (typeof IntersectionObserver !== 'undefined') {
 
-    // 0A. Hero Background Video: pause when offscreen, resume when visible
-    const heroVideo = document.querySelector('.editorial-bg-video');
-    if (heroVideo) {
+    // 0A. Background Videos: pause when offscreen, resume when visible
+    const bgVideos = document.querySelectorAll('.editorial-bg-video, .dock-bg-video');
+    if (bgVideos.length > 0) {
       const videoObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            heroVideo.play().catch(() => {}); // resume playback
+            entry.target.play().catch(() => {}); // resume playback
           } else {
-            heroVideo.pause(); // stop decoding frames when hidden
+            entry.target.pause(); // stop decoding frames when hidden
           }
         });
       }, { threshold: 0.05 });
-      videoObserver.observe(heroVideo);
+      bgVideos.forEach(vid => videoObserver.observe(vid));
     }
 
     // 0B. Pause CSS animations on offscreen elements via .anim-paused class

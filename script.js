@@ -885,4 +885,256 @@
     requestAnimationFrame(animateThree);
   }
 
+  // ─── 16. LENIS SMOOTH INERTIA SCROLL & GSAP SCROLLTRIGGER CHOREOGRAPHY ───
+  let lenis = null;
+  if (typeof window.Lenis !== 'undefined') {
+    lenis = new window.Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      smoothTouch: false,
+      touchMultiplier: 1.5
+    });
+  }
+
+  if (typeof window.gsap !== 'undefined' && typeof window.ScrollTrigger !== 'undefined') {
+    const gsap = window.gsap;
+    const ScrollTrigger = window.ScrollTrigger;
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Sync Lenis directly with GSAP Ticker (Single unified RAF loop)
+    if (lenis) {
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+      gsap.ticker.lagSmoothing(0);
+    } else {
+      function defaultRaf(time) {
+        requestAnimationFrame(defaultRaf);
+      }
+      requestAnimationFrame(defaultRaf);
+    }
+
+    // Smooth Scroll for Navigation Anchor Links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href');
+        if (targetId && targetId !== '#' && !targetId.includes('Modal')) {
+          const targetEl = document.querySelector(targetId);
+          if (targetEl) {
+            e.preventDefault();
+            if (lenis) {
+              lenis.scrollTo(targetEl, { offset: -24, duration: 1.4 });
+            } else {
+              targetEl.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+        }
+      });
+    });
+
+    // ─── CINEMATIC GSAP SCROLLTRIGGER PORTRAIT CHOREOGRAPHY ───
+    const portraitActor = document.getElementById('cinematicPortraitActor') || document.getElementById('heroPortraitWrapper');
+    const dockTarget = document.getElementById('dockPortraitTarget');
+    const homeSection = document.getElementById('home');
+    const aboutSection = document.getElementById('about');
+    const pageWrapper = document.getElementById('mainPageWrapper') || document.body;
+
+    if (portraitActor && dockTarget && homeSection && aboutSection) {
+      // Set initial cinematic 3D perspective & coordinates
+      gsap.set(portraitActor, {
+        xPercent: -50,
+        yPercent: 0,
+        x: 0,
+        y: 0,
+        scale: 1,
+        rotationY: 0,
+        rotationZ: 0,
+        transformPerspective: 1200
+      });
+
+      const mm = gsap.matchMedia();
+
+      // Desktop & Tablet Landscape (>= 993px)
+      mm.add('(min-width: 993px)', () => {
+        function computeCinematicCoords() {
+          const actorBounds = portraitActor.getBoundingClientRect();
+          const dockBounds = dockTarget.getBoundingClientRect();
+          const portraitImg = document.getElementById('cinematicPortraitImg') || portraitActor.querySelector('img');
+
+          // 1. Calculate Horizontal Delta: exact alignment with dockTarget center
+          const actorCenterX = actorBounds.left + actorBounds.width / 2;
+          const dockCenterX = dockBounds.left + dockBounds.width / 2;
+          const deltaX = dockCenterX - actorCenterX;
+
+          // 2. Calculate Scale: scale the portrait to fit comfortably inside the dock stage
+          const imgHeight = portraitImg ? portraitImg.offsetHeight : 540;
+          const targetScale = Math.min(0.68, Math.max(0.52, (dockBounds.height * 0.96) / (imgHeight || 540)));
+
+          // 3. Calculate Vertical Delta: align bottom of scaled portrait with bottom of dockTarget
+          const pageWrapperTop = pageWrapper.getBoundingClientRect().top + window.scrollY;
+          const actorAbsoluteBottom = (actorBounds.bottom + window.scrollY) - pageWrapperTop;
+          const dockAbsoluteBottom = (dockBounds.bottom + window.scrollY) - pageWrapperTop;
+
+          // Shift up slightly from the dock bottom so it rests beautifully above the footer
+          const deltaY = (dockAbsoluteBottom - actorAbsoluteBottom) - 2;
+
+          return { deltaX, deltaY, targetScale };
+        }
+
+        let coords = computeCinematicCoords();
+
+        // Master Cinematic Scrub Timeline (Linked to Lenis & ScrollTrigger)
+        const scrollTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: homeSection,
+            start: 'top top',
+            endTrigger: aboutSection,
+            end: 'top 18%',
+            scrub: 1.25, // Cinematic inertia damping
+            invalidateOnRefresh: true,
+            onRefresh: () => {
+              coords = computeCinematicCoords();
+            }
+          }
+        });
+
+        // 1. Cinematic Parabolic Glide of Portrait with 3D Gyro Tilt
+        scrollTl.to(
+          portraitActor,
+          {
+            x: () => coords.deltaX,
+            y: () => coords.deltaY,
+            scale: () => coords.targetScale,
+            rotationY: -6,
+            rotationZ: -1.2,
+            filter: 'drop-shadow(0 25px 45px rgba(0,0,0,0.95)) drop-shadow(0 0 35px rgba(245,158,11,0.5))',
+            transformOrigin: 'bottom center',
+            ease: 'power2.inOut'
+          },
+          0
+        );
+
+        // Settle 3D tilt cleanly into the docked card
+        scrollTl.to(
+          portraitActor,
+          {
+            rotationY: 0,
+            rotationZ: 0,
+            ease: 'power1.out'
+          },
+          0.6
+        );
+
+        // 2. Parallax Cinematic Drift of Background Outline Typography
+        scrollTl.to(
+          '.editorial-bg-typography',
+          {
+            y: -180,
+            opacity: 0,
+            scale: 0.88,
+            ease: 'power2.inOut'
+          },
+          0
+        );
+
+        // 3. Fade Hero Action Buttons on Scroll-Down
+        scrollTl.to(
+          '.editorial-content-overlay',
+          {
+            opacity: 0,
+            y: -50,
+            ease: 'power1.inOut'
+          },
+          0
+        );
+
+        // 4. Illuminate the Left Dock Chassis Card
+        scrollTl.fromTo(
+          '#aboutPortraitDock',
+          {
+            borderTopColor: '#3e4657',
+            boxShadow: 'var(--chassis-bevel)'
+          },
+          {
+            borderTopColor: 'rgba(251, 191, 36, 0.9)',
+            boxShadow: '0 0 60px rgba(245, 158, 11, 0.38), var(--chassis-bevel)',
+            ease: 'power2.out'
+          },
+          0.35
+        );
+
+        // 5. Cinematic 3D Reveal of Bento Console Card
+        scrollTl.fromTo(
+          '#bentoConsoleCard',
+          {
+            y: 55,
+            opacity: 0.6,
+            rotateX: 6
+          },
+          {
+            y: 0,
+            opacity: 1,
+            rotateX: 0,
+            ease: 'power2.out'
+          },
+          0.2
+        );
+      });
+
+      // Mobile / Tablet Portrait (< 993px)
+      mm.add('(max-width: 992px)', () => {
+        gsap.set(portraitActor, {
+          xPercent: -50,
+          yPercent: 0,
+          x: 0,
+          y: 0,
+          scale: 1,
+          rotationY: 0,
+          rotationZ: 0
+        });
+      });
+    }
+  }
+
+  // ─── 17. BENTO CONSOLE TAB SWITCHER (WHO I AM <-> SKILLS) ───
+  const tabBtnWho = document.getElementById('tabBtnWho');
+  const tabBtnSkills = document.getElementById('tabBtnSkills');
+  const btnSwitchToSkills = document.getElementById('btnSwitchToSkills');
+  const btnSwitchToWho = document.getElementById('btnSwitchToWho');
+  const panelWho = document.getElementById('panelWho');
+  const panelSkills = document.getElementById('panelSkills');
+  const modeLabel = document.getElementById('consoleModeLabel');
+
+  function switchBentoTab(mode) {
+    if (mode === 'skills') {
+      if (tabBtnWho) tabBtnWho.classList.remove('active');
+      if (tabBtnSkills) tabBtnSkills.classList.add('active');
+      if (panelWho) panelWho.classList.remove('active');
+      if (panelSkills) panelSkills.classList.add('active');
+      if (modeLabel) modeLabel.textContent = 'SKILLS ACTIVE';
+
+      // Re-trigger animated skill bar widths
+      document.querySelectorAll('#panelSkills .skill-bar-fill').forEach((bar) => {
+        const prog = bar.getAttribute('data-progress') || '80';
+        bar.style.width = '0%';
+        setTimeout(() => {
+          bar.style.width = prog + '%';
+        }, 60);
+      });
+    } else {
+      if (tabBtnSkills) tabBtnSkills.classList.remove('active');
+      if (tabBtnWho) tabBtnWho.classList.add('active');
+      if (panelSkills) panelSkills.classList.remove('active');
+      if (panelWho) panelWho.classList.add('active');
+      if (modeLabel) modeLabel.textContent = 'BIO ACTIVE';
+    }
+  }
+
+  if (tabBtnWho) tabBtnWho.addEventListener('click', () => switchBentoTab('who'));
+  if (tabBtnSkills) tabBtnSkills.addEventListener('click', () => switchBentoTab('skills'));
+  if (btnSwitchToSkills) btnSwitchToSkills.addEventListener('click', () => switchBentoTab('skills'));
+  if (btnSwitchToWho) btnSwitchToWho.addEventListener('click', () => switchBentoTab('who'));
+
 })();

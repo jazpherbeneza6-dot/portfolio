@@ -1,519 +1,888 @@
-/* ============================================
-   JAZZ DEV PORTFOLIO — INTERACTIVE SCRIPTS
-   ============================================ */
+/* ==========================================================================
+   JAZPHER BENEZA — FUTURISTIC CYBER / SCI-FI HUD PORTFOLIO
+   Interactive Engine: Background Stars, 3D Tilt, UI Paradigm Playground & Modals
+   ========================================================================== */
 
 (function () {
   'use strict';
 
-  // ─── LOADING SCREEN HANDLER (THREE.JS + LOTTIE) ───
-  window.addEventListener('load', () => {
-    const loader = document.getElementById('loadingScreen');
-    const lottieContainer = document.getElementById('lottieLoader');
-    const threeCanvas = document.getElementById('loaderThreeCanvas');
+  // ─── 1. AMBIENT COSMIC BACKGROUND CANVAS ───
+  const canvas = document.getElementById('ambientCanvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
 
-    // 1. TECH SCANNER REMOVED (per user request)
-    const scannerContainer = document.getElementById('lottieLoader');
-    if (scannerContainer) {
-      scannerContainer.style.display = 'none';
+    const particles = [];
+    const particleCount = Math.min(80, Math.floor(width / 20));
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 1.6 + 0.4,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        color: Math.random() > 0.5 ? 'rgba(56, 189, 248, ' : 'rgba(192, 132, 252, ',
+        alpha: Math.random() * 0.7 + 0.2
+      });
     }
 
-    // 3. DOCTOR STRANGE PORTAL FIRE (Circular)
-    const fireContainer = document.getElementById('fireRingCanvas');
-    let fireParticles;
-    let fadeTriggered = false;
+    function renderCanvas() {
+      ctx.clearRect(0, 0, width, height);
 
-    if (fireContainer) {
-      const fireScene = new THREE.Scene();
-      const fireCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-      const fireRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      fireRenderer.setSize(400, 400);
-      fireContainer.appendChild(fireRenderer.domElement);
+      // Draw subtle connective cyber mesh
+      for (let i = 0; i < particles.length; i++) {
+        const p1 = particles[i];
+        p1.x += p1.vx;
+        p1.y += p1.vy;
 
-      const particleCount = 1800; // Even denser for portal look
-      const geometry = new THREE.BufferGeometry();
-      const positions = new Float32Array(particleCount * 3);
-      const colors = new Float32Array(particleCount * 3);
-      const initialAngles = new Float32Array(particleCount);
-      const radii = new Float32Array(particleCount);
+        if (p1.x < 0) p1.x = width;
+        if (p1.x > width) p1.x = 0;
+        if (p1.y < 0) p1.y = height;
+        if (p1.y > height) p1.y = 0;
 
-      for (let i = 0; i < particleCount; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const radius = 62 + (Math.random() - 0.5) * 15;
-        initialAngles[i] = angle;
-        radii[i] = radius;
-        positions[i * 3] = Math.cos(angle) * radius;
-        positions[i * 3 + 1] = Math.sin(angle) * radius;
-        positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+        ctx.beginPath();
+        ctx.arc(p1.x, p1.y, p1.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p1.color + p1.alpha + ')';
+        ctx.fill();
 
-        const r = 1;
-        const g = 0.2 + Math.random() * 0.4;
-        const b = 0.05;
-        colors[i * 3] = r; colors[i * 3 + 1] = g; colors[i * 3 + 2] = b;
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+          if (dist < 110) {
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(168, 85, 247, ${0.15 * (1 - dist / 110)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
       }
 
-      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-      const particleMat = new THREE.PointsMaterial({
-        size: 3,
-        vertexColors: true,
-        transparent: true,
-        blending: THREE.AdditiveBlending,
-        opacity: 0.95
-      });
-
-      fireParticles = new THREE.Points(geometry, particleMat);
-      fireScene.add(fireParticles);
-      fireCamera.position.z = 200;
-
-      let time = 0;
-      const animateFire = () => {
-        if (!fadeTriggered || loader.style.display !== 'none') {
-          requestAnimationFrame(animateFire);
-          time += 0.025;
-          const pos = geometry.attributes.position.array;
-          for (let i = 0; i < particleCount; i++) {
-            const idx = i * 3;
-            const currentAngle = initialAngles[i] + time;
-            const r = radii[i] + Math.sin(time * 3 + i) * 1.5;
-            pos[idx] = Math.cos(currentAngle) * r;
-            pos[idx + 1] = Math.sin(currentAngle) * r;
-          }
-          geometry.attributes.position.needsUpdate = true;
-          fireParticles.rotation.z += 0.005;
-          fireRenderer.render(fireScene, fireCamera);
-        }
-      };
-      animateFire();
-
-      // Netflix-style Portal Reveal Logic
-      window.addEventListener('revealHeroStart', () => {
-        fadeTriggered = true;
-
-        // 1. Extreme zoom-through of the fire ring
-        gsap.to(fireParticles.scale, {
-          x: 60, y: 60, z: 2,
-          duration: 0.8, // Faster for immediate cover
-          ease: "power2.in",
-          onComplete: () => {
-            revealHero(); // ONLY reveal home page AFTER ring is huge
-          }
-        });
-        gsap.to(fireParticles.position, {
-          z: 900,
-          duration: 0.8,
-          ease: "power2.in"
-        });
-
-        // 2. Logo Zoom & Fade
-        const logoWrapper = document.querySelector('.logo-wrapper');
-        if (logoWrapper) {
-          gsap.to(logoWrapper, {
-            scale: 15,
-            opacity: 0,
-            duration: 0.6,
-            ease: "power2.in"
-          });
-        }
-
-        // 3. Overall Fade
-        gsap.to(particleMat, { opacity: 0, duration: 0.4, delay: 0.4 });
-        gsap.to(fireContainer, { opacity: 0, duration: 0.8 });
-      });
+      requestAnimationFrame(renderCanvas);
     }
 
-    function triggerReveal() {
-      window.dispatchEvent(new Event('revealHeroStart'));
-      // revealHero() call removed from here
-    }
-
-    // 2. TIMED TRANSITION (3 Seconds)
-    setTimeout(() => {
-      if (loader) loader.classList.add('loader-loaded');
-      if (scannerContainer) gsap.to(scannerContainer, { opacity: 0, duration: 0.5 });
-      triggerReveal();
-      setTimeout(() => {
-        if (loader) loader.style.display = 'none';
-      }, 1500);
-    }, 3000);
+    renderCanvas();
 
     window.addEventListener('resize', () => {
-      // Background resize logic removed
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
     });
-  });
-
-  // ─── 3D SMOKE BACKGROUND (Three.js) ───
-  (function initSmoke() {
-    const container = document.getElementById('smoke-container');
-    if (!container) return;
-
-    let camera, scene, renderer, clock, delta;
-    let smokeParticles = [];
-    const loader = new THREE.TextureLoader();
-
-    function init() {
-      clock = new THREE.Clock();
-      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      container.appendChild(renderer.domElement);
-      scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-      camera.position.z = 1000;
-      scene.add(camera);
-
-      const light = new THREE.DirectionalLight(0xffffff, 0.5);
-      light.position.set(-1, 0, 1);
-      scene.add(light);
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
-      scene.add(ambientLight);
-
-      // --- EMBER PARTICLES ---
-      const emberCount = 100;
-      const emberGeo = new THREE.BufferGeometry();
-      const emberPos = new Float32Array(emberCount * 3);
-      for (let i = 0; i < emberCount * 3; i++) {
-        emberPos[i] = (Math.random() - 0.5) * 2000;
-      }
-      emberGeo.setAttribute('position', new THREE.BufferAttribute(emberPos, 3));
-      const emberMaterial = new THREE.PointsMaterial({
-        color: 0xff4d4d,
-        size: 3,
-        transparent: true,
-        blending: THREE.AdditiveBlending
-      });
-      const embers = new THREE.Points(emberGeo, emberMaterial);
-      scene.add(embers);
-
-      loader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/95637/Smoke-Element.png', (texture) => {
-        const smokeGeo = new THREE.PlaneGeometry(300, 300);
-        const smokeMaterial = new THREE.MeshLambertMaterial({
-          color: 0xff0000,
-          map: texture,
-          transparent: true,
-          opacity: 0.25,
-          blending: THREE.NormalBlending
-        });
-        for (let p = 0; p < 25; p++) {
-          const particle = new THREE.Mesh(smokeGeo, smokeMaterial);
-          particle.position.set(Math.random() * 1000 - 500, Math.random() * 1000 - 500, Math.random() * 1000 - 100);
-          particle.rotation.z = Math.random() * 360;
-          scene.add(particle);
-          smokeParticles.push(particle);
-        }
-      });
-      window.addEventListener('resize', onWindowResize, false);
-      animate();
-    }
-    function onWindowResize() {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-    function animate() {
-      delta = clock.getDelta();
-      requestAnimationFrame(animate);
-      evolveSmoke();
-      render();
-    }
-    function evolveSmoke() {
-      let sp = smokeParticles.length;
-      while (sp--) { smokeParticles[sp].rotation.z += (delta * 0.15); }
-    }
-    function render() { renderer.render(scene, camera); }
-    init();
-  })();
-
-  // ─── REVEAL HERO LOGIC ───
-  const heroTitleGroup = document.querySelector('.hero-title-group');
-
-  function revealHero() {
-    if (heroTitleGroup) {
-      const header = document.querySelector('.site-header');
-      if (header) header.classList.add('header-reveal');
-
-      heroTitleGroup.classList.add('title-fade-in');
-
-      // --- IMMEDIATE BLACK HOLE PORTRAIT EMERGENCE ---
-      const portraitWrapper = document.querySelector('.hero-portrait-wrapper');
-      if (portraitWrapper) {
-        gsap.fromTo(portraitWrapper,
-          { scale: 0, rotation: 720, filter: 'blur(30px)', opacity: 0, y: 50 },
-          { scale: 1, rotation: 0, filter: 'blur(0px)', opacity: 1, y: 0, duration: 1.2, ease: "power4.out" }
-        );
-      }
-
-      const jazzText = document.querySelector('.hero-text-left');
-      const devText = document.querySelector('.hero-text-right');
-
-      setTimeout(() => burstSparks(jazzText, 25), 50);
-      setTimeout(() => burstSparks(devText, 25), 100);
-
-      setTimeout(() => {
-        heroTitleGroup.classList.remove('title-fade-in');
-        heroTitleGroup.classList.add('glitch-active');
-      }, 1000);
-    }
   }
 
-  // ─── SPARK SYSTEM ───
-  const sparkCanvas = document.createElement('canvas');
-  sparkCanvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
-  document.body.appendChild(sparkCanvas);
-  const sparkCtx = sparkCanvas.getContext('2d');
-  let sparkParticles = [];
-  let sparkAnimating = false;
-  function resizeSparkCanvas() { sparkCanvas.width = window.innerWidth; sparkCanvas.height = window.innerHeight; }
-  resizeSparkCanvas();
-  window.addEventListener('resize', resizeSparkCanvas);
-
-  class Spark {
-    constructor(x, y) {
-      this.x = x; this.y = y;
-      const angle = Math.random() * Math.PI * 2;
-      const speed = 2 + Math.random() * 8;
-      this.vx = Math.cos(angle) * speed;
-      this.vy = Math.sin(angle) * speed - (2 + Math.random() * 4);
-      this.gravity = 0.15; this.friction = 0.98; this.life = 1.0;
-      this.decay = 0.01 + Math.random() * 0.02; this.size = 1 + Math.random() * 2;
-      this.trail = [];
-    }
-    update() {
-      this.trail.push({ x: this.x, y: this.y });
-      if (this.trail.length > 8) this.trail.shift();
-      this.vy += this.gravity; this.vx *= this.friction; this.vy *= this.friction;
-      this.x += this.vx; this.y += this.vy; this.life -= this.decay;
-    }
-    draw(ctx) {
-      if (this.life <= 0) return;
-      ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255,100,20,${this.life})`; ctx.fill();
-    }
-  }
-
-  function burstSparks(targetEl, count) {
-    if (!targetEl) return;
-    const rect = targetEl.getBoundingClientRect();
-    for (let i = 0; i < count; i++) {
-      sparkParticles.push(new Spark(rect.left + Math.random() * rect.width, rect.top + Math.random() * rect.height));
-    }
-    if (!sparkAnimating) { sparkAnimating = true; animateSparks(); }
-  }
-
-  function animateSparks() {
-    sparkCtx.clearRect(0, 0, sparkCanvas.width, sparkCanvas.height);
-    sparkParticles.forEach(p => p.update());
-    sparkParticles.forEach(p => p.draw(sparkCtx));
-    sparkParticles = sparkParticles.filter(p => p.life > 0);
-    if (sparkParticles.length > 0) requestAnimationFrame(animateSparks);
-    else sparkAnimating = false;
-  }
-
-  // ─── TILT EFFECT ───
-  const heroImageWrapper = document.querySelector('.hero-portrait-wrapper');
-  const hudRings = document.querySelectorAll('.hud-ring, .hud-orbit, .hud-crosshair, .hud-corner, .hud-data');
-  if (heroImageWrapper) {
-    heroImageWrapper.addEventListener('mousemove', e => {
-      const rect = heroImageWrapper.getBoundingClientRect();
+  // ─── 2. 3D SCI-FI TILT ON HERO HOLOGRAM CARD ───
+  const heroCard = document.getElementById('heroPortraitWrapper');
+  if (heroCard) {
+    heroCard.addEventListener('mousemove', (e) => {
+      const rect = heroCard.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
-      heroImageWrapper.style.transform = `perspective(1000px) rotateY(${x * 12}deg) rotateX(${-y * 12}deg)`;
-      hudRings.forEach((ring, i) => {
-        const depth = (i % 3 + 1) * 15;
-        ring.style.transform = ring.classList.contains('hud-ring') ? `translate(calc(-50% + ${x * depth}px), calc(-50% + ${y * depth}px))` : `translate(${x * depth}px, ${y * depth}px)`;
-      });
+
+      heroCard.style.transform = `perspective(1000px) rotateY(${x * 14}deg) rotateX(${-y * 14}deg) translateY(-4px)`;
     });
-    heroImageWrapper.addEventListener('mouseenter', () => heroImageWrapper.classList.add('hud-active'));
-    heroImageWrapper.addEventListener('mouseleave', () => {
-      heroImageWrapper.style.transform = '';
-      hudRings.forEach(ring => ring.style.transform = '');
-      heroImageWrapper.classList.remove('hud-active');
+
+    heroCard.addEventListener('mouseleave', () => {
+      heroCard.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+      heroCard.style.transition = 'transform 0.5s ease';
+    });
+
+    heroCard.addEventListener('mouseenter', () => {
+      heroCard.style.transition = 'none';
     });
   }
 
-  // ─── SKILLS MOUSE EFFECT ───
-  document.querySelectorAll('.skill-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
+  // ─── 2B. ANIMATED LIGHTNING SPARK BORDER ENGINE ───
+  const lightningCanvas = document.getElementById('lightningSparkCanvas');
+  if (lightningCanvas) {
+    const lCtx = lightningCanvas.getContext('2d');
+    let lWidth = (lightningCanvas.width = lightningCanvas.parentElement?.offsetWidth || 400);
+    let lHeight = (lightningCanvas.height = lightningCanvas.parentElement?.offsetHeight || 480);
+
+    const sparks = [];
+    let perimeterProgress = 0; // 0 to 1 along rectangle perimeter
+
+    function getPerimeterPoint(t, w, h, radius) {
+      const perim = 2 * (w + h);
+      const d = t * perim;
+
+      if (d < w) return { x: d, y: 0 };
+      if (d < w + h) return { x: w, y: d - w };
+      if (d < 2 * w + h) return { x: w - (d - (w + h)), y: h };
+      return { x: 0, y: h - (d - (2 * w + h)) };
+    }
+
+    function drawLightningSegment(p1, p2) {
+      // Pass 1: Outer ionized plasma corona (diffuse glow)
+      lCtx.beginPath();
+      lCtx.moveTo(p1.x, p1.y);
+      lCtx.lineTo(p2.x, p2.y);
+      lCtx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+      lCtx.lineWidth = 5;
+      lCtx.shadowColor = '#38bdf8';
+      lCtx.shadowBlur = 14;
+      lCtx.stroke();
+
+      // Pass 2: Electric cyan sheath
+      lCtx.beginPath();
+      lCtx.moveTo(p1.x, p1.y);
+      lCtx.lineTo(p2.x, p2.y);
+      lCtx.strokeStyle = '#22d3ee';
+      lCtx.lineWidth = 2.2;
+      lCtx.shadowColor = '#c084fc';
+      lCtx.shadowBlur = 6;
+      lCtx.stroke();
+
+      // Pass 3: Ultra-bright white hot core filament
+      lCtx.beginPath();
+      lCtx.moveTo(p1.x, p1.y);
+      lCtx.lineTo(p2.x, p2.y);
+      lCtx.strokeStyle = '#ffffff';
+      lCtx.lineWidth = 0.9;
+      lCtx.shadowBlur = 0;
+      lCtx.stroke();
+    }
+
+    function createLightningBolt(p1, p2, depth, maxOffset) {
+      if (depth === 0) {
+        drawLightningSegment(p1, p2);
+        return;
+      }
+
+      const midX = (p1.x + p2.x) / 2 + (Math.random() - 0.5) * maxOffset;
+      const midY = (p1.y + p2.y) / 2 + (Math.random() - 0.5) * maxOffset;
+      const mid = { x: midX, y: midY };
+
+      createLightningBolt(p1, mid, depth - 1, maxOffset / 1.8);
+      createLightningBolt(mid, p2, depth - 1, maxOffset / 1.8);
+
+      // Micro branch discharge
+      if (Math.random() < 0.3) {
+        const branchEnd = {
+          x: mid.x + (Math.random() - 0.5) * maxOffset * 1.6,
+          y: mid.y + (Math.random() - 0.5) * maxOffset * 1.6
+        };
+        createLightningBolt(mid, branchEnd, depth - 1, maxOffset / 2.2);
+      }
+    }
+
+    function spawnSparks(x, y, count) {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 3.5 + 1.2;
+        sparks.push({
+          x: x,
+          y: y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 0.5,
+          life: 1.0,
+          decay: Math.random() * 0.035 + 0.02,
+          size: Math.random() * 2.2 + 0.8,
+          color: Math.random() > 0.4 ? '#38bdf8' : (Math.random() > 0.5 ? '#ffffff' : '#c084fc')
+        });
+      }
+    }
+
+    function animateLightning() {
+      lCtx.clearRect(0, 0, lWidth, lHeight);
+
+      // 1. Advance perimeter spark head
+      perimeterProgress = (perimeterProgress + 0.006) % 1;
+      const head = getPerimeterPoint(perimeterProgress, lWidth, lHeight, 16);
+      const tail = getPerimeterPoint((perimeterProgress - 0.06 + 1) % 1, lWidth, lHeight, 16);
+
+      // 2. Draw intense traveling lightning bolt arc
+      createLightningBolt(tail, head, 3, 14);
+
+      // 3. Spawn spark particles at the lightning head
+      if (Math.random() < 0.7) {
+        spawnSparks(head.x, head.y, 2);
+      }
+
+      // 4. Random crackle arc jumps across corners
+      if (Math.random() < 0.15) {
+        const cornerIdx = Math.floor(Math.random() * 4);
+        const corners = [
+          { x: 4, y: 4 },
+          { x: lWidth - 4, y: 4 },
+          { x: lWidth - 4, y: lHeight - 4 },
+          { x: 4, y: lHeight - 4 }
+        ];
+        const c1 = corners[cornerIdx];
+        const c2 = {
+          x: c1.x + (Math.random() - 0.5) * 40,
+          y: c1.y + (Math.random() - 0.5) * 40
+        };
+        createLightningBolt(c1, c2, 2, 8);
+        spawnSparks(c1.x, c1.y, 3);
+      }
+
+      // 5. Update and render spark particles
+      for (let i = sparks.length - 1; i >= 0; i--) {
+        const s = sparks[i];
+        s.x += s.vx;
+        s.y += s.vy;
+        s.life -= s.decay;
+
+        if (s.life <= 0) {
+          sparks.splice(i, 1);
+          continue;
+        }
+
+        lCtx.beginPath();
+        lCtx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        lCtx.fillStyle = s.color;
+        lCtx.globalAlpha = s.life;
+        lCtx.shadowColor = s.color;
+        lCtx.shadowBlur = 6;
+        lCtx.fill();
+        lCtx.globalAlpha = 1;
+      }
+
+      requestAnimationFrame(animateLightning);
+    }
+
+    animateLightning();
+
+    window.addEventListener('resize', () => {
+      lWidth = lightningCanvas.width = lightningCanvas.parentElement?.offsetWidth || 400;
+      lHeight = lightningCanvas.height = lightningCanvas.parentElement?.offsetHeight || 480;
+    });
+  }
+
+  // ─── 3. SPATIAL UI PARALLAX WIDGET TILT ───
+  const spatialWidget = document.getElementById('spatialWidget');
+  if (spatialWidget) {
+    spatialWidget.addEventListener('mousemove', (e) => {
+      const rect = spatialWidget.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+      const midLayer = spatialWidget.querySelector('.layer-mid');
+      const frontLayer = spatialWidget.querySelector('.layer-front');
+
+      if (midLayer) midLayer.style.transform = `translateZ(30px) translate(${x * 15}px, ${y * 15}px)`;
+      if (frontLayer) frontLayer.style.transform = `translateZ(60px) translate(${x * 25}px, ${y * 25}px)`;
+    });
+
+    spatialWidget.addEventListener('mouseleave', () => {
+      const midLayer = spatialWidget.querySelector('.layer-mid');
+      const frontLayer = spatialWidget.querySelector('.layer-front');
+      if (midLayer) midLayer.style.transform = 'translateZ(25px) translate(0,0)';
+      if (frontLayer) frontLayer.style.transform = 'translateZ(50px) translate(0,0)';
+    });
+  }
+
+  // ─── 4. UI PARADIGMS TABS SWITCHER ───
+  const paradigmPills = document.querySelectorAll('.paradigm-pill');
+  const demoCards = document.querySelectorAll('.paradigm-demo-card');
+
+  paradigmPills.forEach((pill) => {
+    pill.addEventListener('click', () => {
+      paradigmPills.forEach((p) => p.classList.remove('active'));
+      pill.classList.add('active');
+
+      const styleKey = pill.getAttribute('data-style');
+      demoCards.forEach((card) => {
+        card.classList.remove('active');
+        if (card.id === `demo-${styleKey}`) {
+          card.classList.add('active');
+        }
+      });
     });
   });
 
-  // ─── HEADER SCROLL EFFECT ───
-  const header = document.getElementById('siteHeader');
-  const backToTop = document.getElementById('backToTop');
+  // ─── 5. NEOMORPHISM TOGGLE SWITCH ───
+  const neoToggleBtn = document.getElementById('neoToggleBtn');
+  if (neoToggleBtn) {
+    let isNeoActive = true;
+    neoToggleBtn.addEventListener('click', () => {
+      isNeoActive = !isNeoActive;
+      const thumb = neoToggleBtn.querySelector('.neo-toggle-thumb');
+      if (thumb) {
+        thumb.style.transform = isNeoActive ? 'translateX(26px)' : 'translateX(0px)';
+        thumb.style.background = isNeoActive ? '#38bdf8' : '#64748b';
+      }
+    });
+  }
 
-  function onScroll() {
-    const scrollY = window.scrollY;
-    if (backToTop) {
-      backToTop.classList.toggle('visible', scrollY > 400);
+  // ─── 6. SKEUOMORPHISM ROTARY KNOB & SWITCH ───
+  const skeuoKnob = document.querySelector('.skeuo-rotary-knob');
+  if (skeuoKnob) {
+    let angle = 0;
+    skeuoKnob.addEventListener('click', () => {
+      angle = (angle + 45) % 360;
+      skeuoKnob.style.transform = `rotate(${angle}deg)`;
+      skeuoKnob.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    });
+  }
+
+  // ─── 7. PROJECT DETAIL MODAL HANDLER ───
+  const projectModal = document.getElementById('projectDetailModal');
+  const modalHeroImg = document.getElementById('modalHeroImg');
+  const modalBadge = document.getElementById('modalBadge');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalDescription = document.getElementById('modalDescription');
+  const modalLiveDemoBtn = document.getElementById('modalLiveDemoBtn');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const modalCloseActionBtn = document.getElementById('modalCloseActionBtn');
+
+  function openProjectModal(data) {
+    if (!projectModal) return;
+    if (modalHeroImg) modalHeroImg.src = data.image || 'public/image/d.png';
+    if (modalBadge) modalBadge.textContent = data.badge || 'PROJECT';
+    if (modalTitle) modalTitle.textContent = data.title || 'Project Showcase';
+    if (modalDescription) modalDescription.textContent = data.description || '';
+    if (modalLiveDemoBtn) modalLiveDemoBtn.href = data.link || '#';
+
+    projectModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeAllModals() {
+    document.querySelectorAll('.interactive-modal-overlay').forEach((m) => m.classList.remove('active'));
+    document.body.style.overflow = '';
+  }
+
+  if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeAllModals);
+  if (modalCloseActionBtn) modalCloseActionBtn.addEventListener('click', closeAllModals);
+
+  // Attach to project showcase cards
+  document.querySelectorAll('.project-showcase-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      openProjectModal({
+        title: card.getAttribute('data-title'),
+        badge: card.getAttribute('data-badge'),
+        description: card.getAttribute('data-description'),
+        image: card.getAttribute('data-image'),
+        link: card.getAttribute('data-link')
+      });
+    });
+  });
+
+  // Attach to more projects items
+  document.querySelectorAll('.more-project-item').forEach((item) => {
+    item.addEventListener('click', () => {
+      openProjectModal({
+        title: item.getAttribute('data-title'),
+        badge: 'PRODUCTION SYSTEM',
+        description: item.getAttribute('data-description'),
+        image: item.getAttribute('data-image'),
+        link: item.getAttribute('data-link')
+      });
+    });
+  });
+
+  // ─── 8. CONTACT MODAL & FORM DISPATCH ───
+  const contactModal = document.getElementById('contactFormModal');
+  const openContactBtn = document.getElementById('openContactModalBtn');
+  const contactModalCloseBtn = document.getElementById('contactModalCloseBtn');
+  const contactQuickForm = document.getElementById('contactQuickForm');
+  const formSuccessToast = document.getElementById('formSuccessToast');
+
+  if (openContactBtn && contactModal) {
+    openContactBtn.addEventListener('click', () => {
+      contactModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  }
+
+  if (contactModalCloseBtn) {
+    contactModalCloseBtn.addEventListener('click', closeAllModals);
+  }
+
+  if (contactQuickForm) {
+    contactQuickForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const senderName = document.getElementById('senderName')?.value;
+      if (formSuccessToast) {
+        formSuccessToast.style.display = 'block';
+        formSuccessToast.textContent = `Thank you ${senderName || ''}! Your message has been dispatched.`;
+      }
+      setTimeout(() => {
+        closeAllModals();
+        contactQuickForm.reset();
+        if (formSuccessToast) formSuccessToast.style.display = 'none';
+      }, 2000);
+    });
+  }
+
+  // ─── 9. ABOUT EXPANDED MODAL ───
+  const aboutModal = document.getElementById('aboutExpandedModal');
+  const openAboutBtn = document.getElementById('openAboutModalBtn');
+  const aboutModalCloseBtn = document.getElementById('aboutModalCloseBtn');
+
+  if (openAboutBtn && aboutModal) {
+    openAboutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      aboutModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  }
+
+  if (aboutModalCloseBtn) {
+    aboutModalCloseBtn.addEventListener('click', closeAllModals);
+  }
+
+  // Close modals on overlay background click
+  document.querySelectorAll('.interactive-modal-overlay').forEach((overlay) => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        closeAllModals();
+      }
+    });
+  });
+
+  // ─── 10. DOWNLOAD CV NOTIFICATION / TRIGGER ───
+  const downloadCvBtn = document.getElementById('downloadCvBtn');
+  if (downloadCvBtn) {
+    downloadCvBtn.addEventListener('click', (e) => {
+      // If contact modal exists, offer quick contact or download
+      if (contactModal) {
+        e.preventDefault();
+        contactModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+  }
+
+  // ─── 11. ACTIVE NAV SPY (FLOATING DOCK & LINKS) ───
+  const sections = document.querySelectorAll('section[id]');
+  const dockIconLinks = document.querySelectorAll('.dock-icon-link');
+
+  function updateNavSpy() {
+    const scrollPos = window.scrollY + 240;
+
+    sections.forEach((section) => {
+      const top = section.offsetTop;
+      const height = section.offsetHeight;
+      const id = section.getAttribute('id');
+
+      if (scrollPos >= top && scrollPos < top + height) {
+        dockIconLinks.forEach((link) => {
+          link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+        });
+      }
+    });
+
+    // Back to top button visibility
+    const backToTopBtn = document.getElementById('backToTopBtn');
+    if (backToTopBtn) {
+      backToTopBtn.classList.toggle('visible', window.scrollY > 400);
     }
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  window.addEventListener('scroll', updateNavSpy, { passive: true });
+  updateNavSpy();
 
-  // ─── BACK TO TOP ───
-  if (backToTop) {
-    backToTop.addEventListener('click', () => {
+  // ─── 12. FLOATING BACK TO TOP ───
+  const backToTopBtn = document.getElementById('backToTopBtn');
+  if (backToTopBtn) {
+    backToTopBtn.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
-  // ─── HAMBURGER MENU ───
-  const hamburger = document.getElementById('hamburger');
-  const navLinks = document.getElementById('navLinks');
+  // ─── 13. 3D SPATIAL UI PROJECT CAROUSEL ENGINE ───
+  const carouselCards = document.querySelectorAll('.spatial-project-card');
+  const carouselPrevBtn = document.getElementById('carouselPrevBtn');
+  const carouselNextBtn = document.getElementById('carouselNextBtn');
+  const carouselCounter = document.getElementById('spatialCarouselCounter');
+  let currentCarouselIndex = 0;
+  const totalSlides = carouselCards.length;
 
-  if (hamburger && navLinks) {
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('active');
-      navLinks.classList.toggle('open');
-      document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
-    });
+  function updateCarouselPositions() {
+    carouselCards.forEach((card, i) => {
+      card.classList.remove('active', 'next', 'prev', 'hidden-right', 'hidden-left');
 
-    navLinks.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('open');
-        document.body.style.overflow = '';
-      });
-    });
-  }
+      const diff = (i - currentCarouselIndex + totalSlides) % totalSlides;
 
-  // ─── ACTIVE NAV LINK ON SCROLL ───
-  const sections = document.querySelectorAll('section[id]');
-  const allNavLinks = document.querySelectorAll('.nav-link');
-
-  function updateActiveNav() {
-    const scrollY = window.scrollY + 200;
-    sections.forEach(section => {
-      const top = section.offsetTop;
-      const height = section.offsetHeight;
-      const id = section.getAttribute('id');
-      if (scrollY >= top && scrollY < top + height) {
-        allNavLinks.forEach(link => {
-          link.classList.remove('active');
-          if (link.getAttribute('href') === '#' + id) {
-            link.classList.add('active');
-          }
-        });
+      if (diff === 0) {
+        card.classList.add('active');
+      } else if (diff === 1) {
+        card.classList.add('next');
+      } else if (diff === totalSlides - 1) {
+        card.classList.add('prev');
+      } else if (diff > 1 && diff <= totalSlides / 2) {
+        card.classList.add('hidden-right');
+      } else {
+        card.classList.add('hidden-left');
       }
     });
-  }
-  window.addEventListener('scroll', updateActiveNav, { passive: true });
 
-  // ─── SCROLL REVEAL (IntersectionObserver) ───
-  const revealElements = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-    revealElements.forEach(el => observer.observe(el));
-  }
-
-  // ─── SKILL BARS ───
-  const skillFills = document.querySelectorAll('.skill-fill');
-  if ('IntersectionObserver' in window && skillFills.length > 0) {
-    const skillObserver = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const width = entry.target.getAttribute('data-width');
-            entry.target.style.width = width + '%';
-            skillObserver.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-    skillFills.forEach(el => skillObserver.observe(el));
-  }
-
-  // ─── PROJECT DETAIL MODAL ───
-  const modal = document.getElementById('projectModal');
-  const modalImage = document.getElementById('modalImage');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalDescription = document.getElementById('modalDescription');
-  const modalLink = document.getElementById('modalLink');
-  const modalClose = document.getElementById('modalClose');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const sliderDots = document.getElementById('sliderDots');
-
-  let currentImages = [];
-  let currentImgIndex = 0;
-
-  function updateSlider() {
-    if (currentImages.length > 0) {
-      modalImage.src = currentImages[currentImgIndex];
-      const dots = sliderDots.querySelectorAll('.dot');
-      dots.forEach((dot, idx) => dot.classList.toggle('active', idx === currentImgIndex));
+    if (carouselCounter) {
+      carouselCounter.textContent = `0${currentCarouselIndex + 1} / 0${totalSlides}`;
     }
   }
 
-  document.querySelectorAll('.project-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const title = card.getAttribute('data-title');
-      const description = card.getAttribute('data-description');
-      const mainImage = card.getAttribute('data-image');
-      const extraImages = card.getAttribute('data-images');
-      const link = card.getAttribute('data-link');
+  if (carouselPrevBtn) {
+    carouselPrevBtn.addEventListener('click', () => {
+      currentCarouselIndex = (currentCarouselIndex - 1 + totalSlides) % totalSlides;
+      updateCarouselPositions();
+    });
+  }
 
-      currentImages = [];
-      if (mainImage) currentImages.push(mainImage);
-      if (extraImages) currentImages.push(...extraImages.split(',').map(s => s.trim()));
+  if (carouselNextBtn) {
+    carouselNextBtn.addEventListener('click', () => {
+      currentCarouselIndex = (currentCarouselIndex + 1) % totalSlides;
+      updateCarouselPositions();
+    });
+  }
 
-      currentImgIndex = 0;
-      modalTitle.textContent = title;
-      modalDescription.textContent = description;
-      modalLink.href = link;
+  // Click on cards to bring to focus or open modal
+  carouselCards.forEach((card, index) => {
+    card.addEventListener('click', (e) => {
+      if (!card.classList.contains('active')) {
+        currentCarouselIndex = index;
+        updateCarouselPositions();
+      } else if (e.target.closest('.btn-spatial-inspect') || e.target.closest('.spatial-card-inner')) {
+        openProjectModal({
+          title: card.getAttribute('data-title'),
+          badge: card.getAttribute('data-badge'),
+          description: card.getAttribute('data-description'),
+          image: card.getAttribute('data-image'),
+          link: card.getAttribute('data-link')
+        });
+      }
+    });
 
-      sliderDots.innerHTML = '';
-      currentImages.forEach((_, idx) => {
-        const dot = document.createElement('div');
-        dot.classList.add('dot');
-        if (idx === 0) dot.classList.add('active');
-        dot.addEventListener('click', () => { currentImgIndex = idx; updateSlider(); });
-        sliderDots.appendChild(dot);
+    // 3D Spatial Parallax Tilt on active card
+    card.addEventListener('mousemove', (e) => {
+      if (!card.classList.contains('active')) return;
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+      const inner = card.querySelector('.spatial-card-inner');
+      if (inner) {
+        inner.style.transform = `perspective(1000px) rotateY(${x * 16}deg) rotateX(${-y * 16}deg)`;
+      }
+    });
+
+    card.addEventListener('mouseleave', () => {
+      const inner = card.querySelector('.spatial-card-inner');
+      if (inner) {
+        inner.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg)';
+      }
+    });
+  });
+
+  updateCarouselPositions();
+
+  // ─── 14. VIEW ALL PROJECTS SMOOTH SCROLL ───
+  const viewAllProjectsBtn = document.getElementById('viewAllProjectsBtn');
+  const allProjectsFilter = document.getElementById('allProjectsFilter');
+  if (viewAllProjectsBtn && allProjectsFilter) {
+    viewAllProjectsBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      allProjectsFilter.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+
+  // ─── 15. THREE.JS 3D ANIME THUNDER & SPATIAL LIGHTNING ENGINE ───
+  const threeCanvas = document.getElementById('threeHeroCanvas');
+  if (threeCanvas && window.THREE) {
+    const THREE = window.THREE;
+    const parentContainer = threeCanvas.parentElement;
+
+    // WebGL Renderer
+    const renderer = new THREE.WebGLRenderer({
+      canvas: threeCanvas,
+      alpha: true,
+      antialias: true,
+      powerPreference: 'high-performance'
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // Scene & Perspective Camera
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
+    camera.position.set(0, 0, 100);
+
+    // Responsive Viewport Resize
+    function resizeThree() {
+      if (!parentContainer) return;
+      const width = parentContainer.clientWidth;
+      const height = parentContainer.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }
+    resizeThree();
+    window.addEventListener('resize', resizeThree);
+
+    // 1. Procedural Golden Glow Ember Texture
+    function createEmberTexture() {
+      const pCanvas = document.createElement('canvas');
+      pCanvas.width = 64;
+      pCanvas.height = 64;
+      const pCtx = pCanvas.getContext('2d');
+
+      const grad = pCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+      grad.addColorStop(0.2, 'rgba(254, 240, 138, 0.9)');
+      grad.addColorStop(0.5, 'rgba(245, 158, 11, 0.5)');
+      grad.addColorStop(1, 'rgba(217, 119, 6, 0)');
+
+      pCtx.fillStyle = grad;
+      pCtx.fillRect(0, 0, 64, 64);
+      return new THREE.CanvasTexture(pCanvas);
+    }
+
+    const emberTexture = createEmberTexture();
+
+    // 2. Volumetric 3D Floating Embers Cloud
+    const emberCount = 380;
+    const emberGeo = new THREE.BufferGeometry();
+    const positions = new Float32Array(emberCount * 3);
+    const scales = new Float32Array(emberCount);
+    const speeds = new Float32Array(emberCount * 3);
+
+    for (let i = 0; i < emberCount; i++) {
+      const i3 = i * 3;
+      const x = (Math.random() - 0.5) * 160;
+      const y = (Math.random() - 0.5) * 120;
+      const z = (Math.random() - 0.5) * 100 - 10;
+
+      positions[i3] = x;
+      positions[i3 + 1] = y;
+      positions[i3 + 2] = z;
+
+      speeds[i3] = (Math.random() - 0.5) * 0.08;
+      speeds[i3 + 1] = Math.random() * 0.25 + 0.12;
+      speeds[i3 + 2] = (Math.random() - 0.5) * 0.06;
+
+      scales[i] = Math.random() * 3.5 + 1.2;
+    }
+
+    emberGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    emberGeo.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
+
+    const emberMat = new THREE.PointsMaterial({
+      size: 4.8,
+      map: emberTexture,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      color: new THREE.Color(0xfbbf24)
+    });
+
+    const emberCloud = new THREE.Points(emberGeo, emberMat);
+    scene.add(emberCloud);
+
+    // 3. 3D Procedural Branching Lightning System
+    const activeBolts = [];
+
+    function trigger3DLightning(startVec, endVec, isSubBranch = false) {
+      const points = [startVec.clone()];
+      const dist = startVec.distanceTo(endVec);
+      const segments = Math.max(6, Math.floor(dist / 6));
+
+      for (let i = 1; i < segments; i++) {
+        const t = i / segments;
+        const interp = new THREE.Vector3().lerpVectors(startVec, endVec, t);
+        const jitter = 5.5 * (1 - Math.abs(t - 0.5));
+        interp.x += (Math.random() - 0.5) * jitter;
+        interp.y += (Math.random() - 0.5) * jitter;
+        interp.z += (Math.random() - 0.5) * (jitter * 0.8);
+        points.push(interp);
+
+        if (!isSubBranch && Math.random() < 0.25) {
+          const branchEnd = interp.clone().add(new THREE.Vector3(
+            (Math.random() - 0.5) * 20,
+            (Math.random() - 0.5) * 20,
+            (Math.random() - 0.5) * 15
+          ));
+          trigger3DLightning(interp, branchEnd, true);
+        }
+      }
+      points.push(endVec.clone());
+
+      const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+
+      // Glowing Amber Halo Line
+      const glowMat = new THREE.LineBasicMaterial({
+        color: 0xf59e0b,
+        transparent: true,
+        opacity: 0.9,
+        blending: THREE.AdditiveBlending,
+        linewidth: 3
+      });
+      const glowLine = new THREE.Line(lineGeo, glowMat);
+
+      // Core Hot White Line
+      const coreMat = new THREE.LineBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 1.0,
+        blending: THREE.AdditiveBlending,
+        linewidth: 1.5
+      });
+      const coreLine = new THREE.Line(lineGeo, coreMat);
+
+      scene.add(glowLine);
+      scene.add(coreLine);
+
+      activeBolts.push({
+        glow: glowLine,
+        core: coreLine,
+        geo: lineGeo,
+        glowMat,
+        coreMat,
+        life: 1.0,
+        decay: Math.random() * 0.08 + 0.06
+      });
+    }
+
+    // 4. 3D Expanding Electric Shockwave Rings
+    const shockwaves = [];
+    const ringGeo = new THREE.RingGeometry(1, 1.8, 32);
+
+    function createShockwave(pos) {
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: 0xfbbf24,
+        transparent: true,
+        opacity: 0.8,
+        blending: THREE.AdditiveBlending,
+        side: THREE.DoubleSide,
+        depthWrite: false
+      });
+      const mesh = new THREE.Mesh(ringGeo, ringMat);
+      mesh.position.copy(pos);
+      mesh.rotation.x = Math.PI * 0.5 + (Math.random() - 0.5) * 0.4;
+      mesh.rotation.y = (Math.random() - 0.5) * 0.4;
+      scene.add(mesh);
+
+      shockwaves.push({
+        mesh,
+        mat: ringMat,
+        scale: 1,
+        speed: Math.random() * 0.9 + 0.6,
+        life: 1.0,
+        decay: 0.035
+      });
+    }
+
+    // Interactive 3D Mouse Parallax
+    let targetMouseX = 0;
+    let targetMouseY = 0;
+    let currentMouseX = 0;
+    let currentMouseY = 0;
+
+    if (parentContainer) {
+      parentContainer.addEventListener('mousemove', (e) => {
+        const rect = parentContainer.getBoundingClientRect();
+        targetMouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+        targetMouseY = -((e.clientY - rect.top) / rect.height - 0.5) * 2;
+
+        if (Math.random() < 0.2) {
+          const target3D = new THREE.Vector3(targetMouseX * 50, targetMouseY * 35, 10);
+          const start3D = new THREE.Vector3(
+            target3D.x + (Math.random() - 0.5) * 45,
+            target3D.y + Math.random() * 40 + 10,
+            target3D.z + (Math.random() - 0.5) * 25
+          );
+          trigger3DLightning(start3D, target3D);
+        }
       });
 
-      updateSlider();
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    });
-  });
+      parentContainer.addEventListener('click', (e) => {
+        const rect = parentContainer.getBoundingClientRect();
+        const clickX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+        const clickY = -((e.clientY - rect.top) / rect.height - 0.5) * 2;
+        const clickPos = new THREE.Vector3(clickX * 55, clickY * 40, 10);
 
-  if (modalClose) modalClose.addEventListener('click', () => {
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
-  });
+        const strikeOrigin = new THREE.Vector3(clickPos.x + (Math.random() - 0.5) * 30, 60, 0);
+        trigger3DLightning(strikeOrigin, clickPos);
+        createShockwave(clickPos);
+      });
+    }
 
-  if (prevBtn) prevBtn.addEventListener('click', () => {
-    currentImgIndex = (currentImgIndex - 1 + currentImages.length) % currentImages.length;
-    updateSlider();
-  });
-  if (nextBtn) nextBtn.addEventListener('click', () => {
-    currentImgIndex = (currentImgIndex + 1) % currentImages.length;
-    updateSlider();
-  });
+    // Animation Loop
+    let lastLightningStrike = 0;
+    let clock = new THREE.Clock();
 
-  // ─── SMOOTH SCROLL FOR ALL ANCHOR LINKS ───
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      if (this.id === 'modalLink') return;
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
+    function animateThree(timestamp) {
+      requestAnimationFrame(animateThree);
+
+      const elapsedTime = clock.getElapsedTime();
+
+      // Smooth 3D Camera Parallax Lerp
+      currentMouseX += (targetMouseX - currentMouseX) * 0.05;
+      currentMouseY += (targetMouseY - currentMouseY) * 0.05;
+      camera.position.x = currentMouseX * 12;
+      camera.position.y = currentMouseY * 10;
+      camera.lookAt(0, 0, 0);
+
+      // Animate 3D Embers Particle Cloud
+      const posAttr = emberGeo.attributes.position;
+      const arr = posAttr.array;
+
+      for (let i = 0; i < emberCount; i++) {
+        const i3 = i * 3;
+        arr[i3 + 1] += speeds[i3 + 1];
+        arr[i3] += Math.sin(elapsedTime * 1.5 + i) * 0.08 + speeds[i3];
+        arr[i3 + 2] += Math.cos(elapsedTime * 1.2 + i) * 0.06 + speeds[i3 + 2];
+
+        if (arr[i3 + 1] > 65) {
+          arr[i3 + 1] = -65;
+          arr[i3] = (Math.random() - 0.5) * 160;
+          arr[i3 + 2] = (Math.random() - 0.5) * 100 - 10;
+        }
+      }
+      posAttr.needsUpdate = true;
+      emberCloud.rotation.y = elapsedTime * 0.04;
+
+      // Random Procedural 3D Lightning Strikes
+      if (timestamp > lastLightningStrike) {
+        const start = new THREE.Vector3((Math.random() - 0.5) * 90, 55 + Math.random() * 15, (Math.random() - 0.5) * 40);
+        const end = new THREE.Vector3(start.x + (Math.random() - 0.5) * 60, -35 - Math.random() * 20, start.z + (Math.random() - 0.5) * 30);
+        trigger3DLightning(start, end);
+
+        if (Math.random() < 0.45) {
+          createShockwave(end);
+        }
+
+        lastLightningStrike = timestamp + Math.random() * 800 + 400;
+      }
+
+      // Animate active 3D lightning bolts
+      for (let i = activeBolts.length - 1; i >= 0; i--) {
+        const b = activeBolts[i];
+        b.life -= b.decay;
+        b.glowMat.opacity = b.life * 0.9;
+        b.coreMat.opacity = b.life;
+
+        if (b.life <= 0) {
+          scene.remove(b.glow);
+          scene.remove(b.core);
+          b.geo.dispose();
+          b.glowMat.dispose();
+          b.coreMat.dispose();
+          activeBolts.splice(i, 1);
+        }
+      }
+
+      // Animate 3D Shockwaves
+      for (let i = shockwaves.length - 1; i >= 0; i--) {
+        const s = shockwaves[i];
+        s.scale += s.speed;
+        s.mesh.scale.set(s.scale, s.scale, s.scale);
+        s.life -= s.decay;
+        s.mat.opacity = s.life * 0.7;
+
+        if (s.life <= 0) {
+          scene.remove(s.mesh);
+          s.mat.dispose();
+          shockwaves.splice(i, 1);
+        }
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    requestAnimationFrame(animateThree);
+  }
+
 })();

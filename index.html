@@ -4,705 +4,866 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jazz Dev | Full-Stack Developer Portfolio</title>
+  <title>Jazpher Beneza | IT Support & Aspiring Developer</title>
   <meta name="description"
-    content="Jazpher O. Beneza — Full-Stack Web Developer crafting beautiful, responsive, and high-performance web experiences.">
+    content="Jazpher Beneza — IT Support & Aspiring Developer crafting intuitive mobile apps, robust IT infrastructure, and modern web experiences.">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&family=Playball&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
-  <!-- Animation Libraries -->
+  <!-- GSAP & Three.js for Visuals -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 </head>
 
 <body>
 
-  <!-- LOADING SCREEN -->
-  <div id="loadingScreen" class="loading-screen">
-    <!-- Three.js 3D Shatter Canvas -->
-    <div id="loaderThreeCanvas" class="loader-3d-bg"></div>
-
-    <div class="loading-container">
-      <div class="logo-wrapper">
-        <div id="fireRingCanvas" class="fire-ring-container"></div>
-        <div id="lottieLoader" class="lottie-scanner"></div>
-        <img src="public/image/Red neon JD logo design.png" alt="Jazz Dev Logo" class="loader-logo">
-        <div class="logo-glow"></div>
-      </div>
-      <div class="loader-progress">
-        <div class="loader-bar"></div>
-        <span class="loader-status-text">LOADING...</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- SMOKE BACKGROUND CONTAINER -->
-  <div id="smoke-container"></div>
-
-
-
-  <!-- ========= HEADER / NAV ========= -->
-  <header class="site-header" id="siteHeader">
-    <div class="nav-inner">
-      <a href="#home" class="brand">
+  <!-- COSMIC HUD AMBIENT CANVAS BACKGROUND -->
+  <canvas id="ambientCanvas" class="ambient-canvas"></canvas> <!-- TOP HEADER / NAV WITH FLOATING ICON DOCK -->
+  <header class="top-nav-header" id="topNavHeader">
+    <div class="top-nav-inner">
+      <!-- Monogram Brand Logo -->
+      <a href="#home" class="nav-brand-logo" aria-label="Jazpher Beneza">
+        <span class="logo-jb">JB.</span>
+        <span class="logo-sub">STUDIO</span>
       </a>
 
-      <nav class="nav-links" id="navLinks">
-        <a href="#home" class="nav-link active">Home</a>
-        <a href="#about" class="nav-link">About</a>
-        <a href="#skills" class="nav-link">Skills</a>
-        <a href="#projects" class="nav-link">Projects</a>
-        <a href="#contact" class="nav-link">Contact</a>
+      <!-- Floating Icon Navigation Dock with Dynamic Expanding Text Labels -->
+      <nav class="floating-nav-dock" id="floatingNavDock">
+        <a href="#home" class="dock-icon-link active" aria-label="Home">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span class="dock-label">Home</span>
+        </a>
+        <a href="#about" class="dock-icon-link" aria-label="About">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span class="dock-label">About</span>
+        </a>
+        <a href="#projects" class="dock-icon-link" aria-label="Projects">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span class="dock-label">Projects</span>
+        </a>
+        <a href="#skills" class="dock-icon-link" aria-label="Skills">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          <span class="dock-label">Skills</span>
+        </a>
+        <a href="#contact" class="dock-icon-link" aria-label="Contact">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          <span class="dock-label">Contact</span>
+        </a>
       </nav>
 
-      <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
-        <span></span><span></span><span></span>
-      </button>
+      <!-- Download CV Button -->
+      <div class="header-action-right">
+        <a href="#contact" class="btn-download-cv" id="downloadCvBtn">
+          <span>DOWNLOAD CV</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+        </a>
+
+        <!-- Mobile Toggle Hamburger -->
+        <button class="mobile-hamburger-btn" id="mobileMenuToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- ========= HERO / HOME ========= -->
-  <section id="home" class="section hero">
-    <!-- Background Decor (Dots) -->
-    <div class="dot-grid top-left"></div>
-    <div class="dot-grid top-right"></div>
-    <div class="dot-grid bottom-right"></div>
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="page-wrapper">
 
-    <!-- Social Sidebar -->
-    <div class="social-sidebar">
-      <a href="https://github.com/jazpherbeneza6-dot" aria-label="Github"><svg width="20" height="20"
-          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path
-            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-          </path>
-        </svg></a>
-      <a href="https://www.linkedin.com/in/jazpher-beneza-406582400/" aria-label="LinkedIn"><svg width="20" height="20"
-          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-          <rect x="2" y="9" width="4" height="12"></rect>
-          <circle cx="4" cy="4" r="2"></circle>
-        </svg></a>
-      <a href="#" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-        </svg></a>
-      <a href="#" aria-label="Email"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="2">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-          <polyline points="22,6 12,13 2,6"></polyline>
-        </svg></a>
-    </div>
+    <!-- ==================== EDITORIAL HERO SECTION ==================== -->
+    <section id="home" class="hero-section editorial-hero-container">
+      
+      <!-- Anime Flame Video Background (Auto-playing, Looping, Seamless) -->
+      <video class="editorial-bg-video" autoplay loop muted playsinline preload="auto">
+        <source src="public/image/Flame%20Backround.mp4" type="video/mp4">
+      </video>
 
+      <!-- Video Atmospheric Dark Vignette Overlay -->
+      <div class="editorial-video-overlay"></div>
 
-    <div class="hero-container">
-      <div class="hero-split-layout">
-        <div class="hero-title-group">
+      <!-- Three.js 3D Anime Thunder & Spatial Lightning Canvas -->
+      <canvas id="threeHeroCanvas" class="three-hero-canvas"></canvas>
 
-          <div class="hero-left-col">
-            <div class="tech-bracket left-bracket">
-              <span class="hero-text-left-bg">JAZZ</span>
-              <span class="hero-text-left">JAZZ</span>
-            </div>
-            <p class="hero-subtext left">
-              CREATIVE <span class="dot-sep">&bull;</span> PASSION <span class="dot-sep">&bull;</span> CODE
-            </p>
-          </div>
+      <!-- Atmospheric Anime Lightning Glows -->
+      <div class="anime-lightning-aura"></div>
 
-          <div class="hero-portrait-wrapper">
-            <!-- Middle ring with tick marks -->
-            <div class="hud-ring ring-middle">
-              <div class="hud-tick tick-n"></div>
-              <div class="hud-tick tick-e"></div>
-              <div class="hud-tick tick-s"></div>
-              <div class="hud-tick tick-w"></div>
-            </div>
-            <!-- Concentric tech rings -->
-            <div class="hud-ring ring-data"></div>
-            <div class="hud-ring ring-sub-inner"></div>
-            <!-- Inner ring with glow -->
-            <div class="hud-ring ring-inner"></div>
-            <div class="hud-ring ring-inner-2"></div>
-            <!-- Crosshair overlay -->
-            <div class="hud-crosshair">
-              <div class="cross-h"></div>
-              <div class="cross-v"></div>
-            </div>
-            <!-- Orbital tracking dots -->
-            <div class="hud-orbit orbit-1"><span class="orbit-dot"></span></div>
-            <div class="hud-orbit orbit-3"><span class="orbit-dot dot-accent"></span></div>
-            <!-- Data readouts -->
-            <div class="hud-data hud-data-top">SYS:ACTIVE</div>
-            <div class="hud-data hud-data-bottom">ID:JAZZDEV_01</div>
-            <!-- Corner brackets -->
-            <div class="hud-corner hud-corner-tl"></div>
-            <div class="hud-corner hud-corner-tr"></div>
-            <div class="hud-corner hud-corner-bl"></div>
-            <div class="hud-corner hud-corner-br"></div>
-            <!-- Scan line -->
-            <div class="hud-scanline"></div>
-            <!-- Portrait -->
-            <img src="public/image/image.png" alt="Portrait of Jazpher O. Beneza" class="hero-portrait" loading="eager">
-          </div>
+      <!-- Massive Background Outline Typography (Layer 1) -->
+      <div class="editorial-bg-typography" aria-hidden="true">
+        <span class="editorial-word word-1">JAZPHER</span>
+        <span class="editorial-word word-2">BENEZA</span>
+      </div>
 
-          <div class="hero-right-col">
-            <div class="tech-bracket right-bracket">
-              <span class="hero-text-right">DEV</span>
-            </div>
-            <p class="hero-subtext">
-              DESIGN <span class="dot-sep">&bull;</span> DEVELOP <span class="dot-sep">&bull;</span> INNOVATE
-            </p>
-          </div>
+      <!-- Centered Foreground Cutout Portrait (Layer 2) -->
+      <div class="editorial-portrait-stage" id="heroPortraitWrapper">
+        <div class="portrait-electric-aura"></div>
+        <img src="public/image/image.png" alt="Jazpher Beneza Portrait" class="editorial-portrait-img">
+      </div>
 
+      <!-- Editorial Action & Connect Overlays (Layer 3) -->
+      <div class="editorial-content-overlay">
+
+        <!-- Bottom Left Action Buttons -->
+        <div class="editorial-bottom-left">
+          <a href="#projects" class="btn-hero-primary">
+            <span>EXPLORE MY WORK</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </a>
+          <a href="#contact" class="btn-hero-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <span>CONTACT ME</span>
+          </a>
         </div>
+
+        <!-- Bottom Right Social Connect & Editorial Controls -->
+        <div class="editorial-bottom-right">
+          <!-- Social Quick Links -->
+          <div class="hero-connect-row">
+            <span class="connect-label">CONNECT</span>
+            <div class="connect-pills-list">
+              <a href="https://www.linkedin.com/in/jazpher-beneza-406582400/" target="_blank" rel="noopener"
+                class="connect-pill-btn" aria-label="LinkedIn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3m1.37 9.74v-8.37H5.09v8.37h2.74z" />
+                </svg>
+              </a>
+              <a href="https://github.com/jazpherbeneza6-dot" target="_blank" rel="noopener" class="connect-pill-btn"
+                aria-label="GitHub">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z" />
+                </svg>
+              </a>
+              <a href="mailto:jazpherbeneza@gmail.com" class="connect-pill-btn" aria-label="Email">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Vertical Controls -->
+          <div class="editorial-right-flank">
+            <div class="editorial-nav-pills-col">
+              <a href="#home" class="editorial-circle-nav-btn" aria-label="Scroll Up">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="18 15 12 9 6 15" />
+                </svg>
+              </a>
+              <a href="#about" class="editorial-circle-nav-btn" aria-label="Scroll Down">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </a>
+            </div>
+            <div class="editorial-scroll-label">
+              <span>— SCROLL DOWN</span>
+            </div>
+          </div>
+        </div>
+
       </div>
+    </section>
 
-      <!-- Bottom Layout Overlay -->
-    </div>
+    <!-- ==================== ABOUT & SKILLS BENTO SECTION ==================== -->
+    <section id="about" class="about-skills-section">
+      <div class="bento-two-col-grid">
 
-    <div class="badge-block">
-      <span class="tech-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)">
-          <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-          <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-          <path d="M2 2l7.586 7.586"></path>
-          <circle cx="11" cy="11" r="2"></circle>
-        </svg> UI/UX</span>
-      <span class="tech-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)">
-          <polyline points="16 18 22 12 16 6"></polyline>
-          <polyline points="8 6 2 12 8 18"></polyline>
-        </svg> Web Dev</span>
-      <span class="tech-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)">
-          <line x1="9" y1="18" x2="15" y2="18"></line>
-          <line x1="10" y1="22" x2="14" y2="22"></line>
-          <path
-            d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14">
-          </path>
-        </svg> Creativity</span>
-    </div>
-
-
-    <!-- Scroll indicator -->
-    <div class="scroll-indicator">
-      <div class="scroll-mouse">
-        <div class="scroll-wheel"></div>
-      </div>
-      <span>Scroll Down</span>
-    </div>
-  </section>
-
-  <!-- ========= ABOUT ========= -->
-  <section id="about" class="section section-about">
-    <div class="container relative">
-      <div class="about-header reveal centered">
-        <span class="bento-kicker">WHO I AM</span>
-      </div>
-
-      <div class="about-bento-container reveal">
-        <!-- Left content: Intro & Stats -->
-        <div class="about-bento-left">
-          <h3 class="bento-title">I DESIGN & BUILD <span class="accent">DIGITAL EXPERIENCES</span></h3>
-          <p class="bento-bio">
-            Hi, I'm <strong>Jazpher O. Beneza</strong> — a web developer who loves creating clean, responsive, and
-            user-focused websites. I enjoy turning ideas into real products that solve problems and make an impact.
+        <!-- Left Bento Card: WHO I AM -->
+        <div class="bento-who-card">
+          <div class="skeuo-screw screw-tl"></div>
+          <div class="skeuo-screw screw-tr"></div>
+          <div class="skeuo-screw screw-bl"></div>
+          <div class="skeuo-screw screw-br"></div>
+          <div class="card-kicker-tag">// ABOUT ME</div>
+          <h2 class="card-headline-title">WHO I AM</h2>
+          <p class="card-body-paragraph">
+            Fresh graduate with a passion for technology. I am a fast learner, adaptable, and always eager to take on
+            new challenges. I enjoy solving problems and creating efficient solutions through technology.
           </p>
 
-          <div class="bento-stats">
-            <div class="bento-stat-item">
-              <span class="stat-num">1</span>
-              <span class="stat-label">YEARS<br>EXPERIENCE</span>
-            </div>
-            <div class="bento-stat-item">
-              <span class="stat-num">6</span>
-              <span class="stat-label">PROJECTS<br>COMPLETED</span>
-            </div>
-            <div class="bento-stat-item">
-              <span class="stat-num">2</span>
-              <span class="stat-label">HAPPY<br>CLIENTS</span>
-            </div>
+          <!-- Interactive Earth / Wireframe Horizon Mesh -->
+          <div class="wireframe-horizon-container">
+            <div class="wireframe-grid-plane"></div>
+            <div class="horizon-glow-circle"></div>
           </div>
 
-          <div class="bento-signature">Jazpher O. Beneza</div>
-        </div>
-
-        <!-- Middle content: Cards -->
-        <div class="about-bento-middle">
-          <div class="bento-approach-card">
-            <div class="approach-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="16 18 22 12 16 6" />
-                <polyline points="8 6 2 12 8 18" />
-              </svg>
-            </div>
-            <h4>WHAT I DO</h4>
-            <p>Responsive websites, landing pages, and web apps.</p>
-          </div>
-          <div class="bento-approach-card">
-            <div class="approach-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="5" />
-                <path
-                  d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-              </svg>
-            </div>
-            <h4>HOW I WORK</h4>
-            <p>I focus on clarity, collaboration, and clean code.</p>
-          </div>
-          <div class="bento-approach-card">
-            <div class="approach-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path
-                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-              </svg>
-            </div>
-            <h4>MY APPROACH</h4>
-            <p>I blend creativity with technical skills to deliver results.</p>
-          </div>
-        </div>
-
-        <!-- Right content: Features -->
-      </div>
-  </section>
-
-  <!-- ========= SKILLS ========= -->
-  <section id="skills" class="section section-skills">
-    <div class="expertise-bg-text">EXPERTISE</div>
-    <div class="container">
-      <div class="skills-header reveal centered">
-        <h2 class="skills-title">MY <span class="accent-red">SKILLS</span></h2>
-        <p class="skills-subtitle">Technologies I work with to bring ideas to life</p>
-      </div>
-
-      <div class="skills-grid reveal">
-        <!-- HTML5 -->
-        <div class="skill-card glass-card">
-          <div class="skill-icon-wrap" style="--skill-color: #e44d26">
-            <svg viewBox="0 0 24 24" width="24" height="24">
-              <path fill="#e44d26"
-                d="M1.5 0h21l-1.91 21.56L11.99 24l-8.59-2.44L1.5 0zm7.09 9.94l-.2-2.32h7.6l.2-2.32H6.09l.6 6.96h8.36l-.27 3.1-2.79.76-2.79-.76-.18-1.98h-2.3l.34 3.82 4.93 1.38 4.93-1.38.66-7.46H8.59z" />
+          <a href="#aboutDetailsModal" class="btn-card-action" id="openAboutModalBtn">
+            <span>MORE ABOUT ME</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
             </svg>
-          </div>
-          <h3 class="skill-name">HTML5</h3>
-          <p class="skill-desc">Semantic markup and modern structure</p>
-          <div class="skill-progress-container">
-            <div class="skill-bar-outer">
-              <div class="skill-fill" data-width="90" style="width: 0%;"></div>
-            </div>
-            <span class="skill-percent">90%</span>
-          </div>
+          </a>
         </div>
 
-        <!-- CSS3 -->
-        <div class="skill-card glass-card">
-          <div class="skill-icon-wrap" style="--skill-color: #2965f1">
-            <svg viewBox="0 0 24 24" width="24" height="24">
-              <path fill="#2965f1"
-                d="M1.5 0h21l-1.91 21.56L11.99 24l-8.59-2.44L1.5 0zm14.08 5.68H6.69l.17 1.97h8.55l-.53 5.63-2.89.78-2.89-.78-.18-2.08h-1.97l.36 4.04 4.68 1.3 4.68-1.3.71-7.6.07-.81.35-3.97-.27-.18z" />
-            </svg>
-          </div>
-          <h3 class="skill-name">CSS3</h3>
-          <p class="skill-desc">Modern styling with responsive design</p>
-          <div class="skill-progress-container">
-            <div class="skill-bar-outer">
-              <div class="skill-fill" data-width="85" style="width: 0%;"></div>
+        <!-- Right Bento Card: CORE SKILLS -->
+        <div class="bento-skills-card" id="skills">
+          <div class="skeuo-screw screw-tl"></div>
+          <div class="skeuo-screw screw-tr"></div>
+          <div class="skeuo-screw screw-bl"></div>
+          <div class="skeuo-screw screw-br"></div>
+          <div class="card-kicker-tag">// SKILLS</div>
+
+          <div class="skills-hud-grid">
+            <!-- IT Support -->
+            <div class="skill-hud-row">
+              <div class="skill-hud-header">
+                <div class="skill-name-group">
+                  <div class="skill-hud-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+                      <path
+                        d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+                    </svg>
+                  </div>
+                  <span class="skill-title-text">IT Support</span>
+                </div>
+                <span class="skill-percent-value">90%</span>
+              </div>
+              <div class="skill-bar-track">
+                <div class="skill-bar-fill" data-progress="90" style="width: 90%;"></div>
+              </div>
             </div>
-            <span class="skill-percent">85%</span>
-          </div>
-        </div>
 
-        <!-- JavaScript -->
-        <div class="skill-card glass-card">
-          <div class="skill-icon-wrap" style="--skill-color: #f7df1e">
-            <svg viewBox="0 0 24 24" width="24" height="24">
-              <path fill="#f7df1e"
-                d="M0 0h24v24H0V0zm22.03 18.26c-.18-1.18-.89-2.17-3.01-3.09-.74-.32-1.56-.56-1.81-1.08-.09-.32-.11-.5-.04-.7.19-.56.77-.72 1.28-.57.33.1.64.36.83.75.88-.58.88-.58 1.49-.96-.23-.36-.35-.52-.51-.66-.57-.62-1.33-.93-2.55-.9l-.63.07c-.61.15-1.19.47-1.53.93-.98 1.22-.7 3.36.49 4.24 1.17.97 2.88 1.18 3.1 2.09.21 1.09-.8 1.44-1.82 1.32-.75-.17-1.16-.55-1.62-1.25l-1.53.88c.17.39.38.56.68.9 1.43 1.44 5.02 1.37 5.66-.83.02-.08.17-.64.01-1.49l-.21-.6zM13.64 11.07h-1.94c0 1.65-.01 3.3-.01 4.95 0 1.05.05 2.02-.12 2.32-.28.58-1 .51-1.33.4-.34-.16-.51-.39-.71-.71-.06-.09-.1-.16-.11-.16l-1.52.93c.26.52.62.97 1.07 1.25.67.42 1.57.55 2.51.33.61-.17 1.14-.56 1.41-1.11.4-.77.31-1.71.31-2.77.01-1.81 0-3.62 0-5.43z" />
-            </svg>
-          </div>
-          <h3 class="skill-name">JavaScript</h3>
-          <p class="skill-desc">Interactive and dynamic user experiences</p>
-          <div class="skill-progress-container">
-            <div class="skill-bar-outer">
-              <div class="skill-fill" data-width="80" style="width: 0%;"></div>
+            <!-- Kotlin -->
+            <div class="skill-hud-row">
+              <div class="skill-hud-header">
+                <div class="skill-name-group">
+                  <div class="skill-hud-icon kotlin-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="2,2 22,2 12,12 22,22 2,22" />
+                    </svg>
+                  </div>
+                  <span class="skill-title-text">Kotlin</span>
+                </div>
+                <span class="skill-percent-value">85%</span>
+              </div>
+              <div class="skill-bar-track">
+                <div class="skill-bar-fill" data-progress="85" style="width: 85%;"></div>
+              </div>
             </div>
-            <span class="skill-percent">80%</span>
-          </div>
-        </div>
 
-        <!-- React -->
-        <div class="skill-card glass-card">
-          <div class="skill-icon-wrap" style="--skill-color: #61dafb">
-            <svg viewBox="0 0 24 24" width="24" height="24">
-              <circle fill="#61dafb" cx="12" cy="11.87" r="2.15" />
-              <path fill="none" stroke="#61dafb" stroke-width="1"
-                d="M12 7.74c4.42 0 8 1.85 8 4.13s-3.58 4.13-8 4.13-8-1.85-8-4.13S7.58 7.74 12 7.74z" />
-              <path fill="none" stroke="#61dafb" stroke-width="1"
-                d="M8.54 9.8c2.21-3.83 5.05-6.27 6.34-5.52s.5 4.45-1.71 8.28-5.05 6.27-6.34 5.52-.5-4.45 1.71-8.28z" />
-              <path fill="none" stroke="#61dafb" stroke-width="1"
-                d="M15.46 9.8c-2.21-3.83-5.05-6.27-6.34-5.52s-.5 4.45 1.71 8.28 5.05 6.27 6.34 5.52.5-4.45-1.71-8.28z" />
-            </svg>
-          </div>
-          <h3 class="skill-name">React</h3>
-          <p class="skill-desc">Component-based UI building library</p>
-          <div class="skill-progress-container">
-            <div class="skill-bar-outer">
-              <div class="skill-fill" data-width="85" style="width: 0%;"></div>
+            <!-- Troubleshooting -->
+            <div class="skill-hud-row">
+              <div class="skill-hud-header">
+                <div class="skill-name-group">
+                  <div class="skill-hud-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path
+                        d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                    </svg>
+                  </div>
+                  <span class="skill-title-text">Troubleshooting</span>
+                </div>
+                <span class="skill-percent-value">85%</span>
+              </div>
+              <div class="skill-bar-track">
+                <div class="skill-bar-fill" data-progress="85" style="width: 85%;"></div>
+              </div>
             </div>
-            <span class="skill-percent">85%</span>
-          </div>
-        </div>
 
-        <!-- Node.js -->
-        <div class="skill-card glass-card">
-          <div class="skill-icon-wrap" style="--skill-color: #68a063">
-            <svg viewBox="0 0 24 24" width="24" height="24">
-              <path fill="#68a063"
-                d="M11.99 24c-.33 0-.64-.08-.93-.25l-2.96-1.75c-.44-.25-.23-.33-.08-.38.59-.21.71-.25 1.34-.61.07-.04.15-.02.22.02l2.28 1.35c.08.05.2.05.27 0l8.89-5.13c.08-.05.14-.14.14-.24V7.88c0-.1-.05-.19-.14-.24L12.13 2.51c-.08-.05-.19-.05-.27 0L2.97 7.64c-.09.05-.14.15-.14.24v10.26c0 .1.05.19.14.24l2.43 1.4c1.32.66 2.13-.12 2.13-.89V8.68c0-.14.11-.25.26-.25h1.11c.14 0 .26.11.26.25v10.21c0 1.74-.95 2.74-2.6 2.74-.51 0-.91 0-2.03-.55l-2.33-1.34A1.87 1.87 0 0 1 1.27 18.14V7.88c0-.66.35-1.27.93-1.6l8.89-5.13c.56-.31 1.3-.31 1.85 0l8.89 5.13c.57.33.93.94.93 1.6v10.26c0 .66-.35 1.27-.93 1.6l-8.89 5.13c-.28.15-.6.23-.93.23l-.02-.1z" />
-            </svg>
-          </div>
-          <h3 class="skill-name">Node.js</h3>
-          <p class="skill-desc">Server-side JavaScript runtime environment</p>
-          <div class="skill-progress-container">
-            <div class="skill-bar-outer">
-              <div class="skill-fill" data-width="80" style="width: 0%;"></div>
+            <!-- Android Development -->
+            <div class="skill-hud-row">
+              <div class="skill-hud-header">
+                <div class="skill-name-group">
+                  <div class="skill-hud-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="5" y="10" width="14" height="10" rx="2" />
+                      <path d="M8 5l2 3M16 5l-2 3" />
+                      <line x1="9" y1="14" x2="9.01" y2="14" />
+                      <line x1="15" y1="14" x2="15.01" y2="14" />
+                    </svg>
+                  </div>
+                  <span class="skill-title-text">Android Development</span>
+                </div>
+                <span class="skill-percent-value">80%</span>
+              </div>
+              <div class="skill-bar-track">
+                <div class="skill-bar-fill" data-progress="80" style="width: 80%;"></div>
+              </div>
             </div>
-            <span class="skill-percent">80%</span>
-          </div>
-        </div>
 
-        <!-- Git -->
-        <div class="skill-card glass-card">
-          <div class="skill-icon-wrap" style="--skill-color: #f05032">
-            <svg viewBox="0 0 24 24" width="24" height="24">
-              <path fill="#f05032"
-                d="M23.55 11.15L12.85.45c-.6-.6-1.57-.6-2.17 0L8.57 2.56l2.74 2.74c.64-.21 1.36-.07 1.87.44.51.51.66 1.24.44 1.88l2.64 2.64c.64-.22 1.37-.07 1.88.44.72.72.72 1.88 0 2.6-.72.72-1.88.72-2.6 0-.54-.54-.67-1.33-.4-1.98l-2.46-2.46v6.48c.17.09.33.2.46.33.72.72.72 1.88 0 2.6-.72.72-1.88.72-2.6 0-.72-.72-.72-1.88 0-2.6.16-.16.35-.29.55-.38V8.78c-.2-.09-.39-.22-.55-.38-.54-.54-.67-1.34-.39-2L7.41 3.65.45 10.61c-.6.6-.6 1.57 0 2.17l10.7 10.7c.6.6 1.57.6 2.17 0l10.23-10.23c.6-.6.6-1.57 0-2.17v.07z" />
-            </svg>
-          </div>
-          <h3 class="skill-name">Git</h3>
-          <p class="skill-desc">Version control and collaboration</p>
-          <div class="skill-progress-container">
-            <div class="skill-bar-outer">
-              <div class="skill-fill" data-width="75" style="width: 0%;"></div>
+            <!-- Networking Basics -->
+            <div class="skill-hud-row">
+              <div class="skill-hud-header">
+                <div class="skill-name-group">
+                  <div class="skill-hud-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="2" width="6" height="6" rx="1" />
+                      <rect x="2" y="16" width="6" height="6" rx="1" />
+                      <rect x="16" y="16" width="6" height="6" rx="1" />
+                      <path d="M5 16v-4h14v4M12 8v4" />
+                    </svg>
+                  </div>
+                  <span class="skill-title-text">Networking Basics</span>
+                </div>
+                <span class="skill-percent-value">80%</span>
+              </div>
+              <div class="skill-bar-track">
+                <div class="skill-bar-fill" data-progress="80" style="width: 80%;"></div>
+              </div>
             </div>
-            <span class="skill-percent">75%</span>
-          </div>
-        </div>
-      </div>
 
-      <div class="skills-quote reveal">
-        <span class="quote-mark">"</span>
-        <p>Continuous learning is the key to staying ahead in technology.</p>
-        <span class="quote-mark">"</span>
-      </div>
-
-      <div class="skills-footer reveal">
-        <div class="scroll-down-arrow">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="6 9 12 15 18 9"></polyline>
-          </svg>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========= PROJECTS ========= -->
-  <section id="projects" class="section section-projects">
-    <div class="projects-bg-text">CREATIVE SOLUTIONS</div>
-    <div class="container">
-      <div class="projects-header reveal centered">
-        <h2 class="projects-title"><span class="white">MY</span> <span class="accent-red">PROJECTS</span></h2>
-      </div>
-
-      <div class="projects-grid reveal">
-        <!-- CARD 1 -->
-        <div class="project-card glass-card" data-title="NOIR.co"
-          data-description="NOIR.co is a contemporary fashion brand that focuses on clean, minimalist, and timeless clothing pieces designed for the modern individual. The brand showcases a curated selection of wardrobe essentials that are both stylish and versatile — perfect for everyday wear or building a refined streetwear look."
-          data-image="public/image/clothing-website.png" data-link="https://norco-io.vercel.app/index.html">
-          <div class="project-thumb">
-            <img src="public/image/clothing-website.png" alt="Clothing Brand Website">
-            <div class="project-external-link">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </div>
-          </div>
-          <div class="project-info">
-            <div class="project-tags">
-              <span class="project-tag">HTML</span>
-              <span class="project-tag">CSS</span>
-              <span class="project-tag">JS</span>
-            </div>
-            <h3>Clothing Brand Website</h3>
-            <p>Modern personal website focused on clean UI and responsive interactions.</p>
-            <div class="project-footer">
-              <button class="project-link">
-                View Project
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
-                </svg>
-              </button>
-              <div class="circular-arrow">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
+            <!-- SQL -->
+            <div class="skill-hud-row">
+              <div class="skill-hud-header">
+                <div class="skill-name-group">
+                  <div class="skill-hud-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <ellipse cx="12" cy="5" rx="9" ry="3" />
+                      <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+                      <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+                    </svg>
+                  </div>
+                  <span class="skill-title-text">SQL</span>
+                </div>
+                <span class="skill-percent-value">70%</span>
+              </div>
+              <div class="skill-bar-track">
+                <div class="skill-bar-fill" data-progress="70" style="width: 70%;"></div>
               </div>
             </div>
           </div>
+
+          <a href="#aboutDetailsModal" class="btn-card-action btn-view-all-skills" id="openSkillsModalBtn">
+            <span>VIEW ALL SKILLS</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="5" cy="5" r="2" />
+              <circle cx="12" cy="5" r="2" />
+              <circle cx="19" cy="5" r="2" />
+              <circle cx="5" cy="12" r="2" />
+              <circle cx="12" cy="12" r="2" />
+              <circle cx="19" cy="12" r="2" />
+              <circle cx="5" cy="19" r="2" />
+              <circle cx="12" cy="19" r="2" />
+              <circle cx="19" cy="19" r="2" />
+            </svg>
+          </a>
         </div>
 
-        <!-- CARD 2 -->
-        <div class="project-card glass-card" data-title="Library Management System"
-          data-description="A sophisticated system designed to manage library resources efficiently. Features including book tracking, user management, and an automated lending system, all wrapped in a sleek, responsive dashboard interface."
-          data-image="public/image/work.png" data-link="https://library-management-system-port.vercel.app/index.html">
-          <div class="project-thumb">
-            <img src="public/image/work.png" alt="Library Management System">
-            <div class="project-external-link">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </div>
-          </div>
-          <div class="project-info">
-            <div class="project-tags">
-              <span class="project-tag">HTML</span>
-              <span class="project-tag">CSS</span>
-              <span class="project-tag">JS</span>
-            </div>
-            <h3>Library Management System</h3>
-            <p>Product-focused landing page with responsive layouts and animations.</p>
-            <div class="project-footer">
-              <button class="project-link">
-                View Project
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
-                </svg>
-              </button>
-              <div class="circular-arrow">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- CARD 3 -->
-        <div class="project-card glass-card" data-title="Safe Sight GPS"
-          data-description="Safe Sight GPS is a comprehensive vehicle tracking and management solution. It provides real-time location monitoring, historical route data, and advanced analytics to help businesses and individuals keep their assets secure and optimized. The system features a responsive dashboard, geofencing alerts, and detailed reports."
-          data-image="public/image/d.png" data-images="public/image/A.png,public/image/b.png,public/image/c.png"
-          data-link="https://safe-sight-admin.vercel.app/login">
-          <div class="project-thumb">
-            <img src="public/image/d.png" alt="Safe Sight GPS">
-            <div class="project-external-link">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </div>
-          </div>
-          <div class="project-info">
-            <div class="project-tags">
-              <span class="project-tag">React</span>
-              <span class="project-tag">Tailwind</span>
-              <span class="project-tag">JS</span>
-              <span class="project-tag">Firebase</span>
-            </div>
-            <h3>Safe Sight GPS</h3>
-            <p>Real-time vehicle tracking and fleet management solution.</p>
-            <div class="project-footer">
-              <button class="project-link">
-                View Project
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
-                </svg>
-              </button>
-              <div class="circular-arrow">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- CARD 4 -->
-        <div class="project-card glass-card" data-title="Teacher Evaluation System"
-          data-description="The Teacher Evaluation System is a specialized platform designed to streamline the assessment of faculty performance based on CHED-adapted standards. It features automated weighted mean calculations, performance monitoring dashboards, and comprehensive PDF report generation for institutional quality assurance."
-          data-image="public/image/1.png"
-          data-images="public/image/2.png, public/image/3.png, public/image/4.png, public/image/5.png, public/image/6.png, public/image/7.png, public/image/8.png, public/image/9.png, public/image/10.png"
-          data-link="https://faculty-evaluation-system.vercel.app/login">
-          <div class="project-thumb">
-            <img src="public/image/1.png" alt="Teacher Evaluation System">
-            <div class="project-external-link">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </div>
-          </div>
-          <div class="project-info">
-            <div class="project-tags">
-              <span class="project-tag">React</span>
-              <span class="project-tag">Tailwind</span>
-              <span class="project-tag">Firebase</span>
-              <span class="project-tag">JS</span>
-            </div>
-            <h3>Teacher Evaluation System</h3>
-            <p>Institutional faculty performance assessment and reporting system.</p>
-            <div class="project-footer">
-              <button class="project-link">
-                View Project
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="5" y1="12" x2="19" y2="12" />
-                  <polyline points="12 5 19 12 12 19" />
-                </svg>
-              </button>
-              <div class="circular-arrow">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ========= PROJECT DETAIL MODAL ========= -->
-  <div class="modal-overlay" id="projectModal">
-    <div class="modal-container">
-      <button class="modal-close" id="modalClose" aria-label="Close modal">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-      </button>
-      <div class="modal-image-wrapper">
-        <button class="slider-btn prev-btn" id="prevBtn" aria-label="Previous image">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-        </button>
-        <img id="modalImage" src="" alt="Project preview">
-        <button class="slider-btn next-btn" id="nextBtn" aria-label="Next image">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="9 18 15 12 9 6" />
-          </svg>
-        </button>
-        <div class="slider-dots" id="sliderDots"></div>
-      </div>
-      <div class="modal-body">
-        <h2 class="modal-title" id="modalTitle"></h2>
-        <p class="modal-description" id="modalDescription"></p>
-        <a href="#" class="btn btn-primary modal-link" id="modalLink" target="_blank" rel="noopener">
-          <span>Visit Live Site</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-            <polyline points="15 3 21 3 21 9" />
-            <line x1="10" y1="14" x2="21" y2="3" />
+    <!-- ==================== PROJECTS SECTION ==================== -->
+    <section id="projects" class="projects-section">
+      <div class="projects-header-bar">
+        <div class="projects-title-group">
+          <span class="card-kicker-tag">// PROJECTS</span>
+          <h2 class="card-headline-title">MY RECENT WORK</h2>
+        </div>
+        <a href="#allProjectsFilter" class="link-view-all-projects" id="viewAllProjectsBtn">
+          <span>VIEW ALL PROJECTS</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
           </svg>
         </a>
       </div>
-    </div>
-  </div>
 
-  <!-- ========= CONTACT ========= -->
-  <section id="contact" class="section section-contact">
-    <div class="contact-bg-text">CONTACT</div>
-    <div class="container">
-      <div class="contact-header reveal centered">
-        <h2 class="contact-title"><span class="white">GET IN</span> <span class="accent-red">TOUCH</span></h2>
+      <!-- Project Cards 3-Column Grid -->
+      <div class="projects-cards-grid">
+
+        <!-- Project 1: MagTipid -->
+        <div class="project-showcase-card" data-title="MagTipid - Expense & Savings Tracker"
+          data-badge="KOTLIN • ANDROID"
+          data-description="MagTipid is an intuitive personal finance and expense tracking Android application built natively in Kotlin. Designed to empower users to manage budgets, categorize daily expenditures, and track savings goals with visual analytics and offline-first persistence."
+          data-image="public/image/d.png" data-link="https://github.com/jazpherbeneza6-dot">
+          <div class="project-card-thumb">
+            <!-- Simulated Phone Mockup UI -->
+            <div class="project-screen-mockup mockup-phone">
+              <div class="mockup-phone-frame">
+                <div class="phone-notch"></div>
+                <div class="phone-screen-content">
+                  <div class="app-ui-header">
+                    <span class="app-title">MagTipid</span>
+                    <span class="app-avatar">₱</span>
+                  </div>
+                  <div class="app-balance-card">
+                    <div class="app-balance-label">Total Savings</div>
+                    <div class="app-balance-val">₱ 24,580.00</div>
+                  </div>
+                  <div class="app-stats-row">
+                    <div class="app-stat-chip green">Income +₱12k</div>
+                    <div class="app-stat-chip red">Expense -₱3.4k</div>
+                  </div>
+                  <div class="app-recent-tx">
+                    <div class="tx-line"><span>Groceries</span><span>-₱450</span></div>
+                    <div class="tx-line"><span>Allowance</span><span>+₱2,000</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="project-card-body">
+            <div class="project-tag-pill tag-kotlin">KOTLIN</div>
+            <h3 class="project-item-title">MagTipid</h3>
+            <p class="project-item-desc">Expense & Savings Tracker App built with Kotlin.</p>
+            <button class="project-card-action-btn">
+              <span>VIEW PROJECT</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Project 2: IT Support Toolkit -->
+        <div class="project-showcase-card" data-title="IT Support Toolkit & Network Diagnostic Suite"
+          data-badge="DOCUMENTATION • NETWORKING"
+          data-description="A comprehensive toolkit and standardized troubleshooting suite designed for enterprise IT support. Features automated network diagnostics, IP configuration utilities, remote desktop playbooks, and hardware stress-testing documentation."
+          data-image="public/image/work.png" data-link="https://github.com/jazpherbeneza6-dot">
+          <div class="project-card-thumb">
+            <!-- Simulated Network Topology Graphic -->
+            <div class="project-screen-mockup mockup-network">
+              <div class="network-iso-stage">
+                <div class="wifi-broadcast-waves">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2">
+                    <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+                    <path d="M1.42 9a16 16 0 0 1 21.16 0" />
+                    <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+                    <line x1="12" y1="20" x2="12.01" y2="20" />
+                  </svg>
+                </div>
+                <div class="iso-devices-grid">
+                  <div class="iso-device-box server">
+                    <span class="device-light green"></span>
+                    <span class="device-name">SERVER</span>
+                  </div>
+                  <div class="iso-device-box laptop">
+                    <span class="device-light blue"></span>
+                    <span class="device-name">CLIENT</span>
+                  </div>
+                </div>
+                <div class="network-data-lines"></div>
+              </div>
+            </div>
+          </div>
+          <div class="project-card-body">
+            <div class="project-tag-pill tag-doc">DOCUMENTATION</div>
+            <h3 class="project-item-title">IT Support Toolkit</h3>
+            <p class="project-item-desc">A collection of troubleshooting tools and guides for IT support.</p>
+            <button class="project-card-action-btn">
+              <span>VIEW PROJECT</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Project 3: System Monitoring Dashboard -->
+        <div class="project-showcase-card" data-title="System Monitoring Dashboard" data-badge="WEB • REACT • METRICS"
+          data-description="Real-time web monitoring dashboard offering high-fidelity telemetry on server load, network latency, CPU/Memory resource distribution, and automated uptime alerts for IT infrastructure."
+          data-image="public/image/clothing-website.png" data-link="https://github.com/jazpherbeneza6-dot">
+          <div class="project-card-thumb">
+            <!-- Simulated Dashboard UI Preview -->
+            <div class="project-screen-mockup mockup-dashboard">
+              <div class="dashboard-preview-window">
+                <div class="dash-top-bar">
+                  <div class="dash-dot red"></div>
+                  <div class="dash-dot yellow"></div>
+                  <div class="dash-dot green"></div>
+                </div>
+                <div class="dash-grid-cards">
+                  <div class="dash-mini-card">
+                    <div class="dash-donut-chart"></div>
+                  </div>
+                  <div class="dash-mini-card">
+                    <div class="dash-donut-chart cyan"></div>
+                  </div>
+                  <div class="dash-mini-card wide">
+                    <div class="dash-bar-graph">
+                      <span style="height:40%"></span>
+                      <span style="height:70%"></span>
+                      <span style="height:90%"></span>
+                      <span style="height:60%"></span>
+                      <span style="height:100%"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="project-card-body">
+            <div class="project-tag-pill tag-web">WEB</div>
+            <h3 class="project-item-title">System Monitoring Dashboard</h3>
+            <p class="project-item-desc">Real-time system monitoring dashboard for better insights.</p>
+            <button class="project-card-action-btn">
+              <span>VIEW PROJECT</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+
       </div>
 
-      <div class="contact-layout contact-layout--centered reveal">
-        <div class="contact-info">
-          <div class="contact-card glass-card">
-            <div class="contact-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <!-- 3D Spatial UI Project Showcase Carousel (Apple VisionOS-Style Z-Depth) -->
+      <div class="more-projects-container spatial-carousel-container" id="allProjectsFilter">
+        <!-- Floating Slide Indicator Badge -->
+        <div class="spatial-counter-display" id="spatialCarouselCounter">01 / 04</div>
+
+        <!-- 3D Spatial Depth Carousel Viewport with Left and Right Flanking Buttons -->
+        <div class="spatial-carousel-viewport" id="spatialCarouselViewport">
+          <!-- Left Side Navigation Button -->
+          <button class="spatial-flank-btn flank-left" id="carouselPrevBtn" aria-label="Previous Project">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+
+          <!-- 3D Spatial Stage -->
+          <div class="spatial-carousel-stage" id="spatialCarouselStage">
+
+            <!-- Slide 1: Safe Sight GPS -->
+            <div class="spatial-project-card active" data-index="0" data-title="Safe Sight GPS"
+              data-badge="VEHICLE TELEMETRY • FIREBASE"
+              data-description="Vehicle tracking & fleet management solution with real-time location monitoring, geofencing, and historical routes."
+              data-image="public/image/d.png" data-link="https://safe-sight-admin.vercel.app/login">
+              <div class="spatial-card-inner">
+                <div class="spatial-glass-sheen"></div>
+                <div class="spatial-card-depth-img">
+                  <img src="public/image/d.png" alt="Safe Sight GPS" class="spatial-proj-img">
+                  <div class="spatial-floating-tag">FLEET TRACKING</div>
+                </div>
+                <div class="spatial-card-depth-content">
+                  <span class="spatial-mini-kicker">PRODUCTION SYSTEM 01</span>
+                  <h4>Safe Sight GPS</h4>
+                  <p>Real-time vehicle fleet tracking, live geofencing alarms, and sensor telemetry.</p>
+                  <div class="spatial-action-row">
+                    <span class="spatial-tech-pill">React</span>
+                    <span class="spatial-tech-pill">Firebase</span>
+                    <button class="btn-spatial-inspect">Explore ↗</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slide 2: Teacher Evaluation System -->
+            <div class="spatial-project-card next" data-index="1" data-title="Teacher Evaluation System"
+              data-badge="ACADEMIC PLATFORM • CHED STANDARDS"
+              data-description="Specialized institutional platform streamlining faculty performance evaluations adapted to CHED standards."
+              data-image="public/image/1.png" data-link="https://faculty-evaluation-system.vercel.app/login">
+              <div class="spatial-card-inner">
+                <div class="spatial-glass-sheen"></div>
+                <div class="spatial-card-depth-img">
+                  <img src="public/image/1.png" alt="Teacher Evaluation System" class="spatial-proj-img">
+                  <div class="spatial-floating-tag">QUALITY ASSURANCE</div>
+                </div>
+                <div class="spatial-card-depth-content">
+                  <span class="spatial-mini-kicker">PRODUCTION SYSTEM 02</span>
+                  <h4>Teacher Evaluation System</h4>
+                  <p>Automated weighted scoring, CHED evaluation criteria, and institutional PDF reporting.</p>
+                  <div class="spatial-action-row">
+                    <span class="spatial-tech-pill">Next.js</span>
+                    <span class="spatial-tech-pill">Tailwind</span>
+                    <button class="btn-spatial-inspect">Explore ↗</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slide 3: NOIR.co Fashion -->
+            <div class="spatial-project-card hidden-right" data-index="2" data-title="NOIR.co Contemporary Fashion"
+              data-badge="E-COMMERCE • LUXURY UI"
+              data-description="Contemporary fashion brand landing page with minimalist typography and seamless product showcase."
+              data-image="public/image/clothing-website.png" data-link="https://norco-io.vercel.app/index.html">
+              <div class="spatial-card-inner">
+                <div class="spatial-glass-sheen"></div>
+                <div class="spatial-card-depth-img">
+                  <img src="public/image/clothing-website.png" alt="NOIR.co Fashion" class="spatial-proj-img">
+                  <div class="spatial-floating-tag">LUXURY APPAREL</div>
+                </div>
+                <div class="spatial-card-depth-content">
+                  <span class="spatial-mini-kicker">PRODUCTION SYSTEM 03</span>
+                  <h4>NOIR.co Fashion</h4>
+                  <p>Minimalist apparel catalog, responsive interactive showcase, and high-fashion aesthetics.</p>
+                  <div class="spatial-action-row">
+                    <span class="spatial-tech-pill">HTML5</span>
+                    <span class="spatial-tech-pill">CSS3 / JS</span>
+                    <button class="btn-spatial-inspect">Explore ↗</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slide 4: Library Management System -->
+            <div class="spatial-project-card prev" data-index="3" data-title="Library Management System"
+              data-badge="ASSET MANAGEMENT • CATALOG"
+              data-description="Digital book cataloging, user lending tracking, and asset management dashboard."
+              data-image="public/image/work.png"
+              data-link="https://library-management-system-port.vercel.app/index.html">
+              <div class="spatial-card-inner">
+                <div class="spatial-glass-sheen"></div>
+                <div class="spatial-card-depth-img">
+                  <img src="public/image/work.png" alt="Library Management System" class="spatial-proj-img">
+                  <div class="spatial-floating-tag">DIGITAL ARCHIVE</div>
+                </div>
+                <div class="spatial-card-depth-content">
+                  <span class="spatial-mini-kicker">PRODUCTION SYSTEM 04</span>
+                  <h4>Library Management System</h4>
+                  <p>Automated book loans, patron records, real-time inventory tracking, and overdue reminders.</p>
+                  <div class="spatial-action-row">
+                    <span class="spatial-tech-pill">Database</span>
+                    <span class="spatial-tech-pill">Fullstack</span>
+                    <button class="btn-spatial-inspect">Explore ↗</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Side Navigation Button -->
+          <button class="spatial-flank-btn flank-right" id="carouselNextBtn" aria-label="Next Project">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CONTACT SECTION ==================== -->
+    <section id="contact" class="contact-banner-section">
+      <div class="contact-card-container">
+        <div class="skeuo-screw screw-tl"></div>
+        <div class="skeuo-screw screw-tr"></div>
+        <div class="skeuo-screw screw-bl"></div>
+        <div class="skeuo-screw screw-br"></div>
+        <div class="contact-left-content">
+          <span class="card-kicker-tag">// CONTACT</span>
+          <h2 class="card-headline-title">LET'S WORK TOGETHER</h2>
+          <p class="contact-lead-text">
+            I am open to job opportunities and freelance projects. Feel free to reach out!
+          </p>
+          <button class="btn-send-message" id="openContactModalBtn">
+            <span>SEND MESSAGE</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="contact-right-pills">
+          <!-- Email Pill -->
+          <a href="mailto:jazpherbeneza@gmail.com" class="contact-info-pill">
+            <div class="contact-pill-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                 <polyline points="22,6 12,13 2,6" />
               </svg>
             </div>
-            <div>
-              <h4>Email</h4>
-              <a href="mailto:JazpherBeneza6@gmail.com">JazpherBeneza6@gmail.com</a>
+            <div class="contact-pill-text">
+              <div class="contact-pill-val">jazpherbeneza@gmail.com</div>
+              <div class="contact-pill-label">EMAIL</div>
             </div>
-          </div>
+          </a>
 
-          <div class="contact-card glass-card">
-            <div class="contact-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <!-- Phone Pill -->
+          <a href="tel:+639123456789" class="contact-info-pill">
+            <div class="contact-pill-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+            </div>
+            <div class="contact-pill-text">
+              <div class="contact-pill-val">+63 912 345 6789</div>
+              <div class="contact-pill-label">PHONE</div>
+            </div>
+          </a>
+
+          <!-- Location Pill -->
+          <div class="contact-info-pill">
+            <div class="contact-pill-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
             </div>
-            <div>
-              <h4>Location</h4>
-              <span>Philippines</span>
+            <div class="contact-pill-text">
+              <div class="contact-pill-val">Philippines</div>
+              <div class="contact-pill-label">LOCATION</div>
             </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="social-links">
-          <a href="https://github.com/jazpherbeneza6-dot" target="_blank" rel="noopener" class="social-link"
-            aria-label="GitHub">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M12 0c-6.63 0-12 5.37-12 12 0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
-            </svg>
-          </a>
-          <a href="#" target="_blank" rel="noopener" class="social-link" aria-label="LinkedIn">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" />
-            </svg>
-          </a>
-          <a href="https://www.facebook.com/09972003438t" target="_blank" rel="noopener" class="social-link"
-            aria-label="Facebook">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M24 12.07C24 5.41 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.95.93-1.95 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z" />
-            </svg>
-          </a>
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="site-bottom-footer">
+      <div class="footer-layout-row">
+        <div class="footer-copy-left">
+          <span class="footer-monogram">JB.</span>
+          <span class="footer-copyright-text">© 2025 Jazpher Beneza. All rights reserved.</span>
+        </div>
+        <div class="footer-motto-right">
+          <span class="motto-quote">"Code. Solve. Support. Repeat."</span>
+          <span class="motto-brackets">&lt;/&gt;</span>
         </div>
       </div>
-    </div>
-  </section>
+    </footer>
 
-  <!-- ========= FOOTER ========= -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-brand">
-          <span class="brand-mark">J</span>
-          <span class="brand-text">Jazz<span class="brand-accent">Dev</span></span>
-        </div>
-        <p class="footer-copy">&copy; 2026 Jazpher O. Beneza. Crafted with passion.</p>
-      </div>
-    </div>
-  </footer>
+  </main>
 
-  <!-- BACK TO TOP -->
-  <button class="back-to-top" id="backToTop" aria-label="Back to top">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+  <!-- FLOATING BACK TO TOP BUTTON -->
+  <button class="floating-back-to-top" id="backToTopBtn" aria-label="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
       <polyline points="18 15 12 9 6 15" />
     </svg>
   </button>
 
+  <!-- ==================== INTERACTIVE MODALS ==================== -->
+
+  <!-- 1. PROJECT DETAIL MODAL -->
+  <div class="interactive-modal-overlay" id="projectDetailModal">
+    <div class="interactive-modal-box">
+      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+      <div class="modal-hero-preview">
+        <img id="modalHeroImg" src="public/image/d.png" alt="Project preview" class="modal-img-tag">
+      </div>
+      <div class="modal-content-area">
+        <div class="modal-tag-badge" id="modalBadge">KOTLIN</div>
+        <h2 class="modal-project-title" id="modalTitle">Project Title</h2>
+        <p class="modal-project-desc" id="modalDescription">Detailed description...</p>
+        <div class="modal-actions-row">
+          <a href="#" id="modalLiveDemoBtn" target="_blank" rel="noopener" class="btn-modal-primary">
+            <span>Visit Live Demo</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+          </a>
+          <button class="btn-modal-secondary" id="modalCloseActionBtn">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. CONTACT MESSAGE MODAL -->
+  <div class="interactive-modal-overlay" id="contactFormModal">
+    <div class="interactive-modal-box contact-modal-box">
+      <button class="modal-close-btn" id="contactModalCloseBtn" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+      <div class="contact-modal-body">
+        <span class="card-kicker-tag">// REACH OUT</span>
+        <h2>SEND A MESSAGE</h2>
+        <p>Drop a note below and I will respond to your inquiry as soon as possible.</p>
+        <form class="contact-quick-form" id="contactQuickForm">
+          <div class="form-group-field">
+            <label for="senderName">Your Name</label>
+            <input type="text" id="senderName" placeholder="e.g. Alex Morgan" required>
+          </div>
+          <div class="form-group-field">
+            <label for="senderEmail">Email Address</label>
+            <input type="email" id="senderEmail" placeholder="e.g. alex@example.com" required>
+          </div>
+          <div class="form-group-field">
+            <label for="senderMessage">Message</label>
+            <textarea id="senderMessage" rows="4" placeholder="How can I assist you?" required></textarea>
+          </div>
+          <button type="submit" class="btn-form-submit">
+            <span>SEND DISPATCH</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg>
+          </button>
+          <div class="form-toast-msg" id="formSuccessToast">Message dispatched successfully! Thank you.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ABOUT ME EXPANDED MODAL -->
+  <div class="interactive-modal-overlay" id="aboutExpandedModal">
+    <div class="interactive-modal-box about-modal-box">
+      <button class="modal-close-btn" id="aboutModalCloseBtn" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+      <div class="about-modal-body">
+        <span class="card-kicker-tag">// BACKGROUND & PHILOSOPHY</span>
+        <h2>ABOUT JAZPHER BENEZA</h2>
+        <div class="about-modal-text">
+          <p>
+            I am a dedicated IT Support professional and passionate aspiring Mobile & Web Developer located in the
+            Philippines. My dual expertise allows me to bridge technical infrastructure troubleshooting with modern
+            software development.
+          </p>
+          <div class="about-pillars-grid">
+            <div class="pillar-box">
+              <h4>🛠 IT Infrastructure & Support</h4>
+              <p>Hardware diagnostics, OS configuration, LAN/WLAN troubleshooting, remote helpdesk, and user system
+                optimization.</p>
+            </div>
+            <div class="pillar-box">
+              <h4>📱 Mobile & Android Development</h4>
+              <p>Native Kotlin development, Android SDK architecture, state management, SQLite/Room, and Material Design
+                standards.</p>
+            </div>
+            <div class="pillar-box">
+              <h4>💻 Fullstack & UI/UX Craftsmanship</h4>
+              <p>Responsive web interfaces, API integrations, modern CSS design paradigms (from Glassmorphism to Spatial
+                UI), and security-minded coding.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three.js 3D WebGL Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="script.js"></script>
 </body>
 

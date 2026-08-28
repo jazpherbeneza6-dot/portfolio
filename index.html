@@ -212,13 +212,24 @@
           <div class="dock-portrait-stage" id="dockPortraitTarget">
             <div class="dock-circuit-lines"></div>
             <div class="dock-radar-ring"></div>
-            <img src="public/image/image.png" alt="Jazpher Beneza Portrait" class="dock-portrait-img" loading="lazy" decoding="async">
+            <img src="public/image/image.png" alt="Jazpher Beneza Portrait" class="dock-portrait-img" loading="lazy"
+              decoding="async">
           </div>
 
           <div class="dock-portrait-footer">
             <div class="dock-footer-left">
               <span class="dock-label-name">JAZPHER BENEZA</span>
-              <span class="dock-label-role">IT SUPPORT & DEV</span>
+              <div class="dock-role-badge-row">
+                <span class="dock-role-chip">IT SUPPORT</span>
+                <span class="dock-role-separator">//</span>
+                <span class="dock-role-chip highlight">SOFTWARE DEV</span>
+              </div>
+            </div>
+            <div class="dock-footer-right">
+              <div class="dock-status-indicator">
+                <span class="dock-status-led"></span>
+                <span class="dock-status-text">ACTIVE // READY</span>
+              </div>
             </div>
           </div>
         </div>
@@ -255,7 +266,7 @@
             </div>
           </div>
 
-          <!-- Panel 1: WHO I AM (Bio & Horizon) -->
+          <!-- Panel 1: WHO I AM (Bio & Insight Telemetry) -->
           <div class="console-panel active" id="panelWho">
             <div class="panel-inner-content">
               <div class="panel-header-meta">
@@ -263,15 +274,65 @@
                 <h2 class="card-headline-title">WHO I AM</h2>
               </div>
               <p class="card-body-paragraph">
-                Fresh graduate with a passion for technology. I am a fast learner, adaptable, and always eager to take
-                on
-                new challenges. I enjoy solving problems and creating efficient solutions through technology.
+                Hi, I'm <strong class="text-highlight name">Jazpher O. Beneza</strong>, a fresh graduate with a <span class="text-highlight gold">Bachelor of Science in Computer Science</span>. I combine a passion for <span class="text-highlight cyan">Software Programming</span> with hands-on expertise in <span class="text-highlight amber">IT Hardware & Network Troubleshooting</span>. Fast learner, highly adaptable, and driven to turn challenging problems into high-performance digital solutions.
               </p>
 
-              <!-- Interactive Earth / Wireframe Horizon Mesh -->
-              <div class="wireframe-horizon-container">
-                <div class="wireframe-grid-plane"></div>
-                <div class="horizon-glow-circle"></div>
+              <!-- Curated Insight Cards Grid -->
+              <div class="who-insights-grid">
+                <div class="insight-item-card">
+                  <div class="insight-card-header">
+                    <div class="insight-icon-chip">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                        <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                      </svg>
+                    </div>
+                    <span class="insight-tag">EDUCATION</span>
+                  </div>
+                  <h4 class="insight-title">BS Computer Science</h4>
+                  <p class="insight-desc">Solid grounding in algorithmic problem solving, database design & modern software engineering.</p>
+                </div>
+
+                <div class="insight-item-card">
+                  <div class="insight-card-header">
+                    <div class="insight-icon-chip cyan">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                      </svg>
+                    </div>
+                    <span class="insight-tag cyan">EXPERTISE</span>
+                  </div>
+                  <h4 class="insight-title">Dev & IT Troubleshooting</h4>
+                  <p class="insight-desc">Versatile across Native Android (Kotlin), web frontends, and OS/hardware maintenance.</p>
+                </div>
+
+                <div class="insight-item-card">
+                  <div class="insight-card-header">
+                    <div class="insight-icon-chip amber">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                      </svg>
+                    </div>
+                    <span class="insight-tag amber">MINDSET</span>
+                  </div>
+                  <h4 class="insight-title">Adaptable & Fast Learner</h4>
+                  <p class="insight-desc">Quickly masters new tech frameworks, tools, and workflows to deliver rapid business value.</p>
+                </div>
+
+                <div class="insight-item-card">
+                  <div class="insight-card-header">
+                    <div class="insight-icon-chip green">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 14 14"></polyline>
+                      </svg>
+                    </div>
+                    <span class="insight-tag green">STATUS</span>
+                  </div>
+                  <h4 class="insight-title">Open for Opportunities</h4>
+                  <p class="insight-desc">Available for full-time roles, developer positions, and collaborative tech projects.</p>
+                </div>
               </div>
 
               <div class="panel-action-row">
@@ -494,7 +555,8 @@
               <div class="spatial-card-inner">
                 <div class="spatial-glass-sheen"></div>
                 <div class="spatial-card-depth-img">
-                  <img src="public/image/d.png" alt="Safe Sight GPS" class="spatial-proj-img" loading="lazy" decoding="async">
+                  <img src="public/image/d.png" alt="Safe Sight GPS" class="spatial-proj-img" loading="lazy"
+                    decoding="async">
                   <div class="spatial-floating-tag">FLEET TRACKING</div>
                 </div>
                 <div class="spatial-card-depth-content">
@@ -518,7 +580,8 @@
               <div class="spatial-card-inner">
                 <div class="spatial-glass-sheen"></div>
                 <div class="spatial-card-depth-img">
-                  <img src="public/image/1.png" alt="Teacher Evaluation System" class="spatial-proj-img" loading="lazy" decoding="async">
+                  <img src="public/image/1.png" alt="Teacher Evaluation System" class="spatial-proj-img" loading="lazy"
+                    decoding="async">
                   <div class="spatial-floating-tag">QUALITY ASSURANCE</div>
                 </div>
                 <div class="spatial-card-depth-content">
@@ -542,7 +605,8 @@
               <div class="spatial-card-inner">
                 <div class="spatial-glass-sheen"></div>
                 <div class="spatial-card-depth-img">
-                  <img src="public/image/clothing-website.png" alt="NOIR.co Fashion" class="spatial-proj-img" loading="lazy" decoding="async">
+                  <img src="public/image/clothing-website.png" alt="NOIR.co Fashion" class="spatial-proj-img"
+                    loading="lazy" decoding="async">
                   <div class="spatial-floating-tag">LUXURY APPAREL</div>
                 </div>
                 <div class="spatial-card-depth-content">
@@ -567,7 +631,8 @@
               <div class="spatial-card-inner">
                 <div class="spatial-glass-sheen"></div>
                 <div class="spatial-card-depth-img">
-                  <img src="public/image/work.png" alt="Library Management System" class="spatial-proj-img" loading="lazy" decoding="async">
+                  <img src="public/image/work.png" alt="Library Management System" class="spatial-proj-img"
+                    loading="lazy" decoding="async">
                   <div class="spatial-floating-tag">DIGITAL ARCHIVE</div>
                 </div>
                 <div class="spatial-card-depth-content">
@@ -698,7 +763,8 @@
         </svg>
       </button>
       <div class="modal-hero-preview">
-        <img id="modalHeroImg" src="public/image/d.png" alt="Project preview" class="modal-img-tag" loading="lazy" decoding="async">
+        <img id="modalHeroImg" src="public/image/d.png" alt="Project preview" class="modal-img-tag" loading="lazy"
+          decoding="async">
       </div>
       <div class="modal-content-area">
         <div class="modal-tag-badge" id="modalBadge">KOTLIN</div>

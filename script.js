@@ -936,6 +936,41 @@
       requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
+
+    // Auto-snap between Hero and About sections to bypass intermediate transition lag
+    let isAutoScrolling = false;
+    let lastScrollY = window.scrollY;
+
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+      const goingDown = currentScrollY > lastScrollY;
+
+      // Snap down to About section if scrolling down from top hero fold
+      if (goingDown && currentScrollY > 12 && currentScrollY < 180 && !isAutoScrolling) {
+        isAutoScrolling = true;
+        lenis.scrollTo('#about', {
+          offset: -24,
+          duration: 1.1,
+          onComplete: () => {
+            setTimeout(() => { isAutoScrolling = false; }, 300);
+          }
+        });
+      }
+
+      // Snap back up to Hero if scrolling up near top of About section
+      if (!goingDown && currentScrollY > 80 && currentScrollY < 260 && !isAutoScrolling) {
+        isAutoScrolling = true;
+        lenis.scrollTo('#home', {
+          offset: 0,
+          duration: 1.1,
+          onComplete: () => {
+            setTimeout(() => { isAutoScrolling = false; }, 300);
+          }
+        });
+      }
+
+      lastScrollY = currentScrollY;
+    }, { passive: true });
   }
 
   // Smooth Scroll for Navigation Anchor Links

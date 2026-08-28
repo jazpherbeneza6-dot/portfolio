@@ -6,6 +6,38 @@
 (function () {
   'use strict';
 
+  // ─── 0. LAZY LOADING & OFFSCREEN SUSPENSION ENGINE ───
+  // Pause heavy resources (video, CSS animations) when they leave the viewport
+  if (typeof IntersectionObserver !== 'undefined') {
+
+    // 0A. Hero Background Video: pause when offscreen, resume when visible
+    const heroVideo = document.querySelector('.editorial-bg-video');
+    if (heroVideo) {
+      const videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            heroVideo.play().catch(() => {}); // resume playback
+          } else {
+            heroVideo.pause(); // stop decoding frames when hidden
+          }
+        });
+      }, { threshold: 0.05 });
+      videoObserver.observe(heroVideo);
+    }
+
+    // 0B. Pause CSS animations on offscreen elements via .anim-paused class
+    const animatedEls = document.querySelectorAll(
+      '.dock-radar-ring, .anime-lightning-aura, .portrait-electric-aura, .indicator-led'
+    );
+    if (animatedEls.length > 0) {
+      const animObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          entry.target.classList.toggle('anim-paused', !entry.isIntersecting);
+        });
+      }, { threshold: 0.01 });
+      animatedEls.forEach(el => animObserver.observe(el));
+    }
+  }
   // ─── 1. AMBIENT COSMIC BACKGROUND CANVAS ───
   const canvas = document.getElementById('ambientCanvas');
   if (canvas) {
@@ -112,7 +144,20 @@
     let lWidth = (lightningCanvas.width = lightningCanvas.parentElement?.offsetWidth || 400);
     let lHeight = (lightningCanvas.height = lightningCanvas.parentElement?.offsetHeight || 480);
 
+    // Visibility-gate: suspend when offscreen
+    let isLightningVisible = true;
+    if (typeof IntersectionObserver !== 'undefined') {
+      const lParent = lightningCanvas.closest('section') || lightningCanvas.parentElement;
+      if (lParent) {
+        const lObs = new IntersectionObserver((entries) => {
+          entries.forEach(e => { isLightningVisible = e.isIntersecting; });
+        }, { threshold: 0.01 });
+        lObs.observe(lParent);
+      }
+    }
+
     const sparks = [];
+    const MAX_SPARKS = 60; // cap spark count
     let perimeterProgress = 0; // 0 to 1 along rectangle perimeter
 
     function getPerimeterPoint(t, w, h, radius) {
@@ -181,6 +226,7 @@
 
     function spawnSparks(x, y, count) {
       for (let i = 0; i < count; i++) {
+        if (sparks.length >= MAX_SPARKS) break; // prevent unbounded growth
         const angle = Math.random() * Math.PI * 2;
         const speed = Math.random() * 3.5 + 1.2;
         sparks.push({
@@ -197,6 +243,9 @@
     }
 
     function animateLightning() {
+      requestAnimationFrame(animateLightning);
+      if (!isLightningVisible) return; // skip work when offscreen
+
       lCtx.clearRect(0, 0, lWidth, lHeight);
 
       // 1. Advance perimeter spark head
@@ -230,17 +279,15 @@
         spawnSparks(c1.x, c1.y, 3);
       }
 
-      // 5. Update and render spark particles
-      for (let i = sparks.length - 1; i >= 0; i--) {
+      // 5. Update and render spark particles (swap-and-pop for O(1) removal)
+      let writeIdx = 0;
+      for (let i = 0; i < sparks.length; i++) {
         const s = sparks[i];
         s.x += s.vx;
         s.y += s.vy;
         s.life -= s.decay;
 
-        if (s.life <= 0) {
-          sparks.splice(i, 1);
-          continue;
-        }
+        if (s.life <= 0) continue; // skip dead sparks
 
         lCtx.beginPath();
         lCtx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
@@ -250,16 +297,22 @@
         lCtx.shadowBlur = 6;
         lCtx.fill();
         lCtx.globalAlpha = 1;
-      }
 
-      requestAnimationFrame(animateLightning);
+        if (writeIdx !== i) sparks[writeIdx] = s;
+        writeIdx++;
+      }
+      sparks.length = writeIdx;
     }
 
     animateLightning();
 
+    let lightningResizeTimeout;
     window.addEventListener('resize', () => {
-      lWidth = lightningCanvas.width = lightningCanvas.parentElement?.offsetWidth || 400;
-      lHeight = lightningCanvas.height = lightningCanvas.parentElement?.offsetHeight || 480;
+      clearTimeout(lightningResizeTimeout);
+      lightningResizeTimeout = setTimeout(() => {
+        lWidth = lightningCanvas.width = lightningCanvas.parentElement?.offsetWidth || 400;
+        lHeight = lightningCanvas.height = lightningCanvas.parentElement?.offsetHeight || 480;
+      }, 150);
     });
   }
 
@@ -502,7 +555,14 @@
   const backToTopBtn = document.getElementById('backToTopBtn');
   if (backToTopBtn) {
     backToTopBtn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (lenis) {
+        lenis.scrollTo(0, {
+          duration: 1.3,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+        });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     });
   }
 
@@ -598,7 +658,15 @@
   if (viewAllProjectsBtn && allProjectsFilter) {
     viewAllProjectsBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      allProjectsFilter.scrollIntoView({ behavior: 'smooth' });
+      if (lenis) {
+        lenis.scrollTo(allProjectsFilter, {
+          offset: -24,
+          duration: 1.3,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+        });
+      } else {
+        allProjectsFilter.scrollIntoView({ behavior: 'smooth' });
+      }
     });
   }
 
@@ -667,7 +735,7 @@
     const emberTexture = createEmberTexture();
 
     // 2. Volumetric 3D Floating Embers Cloud
-    const emberCount = 380;
+    const emberCount = 220; // reduced from 380 for better scroll perf
     const emberGeo = new THREE.BufferGeometry();
     const positions = new Float32Array(emberCount * 3);
     const scales = new Float32Array(emberCount);
@@ -707,8 +775,12 @@
 
     // 3. 3D Procedural Branching Lightning System
     const activeBolts = [];
+    const MAX_BOLTS = 30; // cap bolt objects to prevent unbounded GPU memory growth
 
     function trigger3DLightning(startVec, endVec, isSubBranch = false) {
+      // Hard cap: skip if too many bolts are alive
+      if (activeBolts.length >= MAX_BOLTS) return;
+
       const points = [startVec.clone()];
       const dist = startVec.distanceTo(endVec);
       const segments = Math.max(6, Math.floor(dist / 6));
@@ -805,12 +877,16 @@
     let currentMouseY = 0;
 
     if (parentContainer) {
+      // Throttled mousemove: limit lightning spawn to max 10fps to avoid jank during scroll
+      let lastMouseLightning = 0;
       parentContainer.addEventListener('mousemove', (e) => {
         const rect = parentContainer.getBoundingClientRect();
         targetMouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
         targetMouseY = -((e.clientY - rect.top) / rect.height - 0.5) * 2;
 
-        if (Math.random() < 0.2) {
+        const now = performance.now();
+        if (now - lastMouseLightning > 100 && Math.random() < 0.2) {
+          lastMouseLightning = now;
           const target3D = new THREE.Vector3(targetMouseX * 50, targetMouseY * 35, 10);
           const start3D = new THREE.Vector3(
             target3D.x + (Math.random() - 0.5) * 45,
@@ -921,7 +997,34 @@
   }
 
   // ─── 16. MOTION ONE & LENIS SMOOTH INERTIA SCROLL ───
+  // ─── 16. MOTION & LENIS SMOOTH INERTIA SCROLL ENGINE ───
   let lenis = null;
+  let isAutoScrolling = false;
+
+  function scrollToTarget(target, offset = -20) {
+    isAutoScrolling = true;
+    if (lenis) {
+      lenis.scrollTo(target, {
+        offset: offset,
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        onComplete: () => {
+          setTimeout(() => { isAutoScrolling = false; }, 300);
+        }
+      });
+    } else {
+      if (typeof target === 'number') {
+        window.scrollTo({ top: target, behavior: 'smooth' });
+      } else {
+        const el = typeof target === 'string' ? document.querySelector(target) : target;
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+      setTimeout(() => { isAutoScrolling = false; }, 800);
+    }
+  }
+
   if (typeof window.Lenis !== 'undefined') {
     lenis = new window.Lenis({
       duration: 1.1,
@@ -937,181 +1040,88 @@
     }
     requestAnimationFrame(raf);
 
-    // Auto-snap between Hero and About sections to bypass intermediate transition lag
-    let isAutoScrolling = false;
+    // ── SECTION SNAP: One scroll from Hero → auto-jump to About ──
+    const aboutEl = document.querySelector('#about');
+    const heroEl = document.querySelector('#home');
+    const heroHeight = heroEl ? heroEl.offsetHeight : window.innerHeight;
+
+    // 1. WHEEL EVENT: Catch the very first scroll-down while in the hero zone
+    window.addEventListener('wheel', (e) => {
+      if (isAutoScrolling) return;
+      const scrollY = window.scrollY;
+
+      // Scrolling DOWN while still inside the hero section → snap to About
+      if (e.deltaY > 0 && scrollY < heroHeight * 0.45) {
+        scrollToTarget(aboutEl || '#about', -24);
+      }
+
+      // Scrolling UP while near the top of About → snap back to Hero
+      if (e.deltaY < 0 && scrollY > 10 && scrollY < heroHeight * 1.15) {
+        scrollToTarget(heroEl || '#home', 0);
+      }
+    }, { passive: true });
+
+    // 2. TOUCH: Snap on touch-swipe for mobile
     let lastScrollY = window.scrollY;
-
+    let snapRafPending = false;
     window.addEventListener('scroll', () => {
-      const currentScrollY = window.scrollY;
-      const goingDown = currentScrollY > lastScrollY;
+      if (snapRafPending || isAutoScrolling) return;
+      snapRafPending = true;
+      requestAnimationFrame(() => {
+        snapRafPending = false;
+        const currentScrollY = window.scrollY;
+        const goingDown = currentScrollY > lastScrollY;
 
-      // Snap down to About section if scrolling down from top hero fold
-      if (goingDown && currentScrollY > 12 && currentScrollY < 180 && !isAutoScrolling) {
-        isAutoScrolling = true;
-        lenis.scrollTo('#about', {
-          offset: -24,
-          duration: 1.1,
-          onComplete: () => {
-            setTimeout(() => { isAutoScrolling = false; }, 300);
-          }
-        });
-      }
+        if (goingDown && currentScrollY > 10 && currentScrollY < heroHeight * 0.45 && !isAutoScrolling) {
+          scrollToTarget(aboutEl || '#about', -24);
+        }
 
-      // Snap back up to Hero if scrolling up near top of About section
-      if (!goingDown && currentScrollY > 80 && currentScrollY < 260 && !isAutoScrolling) {
-        isAutoScrolling = true;
-        lenis.scrollTo('#home', {
-          offset: 0,
-          duration: 1.1,
-          onComplete: () => {
-            setTimeout(() => { isAutoScrolling = false; }, 300);
-          }
-        });
-      }
+        if (!goingDown && currentScrollY > 10 && currentScrollY < heroHeight * 1.15 && !isAutoScrolling) {
+          scrollToTarget(heroEl || '#home', 0);
+        }
 
-      lastScrollY = currentScrollY;
+        lastScrollY = currentScrollY;
+      });
     }, { passive: true });
   }
 
-  // Smooth Scroll for Navigation Anchor Links
+  // ─── SMOOTH SCROLL FOR FLOATING NAV DOCK & ANCHOR LINKS ───
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', function (e) {
       const targetId = this.getAttribute('href');
       if (targetId && targetId !== '#' && !targetId.includes('Modal')) {
+        e.preventDefault();
+
+        // Immediate active state feedback on floating dock buttons
+        if (this.classList.contains('dock-icon-link')) {
+          document.querySelectorAll('.dock-icon-link').forEach((l) => l.classList.remove('active'));
+          this.classList.add('active');
+        }
+
+        // Close mobile nav menu if open
+        const floatingDock = document.getElementById('floatingNavDock');
+        if (floatingDock && floatingDock.classList.contains('mobile-open')) {
+          floatingDock.classList.remove('mobile-open');
+        }
+
+        if (targetId === '#skills') {
+          const aboutEl = document.querySelector('#about');
+          if (aboutEl) {
+            if (typeof switchBentoTab === 'function') switchBentoTab('skills');
+            scrollToTarget(aboutEl, -24);
+          }
+          return;
+        }
+
         const targetEl = document.querySelector(targetId);
         if (targetEl) {
-          e.preventDefault();
-          if (lenis) {
-            lenis.scrollTo(targetEl, { offset: -24, duration: 1.2 });
-          } else {
-            targetEl.scrollIntoView({ behavior: 'smooth' });
-          }
+          scrollToTarget(targetEl, targetId === '#home' ? 0 : -24);
         }
       }
     });
   });
 
-  const { animate, scroll } = window.Motion || {};
-  if (animate && scroll) {
-    // Apply zero-transition CSS override for buttery-smooth interpolation
-    document.body.classList.add('motion-active');
 
-    const portraitActor = document.getElementById('heroPortraitWrapper');
-    const dockTarget = document.getElementById('dockPortraitTarget');
-    const homeSection = document.getElementById('home');
-    const aboutSection = document.getElementById('about');
-
-    if (portraitActor && dockTarget && homeSection && aboutSection) {
-      const dockImg = dockTarget.querySelector('img');
-      if (dockImg) {
-        dockImg.style.opacity = '0';
-      }
-
-      function computeCoords() {
-        const actorBounds = portraitActor.getBoundingClientRect();
-        const dockBounds = dockTarget.getBoundingClientRect();
-        const portraitImg = portraitActor.querySelector('img');
-
-        // Horizontal center offsets
-        const actorCenterX = actorBounds.left + actorBounds.width / 2;
-        const dockCenterX = dockBounds.left + dockBounds.width / 2;
-        const deltaX = dockCenterX - actorCenterX;
-
-        // Proportional scale to fit docked stage
-        const imgHeight = portraitImg ? portraitImg.offsetHeight : 540;
-        const targetScale = Math.min(0.68, Math.max(0.52, (dockBounds.height * 0.96) / (imgHeight || 540)));
-
-        // Vertical offset aligning bottom of actors relative to viewport scroll
-        const pageWrapper = document.body;
-        const pageWrapperTop = pageWrapper.getBoundingClientRect().top + window.scrollY;
-        const actorAbsoluteBottom = (actorBounds.bottom + window.scrollY) - pageWrapperTop;
-        const dockAbsoluteBottom = (dockBounds.bottom + window.scrollY) - pageWrapperTop;
-        const deltaY = (dockAbsoluteBottom - actorAbsoluteBottom) - 2;
-
-        return { deltaX, deltaY, targetScale };
-      }
-
-      let coords = computeCoords();
-      window.addEventListener('resize', () => {
-        coords = computeCoords();
-      });
-
-      const isMobile = () => window.innerWidth < 993;
-
-      // Track scroll progress native compositor scroll linked loop
-      scroll((progress) => {
-        if (isMobile()) {
-          // Reset styles on mobile
-          portraitActor.style.transform = '';
-          portraitActor.style.opacity = '1';
-          if (dockImg) dockImg.style.opacity = '1';
-          return;
-        }
-
-        // Linear interpolation of flight parameters (Zero lag, pure CPU/GPU pipeline)
-        const x = progress * coords.deltaX;
-        const y = progress * coords.deltaY;
-        const scale = 1 + progress * (coords.targetScale - 1);
-        const rotY = progress * -6;
-        const rotZ = progress * -1.2;
-
-        portraitActor.style.transform = `translate3d(calc(-50% + ${x}px), ${y}px, 0) scale(${scale}) rotateY(${rotY}deg) rotateZ(${rotZ}deg)`;
-
-        // Seamless visibility handover at 90% scroll path progress
-        if (progress >= 0.9) {
-          portraitActor.style.opacity = '0';
-          if (dockImg) dockImg.style.opacity = '1';
-        } else {
-          portraitActor.style.opacity = '1';
-          if (dockImg) dockImg.style.opacity = '0';
-        }
-
-        // Parallax depth typographic drift
-        const typo = document.querySelector('.editorial-bg-typography');
-        if (typo) {
-          const typoY = progress * -180;
-          const typoScale = 1 + progress * (0.88 - 1);
-          const typoOpacity = 1 - progress;
-          typo.style.transform = `translate3d(-50%, calc(-50% + ${typoY}px), 0) scale(${typoScale})`;
-          typo.style.opacity = typoOpacity;
-        }
-
-        // Fade Hero content actions
-        const overlay = document.querySelector('.editorial-content-overlay');
-        if (overlay) {
-          overlay.style.opacity = 1 - progress * 1.5;
-        }
-
-        // Ambient reveal glow of the dock panel card
-        const dockCard = document.getElementById('aboutPortraitDock');
-        if (dockCard) {
-          if (progress > 0.35) {
-            dockCard.style.borderTopColor = 'rgba(251, 191, 36, 0.9)';
-            dockCard.style.boxShadow = '0 0 60px rgba(245, 158, 11, 0.38), var(--chassis-bevel)';
-          } else {
-            dockCard.style.borderTopColor = '#3e4657';
-            dockCard.style.boxShadow = 'var(--chassis-bevel)';
-          }
-        }
-
-        // Ambient reveal glow of the Bento Console Card
-        const bentoCard = document.getElementById('bentoConsoleCard');
-        if (bentoCard) {
-          if (progress > 0.2) {
-            const bentoY = (1 - progress) * 55;
-            bentoCard.style.transform = `translate3d(0, ${bentoY}px, 0) rotateX(0deg)`;
-            bentoCard.style.opacity = '1';
-          } else {
-            bentoCard.style.transform = 'translate3d(0, 55px, 0) rotateX(6deg)';
-            bentoCard.style.opacity = '0.6';
-          }
-        }
-      }, {
-        target: homeSection,
-        offset: ["start start", "end start"]
-      });
-    }
-  }
 
   // ─── 17. BENTO CONSOLE TAB SWITCHER (WHO I AM <-> SKILLS) ───
   const tabBtnWho = document.getElementById('tabBtnWho');

@@ -95,8 +95,14 @@
   box-sizing: border-box;
 }
 
+/* LAZY RENDER: Freeze CSS animations when element is offscreen (toggled by IntersectionObserver) */
+.anim-paused,
+.anim-paused::before,
+.anim-paused::after {
+  animation-play-state: paused !important;
+}
+
 html {
-  scroll-behavior: smooth;
   color-scheme: dark;
   background-color: var(--bg-desk);
   font-family: var(--font-sans);
@@ -110,7 +116,7 @@ body {
     radial-gradient(circle at 10% 40%, rgba(245, 158, 11, 0.03) 0%, transparent 40%),
     radial-gradient(circle at 90% 70%, rgba(6, 182, 212, 0.03) 0%, transparent 40%),
     linear-gradient(180deg, #161820 0%, #0f1116 100%);
-  background-attachment: fixed;
+  /* PERF: removed background-attachment:fixed — causes full-page repaint on every scroll frame */
   color: var(--text-engraved);
   line-height: 1.6;
   min-height: 100vh;
@@ -695,8 +701,6 @@ button {
   align-items: flex-end;
   justify-content: center;
   pointer-events: none;
-  will-change: transform, opacity;
-  backface-visibility: hidden;
 }
 
 .portrait-electric-aura {
@@ -746,9 +750,7 @@ button {
     drop-shadow(0 30px 60px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 30px rgba(245, 158, 11, 0.5)) contrast(1.15) brightness(1.06) saturate(1.1);
 }
 
-body.motion-active .editorial-portrait-img {
-  transition: none !important;
-}
+
 
 /* Layer 3: Editorial Action & Connect Overlays */
 .editorial-content-overlay {
@@ -855,9 +857,8 @@ body.motion-active .editorial-portrait-img {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(14, 18, 26, 0.78);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(14, 18, 26, 0.85);
+  /* PERF: removed backdrop-filter blur — causes expensive compositing during scroll animations */
   padding: 8px 14px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1025,8 +1026,14 @@ body.motion-active .editorial-portrait-img {
 
 /* ─── 8. ABOUT & SKILLS SECTION: DOCKED PORTRAIT & HARDWARE RACK DECK ─── */
 .about-skills-section {
-  margin-bottom: 60px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  box-sizing: border-box;
   position: relative;
+  contain: layout style;
 }
 
 .about-triptych-layout {
@@ -1034,6 +1041,7 @@ body.motion-active .editorial-portrait-img {
   grid-template-columns: minmax(0, 54rem) minmax(0, 1fr);
   gap: 24px;
   align-items: stretch;
+  width: 100%;
 }
 
 /* Left Column: Portrait Chassis Card */
@@ -2299,14 +2307,20 @@ body.motion-active .editorial-portrait-img {
 
 /* ─── 10. PROJECTS SECTION: MODULAR HARDWARE UNITS ─── */
 .projects-section {
-  margin-bottom: 60px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 0;
+  box-sizing: border-box;
+  position: relative;
 }
 
 .projects-header-bar {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  margin-bottom: 28px;
+  margin-bottom: 18px;
 }
 
 .link-view-all-projects {
@@ -2456,7 +2470,7 @@ body.motion-active .editorial-portrait-img {
   border-top-color: #3e4657;
   border-radius: 18px;
   box-shadow: var(--chassis-bevel);
-  padding: 24px 20px;
+  padding: 18px 20px;
   position: relative;
 }
 
@@ -2478,7 +2492,7 @@ body.motion-active .editorial-portrait-img {
 
 .spatial-carousel-viewport {
   position: relative;
-  min-height: 560px;
+  min-height: 480px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2527,7 +2541,7 @@ body.motion-active .editorial-portrait-img {
   position: relative;
   width: 100%;
   max-width: 1240px;
-  height: 530px;
+  height: 460px;
 }
 
 .spatial-project-card {
@@ -2696,7 +2710,13 @@ body.motion-active .editorial-portrait-img {
 
 /* ─── 12. CONTACT SECTION: CONTROL DESK ─── */
 .contact-banner-section {
-  margin-bottom: 50px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 0;
+  box-sizing: border-box;
+  position: relative;
 }
 
 .contact-card-container {

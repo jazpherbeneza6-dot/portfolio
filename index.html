@@ -99,7 +99,7 @@
       <!-- Backdrop Stage with Video & Three.js Canvas -->
       <div class="hero-media-backdrop">
         <!-- Anime Flame Video Background (Auto-playing, Looping, Seamless) -->
-        <video class="editorial-bg-video" autoplay loop muted playsinline preload="auto">
+        <video class="editorial-bg-video" autoplay loop muted playsinline preload="metadata">
           <source src="public/image/Flame%20Backround.mp4" type="video/mp4">
         </video>
 
@@ -212,7 +212,7 @@
           <div class="dock-portrait-stage" id="dockPortraitTarget">
             <div class="dock-circuit-lines"></div>
             <div class="dock-radar-ring"></div>
-            <img src="public/image/image.png" alt="Jazpher Beneza Portrait" class="dock-portrait-img">
+            <img src="public/image/image.png" alt="Jazpher Beneza Portrait" class="dock-portrait-img" loading="lazy" decoding="async">
           </div>
 
           <div class="dock-portrait-footer">
@@ -467,147 +467,7 @@
         </a>
       </div>
 
-      <!-- Project Cards 3-Column Grid -->
-      <div class="projects-cards-grid">
 
-        <!-- Project 1: MagTipid -->
-        <div class="project-showcase-card" data-title="MagTipid - Expense & Savings Tracker"
-          data-badge="KOTLIN • ANDROID"
-          data-description="MagTipid is an intuitive personal finance and expense tracking Android application built natively in Kotlin. Designed to empower users to manage budgets, categorize daily expenditures, and track savings goals with visual analytics and offline-first persistence."
-          data-image="public/image/d.png" data-link="https://github.com/jazpherbeneza6-dot">
-          <div class="project-card-thumb">
-            <!-- Simulated Phone Mockup UI -->
-            <div class="project-screen-mockup mockup-phone">
-              <div class="mockup-phone-frame">
-                <div class="phone-notch"></div>
-                <div class="phone-screen-content">
-                  <div class="app-ui-header">
-                    <span class="app-title">MagTipid</span>
-                    <span class="app-avatar">₱</span>
-                  </div>
-                  <div class="app-balance-card">
-                    <div class="app-balance-label">Total Savings</div>
-                    <div class="app-balance-val">₱ 24,580.00</div>
-                  </div>
-                  <div class="app-stats-row">
-                    <div class="app-stat-chip green">Income +₱12k</div>
-                    <div class="app-stat-chip red">Expense -₱3.4k</div>
-                  </div>
-                  <div class="app-recent-tx">
-                    <div class="tx-line"><span>Groceries</span><span>-₱450</span></div>
-                    <div class="tx-line"><span>Allowance</span><span>+₱2,000</span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="project-card-body">
-            <div class="project-tag-pill tag-kotlin">KOTLIN</div>
-            <h3 class="project-item-title">MagTipid</h3>
-            <p class="project-item-desc">Expense & Savings Tracker App built with Kotlin.</p>
-            <button class="project-card-action-btn">
-              <span>VIEW PROJECT</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <!-- Project 2: IT Support Toolkit -->
-        <div class="project-showcase-card" data-title="IT Support Toolkit & Network Diagnostic Suite"
-          data-badge="DOCUMENTATION • NETWORKING"
-          data-description="A comprehensive toolkit and standardized troubleshooting suite designed for enterprise IT support. Features automated network diagnostics, IP configuration utilities, remote desktop playbooks, and hardware stress-testing documentation."
-          data-image="public/image/work.png" data-link="https://github.com/jazpherbeneza6-dot">
-          <div class="project-card-thumb">
-            <!-- Simulated Network Topology Graphic -->
-            <div class="project-screen-mockup mockup-network">
-              <div class="network-iso-stage">
-                <div class="wifi-broadcast-waves">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2">
-                    <path d="M5 12.55a11 11 0 0 1 14.08 0" />
-                    <path d="M1.42 9a16 16 0 0 1 21.16 0" />
-                    <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
-                    <line x1="12" y1="20" x2="12.01" y2="20" />
-                  </svg>
-                </div>
-                <div class="iso-devices-grid">
-                  <div class="iso-device-box server">
-                    <span class="device-light green"></span>
-                    <span class="device-name">SERVER</span>
-                  </div>
-                  <div class="iso-device-box laptop">
-                    <span class="device-light blue"></span>
-                    <span class="device-name">CLIENT</span>
-                  </div>
-                </div>
-                <div class="network-data-lines"></div>
-              </div>
-            </div>
-          </div>
-          <div class="project-card-body">
-            <div class="project-tag-pill tag-doc">DOCUMENTATION</div>
-            <h3 class="project-item-title">IT Support Toolkit</h3>
-            <p class="project-item-desc">A collection of troubleshooting tools and guides for IT support.</p>
-            <button class="project-card-action-btn">
-              <span>VIEW PROJECT</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <!-- Project 3: System Monitoring Dashboard -->
-        <div class="project-showcase-card" data-title="System Monitoring Dashboard" data-badge="WEB • REACT • METRICS"
-          data-description="Real-time web monitoring dashboard offering high-fidelity telemetry on server load, network latency, CPU/Memory resource distribution, and automated uptime alerts for IT infrastructure."
-          data-image="public/image/clothing-website.png" data-link="https://github.com/jazpherbeneza6-dot">
-          <div class="project-card-thumb">
-            <!-- Simulated Dashboard UI Preview -->
-            <div class="project-screen-mockup mockup-dashboard">
-              <div class="dashboard-preview-window">
-                <div class="dash-top-bar">
-                  <div class="dash-dot red"></div>
-                  <div class="dash-dot yellow"></div>
-                  <div class="dash-dot green"></div>
-                </div>
-                <div class="dash-grid-cards">
-                  <div class="dash-mini-card">
-                    <div class="dash-donut-chart"></div>
-                  </div>
-                  <div class="dash-mini-card">
-                    <div class="dash-donut-chart cyan"></div>
-                  </div>
-                  <div class="dash-mini-card wide">
-                    <div class="dash-bar-graph">
-                      <span style="height:40%"></span>
-                      <span style="height:70%"></span>
-                      <span style="height:90%"></span>
-                      <span style="height:60%"></span>
-                      <span style="height:100%"></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="project-card-body">
-            <div class="project-tag-pill tag-web">WEB</div>
-            <h3 class="project-item-title">System Monitoring Dashboard</h3>
-            <p class="project-item-desc">Real-time system monitoring dashboard for better insights.</p>
-            <button class="project-card-action-btn">
-              <span>VIEW PROJECT</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-      </div>
 
       <!-- 3D Spatial UI Project Showcase Carousel (Apple VisionOS-Style Z-Depth) -->
       <div class="more-projects-container spatial-carousel-container" id="allProjectsFilter">
@@ -634,7 +494,7 @@
               <div class="spatial-card-inner">
                 <div class="spatial-glass-sheen"></div>
                 <div class="spatial-card-depth-img">
-                  <img src="public/image/d.png" alt="Safe Sight GPS" class="spatial-proj-img">
+                  <img src="public/image/d.png" alt="Safe Sight GPS" class="spatial-proj-img" loading="lazy" decoding="async">
                   <div class="spatial-floating-tag">FLEET TRACKING</div>
                 </div>
                 <div class="spatial-card-depth-content">
@@ -658,7 +518,7 @@
               <div class="spatial-card-inner">
                 <div class="spatial-glass-sheen"></div>
                 <div class="spatial-card-depth-img">
-                  <img src="public/image/1.png" alt="Teacher Evaluation System" class="spatial-proj-img">
+                  <img src="public/image/1.png" alt="Teacher Evaluation System" class="spatial-proj-img" loading="lazy" decoding="async">
                   <div class="spatial-floating-tag">QUALITY ASSURANCE</div>
                 </div>
                 <div class="spatial-card-depth-content">
@@ -682,7 +542,7 @@
               <div class="spatial-card-inner">
                 <div class="spatial-glass-sheen"></div>
                 <div class="spatial-card-depth-img">
-                  <img src="public/image/clothing-website.png" alt="NOIR.co Fashion" class="spatial-proj-img">
+                  <img src="public/image/clothing-website.png" alt="NOIR.co Fashion" class="spatial-proj-img" loading="lazy" decoding="async">
                   <div class="spatial-floating-tag">LUXURY APPAREL</div>
                 </div>
                 <div class="spatial-card-depth-content">
@@ -707,7 +567,7 @@
               <div class="spatial-card-inner">
                 <div class="spatial-glass-sheen"></div>
                 <div class="spatial-card-depth-img">
-                  <img src="public/image/work.png" alt="Library Management System" class="spatial-proj-img">
+                  <img src="public/image/work.png" alt="Library Management System" class="spatial-proj-img" loading="lazy" decoding="async">
                   <div class="spatial-floating-tag">DIGITAL ARCHIVE</div>
                 </div>
                 <div class="spatial-card-depth-content">
@@ -838,7 +698,7 @@
         </svg>
       </button>
       <div class="modal-hero-preview">
-        <img id="modalHeroImg" src="public/image/d.png" alt="Project preview" class="modal-img-tag">
+        <img id="modalHeroImg" src="public/image/d.png" alt="Project preview" class="modal-img-tag" loading="lazy" decoding="async">
       </div>
       <div class="modal-content-area">
         <div class="modal-tag-badge" id="modalBadge">KOTLIN</div>
@@ -938,8 +798,6 @@
     </div>
   </div>
 
-  <!-- Motion One (Ultra-Lightweight hardware-accelerated animations) -->
-  <script src="https://cdn.jsdelivr.net/npm/motion@11.11.13/dist/motion.js"></script>
 
   <!-- Lenis Smooth Inertia Scrolling Engine -->
   <script src="https://unpkg.com/lenis@1.1.9/dist/lenis.min.js"></script>

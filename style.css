@@ -1074,7 +1074,7 @@ button {
   background: #080a10;
   border-radius: 10px;
   margin: 8px 0 16px 0;
-  border: 1px dashed rgba(245, 158, 11, 0.35);
+  border: 1.5px solid #1c2436;
   overflow: hidden;
 }
 
@@ -1129,17 +1129,6 @@ button {
     drop-shadow(0 0 24px rgba(245, 158, 11, 0.6))
     contrast(1.14) 
     brightness(1.06);
-}
-
-.dock-circuit-lines {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(245, 158, 11, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(245, 158, 11, 0.08) 1px, transparent 1px);
-  background-size: 24px 24px;
-  pointer-events: none;
-  z-index: 2;
 }
 
 .dock-radar-ring {

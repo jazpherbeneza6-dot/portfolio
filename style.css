@@ -553,7 +553,7 @@ button {
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
     0 0 50px rgba(245, 158, 11, 0.25);
   padding: 40px 48px 24px 48px;
-  overflow: hidden;
+  overflow: visible;
   margin-bottom: 40px;
 }
 
@@ -686,7 +686,7 @@ button {
   position: absolute;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate3d(-50%, 0, 0);
   z-index: 10;
   width: 100%;
   max-width: 600px;
@@ -695,6 +695,8 @@ button {
   align-items: flex-end;
   justify-content: center;
   pointer-events: none;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 .portrait-electric-aura {
@@ -742,6 +744,10 @@ button {
   transform: scale(1.02);
   filter:
     drop-shadow(0 30px 60px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 30px rgba(245, 158, 11, 0.5)) contrast(1.15) brightness(1.06) saturate(1.1);
+}
+
+body.gsap-active .editorial-portrait-img {
+  transition: none !important;
 }
 
 /* Layer 3: Editorial Action & Connect Overlays */

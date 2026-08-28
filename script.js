@@ -586,6 +586,18 @@
     const THREE = window.THREE;
     const parentContainer = threeCanvas.parentElement;
 
+    // Intersection Observer to suspend WebGL rendering when Hero is out of view
+    let isHeroVisible = true;
+    const heroSection = document.getElementById('home');
+    if (heroSection && typeof IntersectionObserver !== 'undefined') {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          isHeroVisible = entry.isIntersecting;
+        });
+      }, { threshold: 0.02 });
+      observer.observe(heroSection);
+    }
+
     // WebGL Renderer
     const renderer = new THREE.WebGLRenderer({
       canvas: threeCanvas,
@@ -805,6 +817,7 @@
 
     function animateThree(timestamp) {
       requestAnimationFrame(animateThree);
+      if (!isHeroVisible) return;
 
       const elapsedTime = clock.getElapsedTime();
 
@@ -902,6 +915,9 @@
     const ScrollTrigger = window.ScrollTrigger;
     gsap.registerPlugin(ScrollTrigger);
 
+    // Apply zero-transition CSS override for buttery-smooth interpolation
+    document.body.classList.add('gsap-active');
+
     // Sync Lenis directly with GSAP Ticker (Single unified RAF loop)
     if (lenis) {
       lenis.on('scroll', ScrollTrigger.update);
@@ -942,6 +958,12 @@
     const pageWrapper = document.getElementById('mainPageWrapper') || document.body;
 
     if (portraitActor && dockTarget && homeSection && aboutSection) {
+      // Hide static dock image initially; it will be revealed seamlessly at the end of the scroll
+      const dockImg = dockTarget.querySelector('img');
+      if (dockImg) {
+        gsap.set(dockImg, { opacity: 0 });
+      }
+
       // Set initial cinematic 3D perspective & coordinates
       gsap.set(portraitActor, {
         xPercent: -50,
@@ -951,6 +973,7 @@
         scale: 1,
         rotationY: 0,
         rotationZ: 0,
+        opacity: 1,
         transformPerspective: 1200
       });
 
@@ -1000,7 +1023,7 @@
           }
         });
 
-        // 1. Cinematic Parabolic Glide of Portrait with 3D Gyro Tilt
+        // 1. Cinematic Parabolic Glide of Portrait with 3D Gyro Tilt (Pure GPU 120 FPS)
         scrollTl.to(
           portraitActor,
           {
@@ -1009,7 +1032,7 @@
             scale: () => coords.targetScale,
             rotationY: -6,
             rotationZ: -1.2,
-            filter: 'drop-shadow(0 25px 45px rgba(0,0,0,0.95)) drop-shadow(0 0 35px rgba(245,158,11,0.5))',
+            force3D: true,
             transformOrigin: 'bottom center',
             ease: 'power2.inOut'
           },
@@ -1022,10 +1045,17 @@
           {
             rotationY: 0,
             rotationZ: 0,
+            force3D: true,
             ease: 'power1.out'
           },
           0.6
         );
+
+        // Seamless handover: Hide the moving hero actor and reveal the static dock image at 95% of scroll progress
+        if (dockImg) {
+          scrollTl.to(portraitActor, { opacity: 0, duration: 0.05, ease: 'none' }, 0.9);
+          scrollTl.to(dockImg, { opacity: 1, duration: 0.05, ease: 'none' }, 0.9);
+        }
 
         // 2. Parallax Cinematic Drift of Background Outline Typography
         scrollTl.to(
@@ -1092,8 +1122,12 @@
           y: 0,
           scale: 1,
           rotationY: 0,
-          rotationZ: 0
+          rotationZ: 0,
+          opacity: 1
         });
+        if (dockImg) {
+          gsap.set(dockImg, { opacity: 1 });
+        }
       });
     }
   }

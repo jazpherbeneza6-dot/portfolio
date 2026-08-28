@@ -14,49 +14,57 @@
     let height = (canvas.height = window.innerHeight);
 
     const particles = [];
-    const particleCount = Math.min(80, Math.floor(width / 20));
+    const particleCount = Math.min(45, Math.floor(width / 40));
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        radius: Math.random() * 1.6 + 0.4,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
+        radius: Math.random() * 1.5 + 0.4,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
         color: Math.random() > 0.5 ? 'rgba(56, 189, 248, ' : 'rgba(192, 132, 252, ',
         alpha: Math.random() * 0.7 + 0.2
       });
     }
 
+    // Suspend rendering when page is scrolled down past the first fold (completely hidden behind solid layers)
+    let isCanvasVisible = true;
+    window.addEventListener('scroll', () => {
+      isCanvasVisible = window.scrollY < window.innerHeight + 100;
+    }, { passive: true });
+
     function renderCanvas() {
-      ctx.clearRect(0, 0, width, height);
+      if (isCanvasVisible) {
+        ctx.clearRect(0, 0, width, height);
 
-      // Draw subtle connective cyber mesh
-      for (let i = 0; i < particles.length; i++) {
-        const p1 = particles[i];
-        p1.x += p1.vx;
-        p1.y += p1.vy;
+        // Draw subtle connective cyber mesh (O(N^2) optimized by reduced count)
+        for (let i = 0; i < particles.length; i++) {
+          const p1 = particles[i];
+          p1.x += p1.vx;
+          p1.y += p1.vy;
 
-        if (p1.x < 0) p1.x = width;
-        if (p1.x > width) p1.x = 0;
-        if (p1.y < 0) p1.y = height;
-        if (p1.y > height) p1.y = 0;
+          if (p1.x < 0) p1.x = width;
+          if (p1.x > width) p1.x = 0;
+          if (p1.y < 0) p1.y = height;
+          if (p1.y > height) p1.y = 0;
 
-        ctx.beginPath();
-        ctx.arc(p1.x, p1.y, p1.radius, 0, Math.PI * 2);
-        ctx.fillStyle = p1.color + p1.alpha + ')';
-        ctx.fill();
+          ctx.beginPath();
+          ctx.arc(p1.x, p1.y, p1.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p1.color + p1.alpha + ')';
+          ctx.fill();
 
-        for (let j = i + 1; j < particles.length; j++) {
-          const p2 = particles[j];
-          const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
-          if (dist < 110) {
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(168, 85, 247, ${0.15 * (1 - dist / 110)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+            if (dist < 90) {
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(168, 85, 247, ${0.15 * (1 - dist / 90)})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
           }
         }
       }
@@ -66,9 +74,13 @@
 
     renderCanvas();
 
+    let resizeTimeout;
     window.addEventListener('resize', () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }, 150);
     });
   }
 
@@ -447,34 +459,44 @@
     });
   }
 
-  // ─── 11. ACTIVE NAV SPY (FLOATING DOCK & LINKS) ───
+  // ─── 11. ACTIVE NAV SPY (FLOATING DOCK & LINKS via IntersectionObserver) ───
   const sections = document.querySelectorAll('section[id]');
   const dockIconLinks = document.querySelectorAll('.dock-icon-link');
 
-  function updateNavSpy() {
-    const scrollPos = window.scrollY + 240;
+  if (sections.length > 0 && typeof IntersectionObserver !== 'undefined') {
+    const observerOptions = {
+      root: null,
+      rootMargin: '-30% 0px -50% 0px', // Trigger when section occupies center focus
+      threshold: 0
+    };
 
-    sections.forEach((section) => {
-      const top = section.offsetTop;
-      const height = section.offsetHeight;
-      const id = section.getAttribute('id');
+    const spyObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          dockIconLinks.forEach((link) => {
+            link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+          });
+        }
+      });
+    }, observerOptions);
 
-      if (scrollPos >= top && scrollPos < top + height) {
-        dockIconLinks.forEach((link) => {
-          link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
-        });
-      }
-    });
-
-    // Back to top button visibility
-    const backToTopBtn = document.getElementById('backToTopBtn');
-    if (backToTopBtn) {
-      backToTopBtn.classList.toggle('visible', window.scrollY > 400);
-    }
+    sections.forEach((section) => spyObserver.observe(section));
   }
 
-  window.addEventListener('scroll', updateNavSpy, { passive: true });
-  updateNavSpy();
+  // Back to top button visibility (Throttled scroll updates to eliminate main thread lag)
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    if (!scrollTimeout) {
+      scrollTimeout = setTimeout(() => {
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        if (backToTopBtn) {
+          backToTopBtn.classList.toggle('visible', window.scrollY > 400);
+        }
+        scrollTimeout = null;
+      }, 120);
+    }
+  }, { passive: true });
 
   // ─── 12. FLOATING BACK TO TOP ───
   const backToTopBtn = document.getElementById('backToTopBtn');
@@ -898,236 +920,160 @@
     requestAnimationFrame(animateThree);
   }
 
-  // ─── 16. LENIS SMOOTH INERTIA SCROLL & GSAP SCROLLTRIGGER CHOREOGRAPHY ───
+  // ─── 16. MOTION ONE & LENIS SMOOTH INERTIA SCROLL ───
   let lenis = null;
   if (typeof window.Lenis !== 'undefined') {
     lenis = new window.Lenis({
-      duration: 1.2,
+      duration: 1.1,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       smoothTouch: false,
-      touchMultiplier: 1.5
+      touchMultiplier: 1.2
     });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
   }
 
-  if (typeof window.gsap !== 'undefined' && typeof window.ScrollTrigger !== 'undefined') {
-    const gsap = window.gsap;
-    const ScrollTrigger = window.ScrollTrigger;
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Apply zero-transition CSS override for buttery-smooth interpolation
-    document.body.classList.add('gsap-active');
-
-    // Sync Lenis directly with GSAP Ticker (Single unified RAF loop)
-    if (lenis) {
-      lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-      });
-      gsap.ticker.lagSmoothing(0);
-    } else {
-      function defaultRaf(time) {
-        requestAnimationFrame(defaultRaf);
-      }
-      requestAnimationFrame(defaultRaf);
-    }
-
-    // Smooth Scroll for Navigation Anchor Links
-    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-      anchor.addEventListener('click', function (e) {
-        const targetId = this.getAttribute('href');
-        if (targetId && targetId !== '#' && !targetId.includes('Modal')) {
-          const targetEl = document.querySelector(targetId);
-          if (targetEl) {
-            e.preventDefault();
-            if (lenis) {
-              lenis.scrollTo(targetEl, { offset: -24, duration: 1.4 });
-            } else {
-              targetEl.scrollIntoView({ behavior: 'smooth' });
-            }
+  // Smooth Scroll for Navigation Anchor Links
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener('click', function (e) {
+      const targetId = this.getAttribute('href');
+      if (targetId && targetId !== '#' && !targetId.includes('Modal')) {
+        const targetEl = document.querySelector(targetId);
+        if (targetEl) {
+          e.preventDefault();
+          if (lenis) {
+            lenis.scrollTo(targetEl, { offset: -24, duration: 1.2 });
+          } else {
+            targetEl.scrollIntoView({ behavior: 'smooth' });
           }
         }
-      });
+      }
     });
+  });
 
-    // ─── CINEMATIC GSAP SCROLLTRIGGER PORTRAIT CHOREOGRAPHY ───
-    const portraitActor = document.getElementById('cinematicPortraitActor') || document.getElementById('heroPortraitWrapper');
+  const { animate, scroll } = window.Motion || {};
+  if (animate && scroll) {
+    // Apply zero-transition CSS override for buttery-smooth interpolation
+    document.body.classList.add('motion-active');
+
+    const portraitActor = document.getElementById('heroPortraitWrapper');
     const dockTarget = document.getElementById('dockPortraitTarget');
     const homeSection = document.getElementById('home');
     const aboutSection = document.getElementById('about');
-    const pageWrapper = document.getElementById('mainPageWrapper') || document.body;
 
     if (portraitActor && dockTarget && homeSection && aboutSection) {
-      // Hide static dock image initially; it will be revealed seamlessly at the end of the scroll
       const dockImg = dockTarget.querySelector('img');
       if (dockImg) {
-        gsap.set(dockImg, { opacity: 0 });
+        dockImg.style.opacity = '0';
       }
 
-      // Set initial cinematic 3D perspective & coordinates
-      gsap.set(portraitActor, {
-        xPercent: -50,
-        yPercent: 0,
-        x: 0,
-        y: 0,
-        scale: 1,
-        rotationY: 0,
-        rotationZ: 0,
-        opacity: 1,
-        transformPerspective: 1200
+      function computeCoords() {
+        const actorBounds = portraitActor.getBoundingClientRect();
+        const dockBounds = dockTarget.getBoundingClientRect();
+        const portraitImg = portraitActor.querySelector('img');
+
+        // Horizontal center offsets
+        const actorCenterX = actorBounds.left + actorBounds.width / 2;
+        const dockCenterX = dockBounds.left + dockBounds.width / 2;
+        const deltaX = dockCenterX - actorCenterX;
+
+        // Proportional scale to fit docked stage
+        const imgHeight = portraitImg ? portraitImg.offsetHeight : 540;
+        const targetScale = Math.min(0.68, Math.max(0.52, (dockBounds.height * 0.96) / (imgHeight || 540)));
+
+        // Vertical offset aligning bottom of actors relative to viewport scroll
+        const pageWrapper = document.body;
+        const pageWrapperTop = pageWrapper.getBoundingClientRect().top + window.scrollY;
+        const actorAbsoluteBottom = (actorBounds.bottom + window.scrollY) - pageWrapperTop;
+        const dockAbsoluteBottom = (dockBounds.bottom + window.scrollY) - pageWrapperTop;
+        const deltaY = (dockAbsoluteBottom - actorAbsoluteBottom) - 2;
+
+        return { deltaX, deltaY, targetScale };
+      }
+
+      let coords = computeCoords();
+      window.addEventListener('resize', () => {
+        coords = computeCoords();
       });
 
-      const mm = gsap.matchMedia();
+      const isMobile = () => window.innerWidth < 993;
 
-      // Desktop & Tablet Landscape (>= 993px)
-      mm.add('(min-width: 993px)', () => {
-        function computeCinematicCoords() {
-          const actorBounds = portraitActor.getBoundingClientRect();
-          const dockBounds = dockTarget.getBoundingClientRect();
-          const portraitImg = document.getElementById('cinematicPortraitImg') || portraitActor.querySelector('img');
-
-          // 1. Calculate Horizontal Delta: exact alignment with dockTarget center
-          const actorCenterX = actorBounds.left + actorBounds.width / 2;
-          const dockCenterX = dockBounds.left + dockBounds.width / 2;
-          const deltaX = dockCenterX - actorCenterX;
-
-          // 2. Calculate Scale: scale the portrait to fit comfortably inside the dock stage
-          const imgHeight = portraitImg ? portraitImg.offsetHeight : 540;
-          const targetScale = Math.min(0.68, Math.max(0.52, (dockBounds.height * 0.96) / (imgHeight || 540)));
-
-          // 3. Calculate Vertical Delta: align bottom of scaled portrait with bottom of dockTarget
-          const pageWrapperTop = pageWrapper.getBoundingClientRect().top + window.scrollY;
-          const actorAbsoluteBottom = (actorBounds.bottom + window.scrollY) - pageWrapperTop;
-          const dockAbsoluteBottom = (dockBounds.bottom + window.scrollY) - pageWrapperTop;
-
-          // Shift up slightly from the dock bottom so it rests beautifully above the footer
-          const deltaY = (dockAbsoluteBottom - actorAbsoluteBottom) - 2;
-
-          return { deltaX, deltaY, targetScale };
+      // Track scroll progress native compositor scroll linked loop
+      scroll((progress) => {
+        if (isMobile()) {
+          // Reset styles on mobile
+          portraitActor.style.transform = '';
+          portraitActor.style.opacity = '1';
+          if (dockImg) dockImg.style.opacity = '1';
+          return;
         }
 
-        let coords = computeCinematicCoords();
+        // Linear interpolation of flight parameters (Zero lag, pure CPU/GPU pipeline)
+        const x = progress * coords.deltaX;
+        const y = progress * coords.deltaY;
+        const scale = 1 + progress * (coords.targetScale - 1);
+        const rotY = progress * -6;
+        const rotZ = progress * -1.2;
 
-        // Master Cinematic Scrub Timeline (Linked to Lenis & ScrollTrigger)
-        const scrollTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: homeSection,
-            start: 'top top',
-            endTrigger: aboutSection,
-            end: 'top 18%',
-            scrub: 1.25, // Cinematic inertia damping
-            invalidateOnRefresh: true,
-            onRefresh: () => {
-              coords = computeCinematicCoords();
-            }
+        portraitActor.style.transform = `translate3d(calc(-50% + ${x}px), ${y}px, 0) scale(${scale}) rotateY(${rotY}deg) rotateZ(${rotZ}deg)`;
+
+        // Seamless visibility handover at 90% scroll path progress
+        if (progress >= 0.9) {
+          portraitActor.style.opacity = '0';
+          if (dockImg) dockImg.style.opacity = '1';
+        } else {
+          portraitActor.style.opacity = '1';
+          if (dockImg) dockImg.style.opacity = '0';
+        }
+
+        // Parallax depth typographic drift
+        const typo = document.querySelector('.editorial-bg-typography');
+        if (typo) {
+          const typoY = progress * -180;
+          const typoScale = 1 + progress * (0.88 - 1);
+          const typoOpacity = 1 - progress;
+          typo.style.transform = `translate3d(-50%, calc(-50% + ${typoY}px), 0) scale(${typoScale})`;
+          typo.style.opacity = typoOpacity;
+        }
+
+        // Fade Hero content actions
+        const overlay = document.querySelector('.editorial-content-overlay');
+        if (overlay) {
+          overlay.style.opacity = 1 - progress * 1.5;
+        }
+
+        // Ambient reveal glow of the dock panel card
+        const dockCard = document.getElementById('aboutPortraitDock');
+        if (dockCard) {
+          if (progress > 0.35) {
+            dockCard.style.borderTopColor = 'rgba(251, 191, 36, 0.9)';
+            dockCard.style.boxShadow = '0 0 60px rgba(245, 158, 11, 0.38), var(--chassis-bevel)';
+          } else {
+            dockCard.style.borderTopColor = '#3e4657';
+            dockCard.style.boxShadow = 'var(--chassis-bevel)';
           }
-        });
-
-        // 1. Cinematic Parabolic Glide of Portrait with 3D Gyro Tilt (Pure GPU 120 FPS)
-        scrollTl.to(
-          portraitActor,
-          {
-            x: () => coords.deltaX,
-            y: () => coords.deltaY,
-            scale: () => coords.targetScale,
-            rotationY: -6,
-            rotationZ: -1.2,
-            force3D: true,
-            transformOrigin: 'bottom center',
-            ease: 'power2.inOut'
-          },
-          0
-        );
-
-        // Settle 3D tilt cleanly into the docked card
-        scrollTl.to(
-          portraitActor,
-          {
-            rotationY: 0,
-            rotationZ: 0,
-            force3D: true,
-            ease: 'power1.out'
-          },
-          0.6
-        );
-
-        // Seamless handover: Hide the moving hero actor and reveal the static dock image at 95% of scroll progress
-        if (dockImg) {
-          scrollTl.to(portraitActor, { opacity: 0, duration: 0.05, ease: 'none' }, 0.9);
-          scrollTl.to(dockImg, { opacity: 1, duration: 0.05, ease: 'none' }, 0.9);
         }
 
-        // 2. Parallax Cinematic Drift of Background Outline Typography
-        scrollTl.to(
-          '.editorial-bg-typography',
-          {
-            y: -180,
-            opacity: 0,
-            scale: 0.88,
-            ease: 'power2.inOut'
-          },
-          0
-        );
-
-        // 3. Fade Hero Action Buttons on Scroll-Down
-        scrollTl.to(
-          '.editorial-content-overlay',
-          {
-            opacity: 0,
-            y: -50,
-            ease: 'power1.inOut'
-          },
-          0
-        );
-
-        // 4. Illuminate the Left Dock Chassis Card
-        scrollTl.fromTo(
-          '#aboutPortraitDock',
-          {
-            borderTopColor: '#3e4657',
-            boxShadow: 'var(--chassis-bevel)'
-          },
-          {
-            borderTopColor: 'rgba(251, 191, 36, 0.9)',
-            boxShadow: '0 0 60px rgba(245, 158, 11, 0.38), var(--chassis-bevel)',
-            ease: 'power2.out'
-          },
-          0.35
-        );
-
-        // 5. Cinematic 3D Reveal of Bento Console Card
-        scrollTl.fromTo(
-          '#bentoConsoleCard',
-          {
-            y: 55,
-            opacity: 0.6,
-            rotateX: 6
-          },
-          {
-            y: 0,
-            opacity: 1,
-            rotateX: 0,
-            ease: 'power2.out'
-          },
-          0.2
-        );
-      });
-
-      // Mobile / Tablet Portrait (< 993px)
-      mm.add('(max-width: 992px)', () => {
-        gsap.set(portraitActor, {
-          xPercent: -50,
-          yPercent: 0,
-          x: 0,
-          y: 0,
-          scale: 1,
-          rotationY: 0,
-          rotationZ: 0,
-          opacity: 1
-        });
-        if (dockImg) {
-          gsap.set(dockImg, { opacity: 1 });
+        // Ambient reveal glow of the Bento Console Card
+        const bentoCard = document.getElementById('bentoConsoleCard');
+        if (bentoCard) {
+          if (progress > 0.2) {
+            const bentoY = (1 - progress) * 55;
+            bentoCard.style.transform = `translate3d(0, ${bentoY}px, 0) rotateX(0deg)`;
+            bentoCard.style.opacity = '1';
+          } else {
+            bentoCard.style.transform = 'translate3d(0, 55px, 0) rotateX(6deg)';
+            bentoCard.style.opacity = '0.6';
+          }
         }
+      }, {
+        target: homeSection,
+        offset: ["start start", "end start"]
       });
     }
   }

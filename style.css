@@ -746,7 +746,7 @@ button {
     drop-shadow(0 30px 60px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 30px rgba(245, 158, 11, 0.5)) contrast(1.15) brightness(1.06) saturate(1.1);
 }
 
-body.gsap-active .editorial-portrait-img {
+body.motion-active .editorial-portrait-img {
   transition: none !important;
 }
 

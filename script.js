@@ -641,6 +641,7 @@
   // ─── 7. PROJECT DETAIL MODAL HANDLER ───
   const projectModal = document.getElementById('projectDetailModal');
   const modalHeroImg = document.getElementById('modalHeroImg');
+  const modalGalleryStrip = document.getElementById('modalGalleryStrip');
   const modalBadge = document.getElementById('modalBadge');
   const modalTitle = document.getElementById('modalTitle');
   const modalDescription = document.getElementById('modalDescription');
@@ -654,6 +655,40 @@
     if (modalBadge) modalBadge.textContent = data.badge || 'PROJECT';
     if (modalTitle) modalTitle.textContent = data.title || 'Project Showcase';
     if (modalDescription) modalDescription.textContent = data.description || '';
+
+    // Handle multi-screenshot gallery if present
+    if (modalGalleryStrip) {
+      modalGalleryStrip.innerHTML = '';
+      if (data.gallery) {
+        const items = data.gallery.split(',');
+        items.forEach((itemStr, idx) => {
+          const parts = itemStr.split(':');
+          const src = parts[0];
+          const label = parts[1] || `Screen 0${idx + 1}`;
+          const thumbBtn = document.createElement('button');
+          thumbBtn.className = `modal-thumb-btn ${idx === 0 ? 'active' : ''}`;
+          thumbBtn.type = 'button';
+          thumbBtn.innerHTML = `<span>${label}</span>`;
+          thumbBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            modalGalleryStrip.querySelectorAll('.modal-thumb-btn').forEach((b) => b.classList.remove('active'));
+            thumbBtn.classList.add('active');
+            if (modalHeroImg) {
+              modalHeroImg.style.opacity = '0.3';
+              setTimeout(() => {
+                modalHeroImg.src = src;
+                modalHeroImg.style.opacity = '1';
+              }, 120);
+            }
+          });
+          modalGalleryStrip.appendChild(thumbBtn);
+        });
+        modalGalleryStrip.style.display = 'flex';
+      } else {
+        modalGalleryStrip.style.display = 'none';
+      }
+    }
+
     if (modalLiveDemoBtn) {
       const link = data.link && data.link !== '#' ? data.link : '';
       if (link) {
@@ -691,29 +726,32 @@
     });
   }
 
-  // Attach to project showcase cards
-  document.querySelectorAll('.project-showcase-card').forEach((card) => {
-    card.addEventListener('click', () => {
+  // Attach modal trigger to spatial project cards and inspect / telemetry buttons
+  document.querySelectorAll('.spatial-project-card').forEach((card) => {
+    const triggerModal = () => {
       openProjectModal({
         title: card.getAttribute('data-title'),
         badge: card.getAttribute('data-badge'),
         description: card.getAttribute('data-description'),
         image: card.getAttribute('data-image'),
+        gallery: card.getAttribute('data-gallery'),
         link: card.getAttribute('data-link')
       });
-    });
-  });
+    };
 
-  // Attach to more projects items
-  document.querySelectorAll('.more-project-item').forEach((item) => {
-    item.addEventListener('click', () => {
-      openProjectModal({
-        title: item.getAttribute('data-title'),
-        badge: 'PRODUCTION SYSTEM',
-        description: item.getAttribute('data-description'),
-        image: item.getAttribute('data-image'),
-        link: item.getAttribute('data-link')
+    const inspectBtn = card.querySelector('.btn-spatial-inspect');
+    if (inspectBtn) {
+      inspectBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        triggerModal();
       });
+    }
+
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a') || e.target.closest('.btn-spatial-demo')) return;
+      if (card.classList.contains('active')) {
+        triggerModal();
+      }
     });
   });
 
@@ -1603,4 +1641,46 @@
 
   initScrollReveal();
 
+  // ─── 18. HIGH-PERFORMANCE VIDEO CACHE & SERVICE WORKER ENGINE ───
+  function initVideoCacheOptimization() {
+    // 1. Register Service Worker for CacheStorage on HTTP/HTTPS
+    if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => console.log('Video Cache Service Worker Active:', reg.scope))
+          .catch((err) => console.warn('Service Worker registration skipped:', err));
+      });
+    }
+
+    // 2. In-Memory Blob Cache for looping background videos
+    // Prevents browser from sending repeated HTTP 206 Partial Content Range requests on each loop
+    const flameVideoSrc = 'public/image/Flame%20Backround.mp4';
+    const loopingVideos = document.querySelectorAll('.editorial-bg-video, .dock-bg-video');
+
+    if (loopingVideos.length > 0 && window.location.protocol.startsWith('http')) {
+      fetch(flameVideoSrc, { cache: 'force-cache' })
+        .then((res) => {
+          if (!res.ok) throw new Error('Network response not ok');
+          return res.blob();
+        })
+        .then((blob) => {
+          const videoBlobUrl = URL.createObjectURL(blob);
+          loopingVideos.forEach((video) => {
+            const currentSrc = video.querySelector('source')?.src || video.src;
+            if (currentSrc && !currentSrc.startsWith('blob:')) {
+              video.src = videoBlobUrl;
+              video.load();
+              video.play().catch(() => {});
+            }
+          });
+        })
+        .catch(() => {
+          // Graceful fallback to standard MP4 source
+        });
+    }
+  }
+
+  initVideoCacheOptimization();
+
 })();
+

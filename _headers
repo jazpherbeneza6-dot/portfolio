@@ -1,0 +1,19 @@
+# Long-term Immutable Caching for Media & Assets
+/public/image/*.mp4
+  Cache-Control: public, max-age=31536000, immutable
+  Accept-Ranges: bytes
+
+/public/image/*.mp3
+  Cache-Control: public, max-age=31536000, immutable
+
+/public/image/*.png
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/public/image/*.jpg
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/*.css
+  Cache-Control: public, max-age=86400, stale-while-revalidate=3600
+
+/*.js
+  Cache-Control: public, max-age=86400, stale-while-revalidate=3600

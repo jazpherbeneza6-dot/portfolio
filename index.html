@@ -142,7 +142,7 @@
       <!-- Backdrop Stage with Video & Three.js Canvas -->
       <div class="hero-media-backdrop">
         <!-- Anime Flame Video Background (Auto-playing, Looping, Seamless) -->
-        <video class="editorial-bg-video" autoplay loop muted playsinline preload="metadata">
+        <video class="editorial-bg-video" autoplay loop muted playsinline preload="auto">
           <source src="public/image/Flame%20Backround.mp4" type="video/mp4">
         </video>
 
@@ -235,7 +235,7 @@
 
           <div class="dock-portrait-stage" id="dockPortraitTarget">
             <!-- Background Flame Video -->
-            <video class="dock-bg-video" autoplay loop muted playsinline preload="metadata">
+            <video class="dock-bg-video" autoplay loop muted playsinline preload="auto">
               <source src="public/image/Flame%20Backround.mp4" type="video/mp4">
             </video>
             <!-- Atmospheric Dark Vignette Overlay -->
@@ -794,32 +794,8 @@
           <!-- Hardware Recessed Matrix Counter Window -->
           <div class="skeuo-matrix-counter">
             <span class="matrix-label">CH. SEL</span>
-            <span class="matrix-val" id="spatialCarouselCounter">01 / 04</span>
+            <span class="matrix-val" id="spatialCarouselCounter">01 / 05</span>
           </div>
-        </div>
-
-        <!-- Tactile Physical Channel Selector Push-Button Strip -->
-        <div class="skeuo-channel-strip" id="skeuoChannelStrip">
-          <button class="skeuo-ch-btn active" data-ch="0" aria-label="Select Project 01">
-            <span class="ch-led"></span>
-            <span class="ch-num">CH 01</span>
-            <span class="ch-title">SAFE SIGHT GPS</span>
-          </button>
-          <button class="skeuo-ch-btn" data-ch="1" aria-label="Select Project 02">
-            <span class="ch-led"></span>
-            <span class="ch-num">CH 02</span>
-            <span class="ch-title">TEACHER EVAL</span>
-          </button>
-          <button class="skeuo-ch-btn" data-ch="2" aria-label="Select Project 03">
-            <span class="ch-led"></span>
-            <span class="ch-num">CH 03</span>
-            <span class="ch-title">NOIR.CO</span>
-          </button>
-          <button class="skeuo-ch-btn" data-ch="3" aria-label="Select Project 04">
-            <span class="ch-led"></span>
-            <span class="ch-num">CH 04</span>
-            <span class="ch-title">LIBRARY MGT</span>
-          </button>
         </div>
 
         <!-- Skeuomorphic Hardware Carousel Viewport with Machined Rocker Nav Buttons -->
@@ -856,7 +832,6 @@
                   <div class="skeuo-panel-top">
                     <div class="skeuo-kicker-row">
                       <span class="spatial-mini-kicker skeuo-silkscreen-kicker">// PRODUCTION UNIT 01</span>
-                      <span class="skeuo-status-pill green">ACTIVE FEED</span>
                     </div>
                     <h4 class="skeuo-title">Safe Sight GPS</h4>
                     <p class="skeuo-desc">Real-time vehicle fleet tracking, live geofencing alarms, and sensor telemetry on dedicated cloud infrastructure.</p>
@@ -915,7 +890,6 @@
                   <div class="skeuo-panel-top">
                     <div class="skeuo-kicker-row">
                       <span class="spatial-mini-kicker skeuo-silkscreen-kicker">// PRODUCTION UNIT 02</span>
-                      <span class="skeuo-status-pill cyan">DEPLOYED</span>
                     </div>
                     <h4 class="skeuo-title">Teacher Evaluation System</h4>
                     <p class="skeuo-desc">Automated weighted scoring, CHED evaluation criteria, and institutional PDF analytics reporting for academic faculty.</p>
@@ -974,7 +948,6 @@
                   <div class="skeuo-panel-top">
                     <div class="skeuo-kicker-row">
                       <span class="spatial-mini-kicker skeuo-silkscreen-kicker">// PRODUCTION UNIT 03</span>
-                      <span class="skeuo-status-pill amber">COMMERCE</span>
                     </div>
                     <h4 class="skeuo-title">NOIR.co Fashion</h4>
                     <p class="skeuo-desc">Contemporary apparel catalog, editorial visual rhythm, and responsive luxury commerce interface.</p>
@@ -1034,7 +1007,6 @@
                   <div class="skeuo-panel-top">
                     <div class="skeuo-kicker-row">
                       <span class="spatial-mini-kicker skeuo-silkscreen-kicker">// PRODUCTION UNIT 04</span>
-                      <span class="skeuo-status-pill green">DATABASE</span>
                     </div>
                     <h4 class="skeuo-title">Library Management System</h4>
                     <p class="skeuo-desc">Automated book loans, patron records, real-time catalog tracking, and overdue alert notification systems.</p>
@@ -1048,6 +1020,66 @@
                     </div>
                     <div class="spatial-action-row skeuo-action-row">
                       <a href="https://library-management-system-port.vercel.app/index.html" target="_blank" rel="noopener noreferrer"
+                        class="btn-spatial-demo btn-skeuo-primary" onclick="event.stopPropagation()">
+                        <span class="btn-led-dot"></span>
+                        <span>LAUNCH DEMO</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                          <polyline points="15 3 21 3 21 9"></polyline>
+                          <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                      </a>
+                      <button class="btn-spatial-inspect btn-skeuo-secondary" type="button">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="12" y1="16" x2="12" y2="12"></line>
+                          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        <span>TELEMETRY</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slide 5: Allyana's Food House -->
+            <div class="spatial-project-card skeuo-project-card hidden-right" data-index="4" data-title="Allyana's Food House"
+              data-badge="CULINARY PLATFORM • FILIPINO CUISINE"
+              data-description="Authentic Kapampangan &amp; Tagalog heirloom dining website featuring interactive culinary showcase, menu discovery, and modern dark luxury ambience."
+              data-image="public/image/allyana-food-house.png"
+              data-gallery="public/image/allyana-food-house.png:Overview Hero,public/image/allyana-menu.png:Delicious Menu,public/image/allyana-about.png:About Heritage,public/image/allyana-contact.png:Hotlines & Contact"
+              data-link="https://allyana-s-food-house.vercel.app/">
+              <div class="spatial-card-inner skeuo-card-inner">
+                <!-- Monitor Screen Well (Left) -->
+                <div class="spatial-card-depth-img skeuo-monitor-well">
+                  <div class="skeuo-screen-glare"></div>
+                  <div class="skeuo-screen-scanlines"></div>
+                  <img src="public/image/allyana-food-house.png" alt="Allyana's Food House" class="spatial-proj-img skeuo-screen-img" loading="lazy" decoding="async">
+                  <div class="spatial-floating-tag skeuo-metal-tag">
+                    <span class="tag-pip"></span>
+                    <span>FILIPINO CUISINE</span>
+                  </div>
+                </div>
+
+                <!-- Instrumentation Control Faceplate (Right) -->
+                <div class="spatial-card-depth-content skeuo-instrument-panel">
+                  <div class="skeuo-panel-top">
+                    <div class="skeuo-kicker-row">
+                      <span class="spatial-mini-kicker skeuo-silkscreen-kicker">// PRODUCTION UNIT 05</span>
+                    </div>
+                    <h4 class="skeuo-title">Allyana's Food House</h4>
+                    <p class="skeuo-desc">Authentic Kapampangan &amp; Tagalog heirloom dining website featuring interactive culinary showcase, menu discovery, and modern dark luxury ambience.</p>
+                  </div>
+
+                  <div class="skeuo-panel-bottom">
+                    <div class="skeuo-tech-stack">
+                      <span class="spatial-tech-pill skeuo-tech-chip">JavaScript</span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">Three.js</span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">Vercel</span>
+                    </div>
+                    <div class="spatial-action-row skeuo-action-row">
+                      <a href="https://allyana-s-food-house.vercel.app/" target="_blank" rel="noopener noreferrer"
                         class="btn-spatial-demo btn-skeuo-primary" onclick="event.stopPropagation()">
                         <span class="btn-led-dot"></span>
                         <span>LAUNCH DEMO</span>
@@ -1174,6 +1206,7 @@
       <div class="modal-hero-preview">
         <img id="modalHeroImg" src="public/image/d.png" alt="Project preview" class="modal-img-tag" loading="lazy"
           decoding="async">
+        <div class="modal-gallery-strip" id="modalGalleryStrip" style="display: none;"></div>
       </div>
       <div class="modal-content-area">
         <div class="modal-tag-badge" id="modalBadge">KOTLIN</div>

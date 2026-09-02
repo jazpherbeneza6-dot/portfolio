@@ -1,0 +1,158 @@
+/* ─── 15. RESPONSIVE BREAKPOINTS ─── */
+@media (max-width: 992px) {
+  .editorial-hero-container {
+    min-height: 72vh;
+    padding: 30px 20px;
+  }
+
+  .editorial-content-overlay {
+    position: absolute;
+    padding: 24px 16px;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .editorial-bottom-left {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .editorial-bottom-right {
+    justify-content: center;
+    width: 100%;
+    gap: 16px;
+  }
+
+  .editorial-right-flank {
+    display: none;
+  }
+
+  .editorial-portrait-stage {
+    max-width: 440px;
+  }
+
+  .editorial-word {
+    font-size: clamp(50px, 15vw, 100px);
+  }
+
+  .about-triptych-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .about-portrait-dock-card {
+    max-width: 100%;
+    height: auto;
+    min-height: 420px;
+  }
+
+  .bento-console-card {
+    height: auto;
+    min-height: 420px;
+  }
+
+  .bento-two-col-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .projects-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-card-container {
+    grid-template-columns: 1fr;
+    padding: 28px;
+  }
+
+  .stats-counter-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .spatial-carousel-stage {
+    max-width: 100%;
+    height: 540px;
+  }
+
+  .spatial-card-inner {
+    grid-template-columns: 1fr;
+    grid-template-rows: 240px 1fr;
+  }
+
+  .spatial-card-depth-img {
+    border-right: none;
+    border-bottom: 1.5px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .spatial-card-depth-content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-wrapper {
+    padding: 85px 16px 40px 16px;
+  }
+
+  .floating-nav-dock {
+    display: none;
+  }
+
+  .floating-nav-dock.mobile-open {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 70px;
+    left: 16px;
+    right: 16px;
+    transform: none;
+    width: auto;
+    max-width: none;
+    background: #141820;
+    padding: 14px;
+    border-radius: 10px;
+    border: 2px solid #232835;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9);
+  }
+
+  .mobile-hamburger-btn {
+    display: flex;
+  }
+
+  .stats-counter-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .paradigm-demo-card {
+    grid-template-columns: 1fr;
+  }
+
+  .spatial-carousel-stage {
+    height: 560px;
+  }
+
+  .spatial-carousel-container {
+    padding: 24px 16px;
+  }
+
+  .spatial-flank-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .flank-left {
+    left: 4px;
+  }
+
+  .flank-right {
+    right: 4px;
+  }
+
+  .modal-hero-preview {
+    height: 220px;
+  }
+
+  .who-insights-grid {
+    grid-template-columns: 1fr;
+  }
+}

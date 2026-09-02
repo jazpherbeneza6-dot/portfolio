@@ -1,0 +1,144 @@
+/* ─── 3. REUSABLE SKEUOMORPHIC HARDWARE COMPONENTS ─── */
+
+/* Physical Slotted Screws (Mounting Fasteners in Card Corners) */
+.skeuo-screw {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #8e9bb0 0%, #434a59 55%, #1d212a 100%);
+  border: 1px solid #13161c;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  z-index: 5;
+}
+
+.skeuo-screw::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 9px;
+  height: 2px;
+  background: #111419;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15);
+  transform: translate(-50%, -50%) rotate(42deg);
+}
+
+.screw-tl {
+  top: 12px;
+  left: 12px;
+}
+
+.screw-tr {
+  top: 12px;
+  right: 12px;
+}
+
+.screw-bl {
+  bottom: 12px;
+  left: 12px;
+}
+
+.screw-br {
+  bottom: 12px;
+  right: 12px;
+}
+
+.screw-tr::after {
+  transform: translate(-50%, -50%) rotate(-35deg);
+}
+
+.screw-bl::after {
+  transform: translate(-50%, -50%) rotate(78deg);
+}
+
+.screw-br::after {
+  transform: translate(-50%, -50%) rotate(15deg);
+}
+
+/* Jewel Indicator LED Lamp with Chrome Bezel */
+.jewel-led {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #181b22;
+  border: 1.5px solid #4a5568;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.jewel-led::before {
+  content: '';
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, var(--led-emerald) 60%, #064e3b 100%);
+  box-shadow: 0 0 8px var(--led-emerald-glow), inset 0 0 2px rgba(255, 255, 255, 0.8);
+  animation: ledPulse 2.5s infinite ease-in-out;
+}
+
+.jewel-led.amber::before {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, var(--led-amber) 60%, #78350f 100%);
+  box-shadow: 0 0 8px var(--led-amber-glow), inset 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+.jewel-led.cyan::before {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, var(--led-cyan) 60%, #164e63 100%);
+  box-shadow: 0 0 8px var(--led-cyan-glow), inset 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+.jewel-led.ruby::before {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, var(--led-ruby) 60%, #7f1d1d 100%);
+  box-shadow: 0 0 8px var(--led-ruby-glow), inset 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes ledPulse {
+
+  0%,
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* Debossed Silkscreen Kicker Tag */
+.card-kicker-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-silkscreen);
+  text-shadow: var(--shadow-letterpress);
+  background: rgba(14, 16, 21, 0.65);
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid #1c202a;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.7);
+  margin-bottom: 12px;
+}
+
+/* Stamped Letterpress Headline Title */
+.card-headline-title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3.2vw, 36px);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #f1f5f9;
+  text-shadow: var(--shadow-letterpress-light);
+  line-height: 1.2;
+  margin-bottom: 14px;
+}

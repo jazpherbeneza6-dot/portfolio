@@ -1,0 +1,25 @@
+/* ==========================================================================
+   JAZPHER BENEZA PORTFOLIO — MASTER CSS ORCHESTRATOR
+   Senior Clean Architecture Modular Stylesheet
+   ========================================================================== */
+
+/* Design Tokens & Theme Variables */
+@import './tokens.css';
+
+/* Global Reset & Base Typography */
+@import './reset.css';
+
+/* Reusable Components */
+@import './components/entrance.css';
+@import './components/buttons.css';
+@import './components/navigation.css';
+@import './components/modals.css';
+
+/* Page Sections */
+@import './sections/hero.css';
+@import './sections/about.css';
+@import './sections/projects.css';
+@import './sections/contact.css';
+
+/* Global Responsive Layout Breakpoints */
+@import './responsive.css';

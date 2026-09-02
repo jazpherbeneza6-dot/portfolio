@@ -6,6 +6,261 @@
 (function () {
   'use strict';
 
+  // ─── 00. CINEMATIC SPARK ENTRANCE & EXPLOSION ENGINE ───
+  function initSparkEntrance() {
+    const entranceScreen = document.getElementById('sparkEntranceScreen');
+    if (!entranceScreen) return;
+
+    const video = document.getElementById('sparkVideo');
+    const textStage = document.getElementById('sparkTextStage');
+    const skipBtn = document.getElementById('skipToDashboardBtn');
+    const audio = document.getElementById('sparkAudio');
+    const soundToggle = document.getElementById('entranceSoundToggle');
+    const soundIcon = document.getElementById('soundToggleIcon');
+    const soundLabel = document.getElementById('soundToggleLabel');
+
+    let hasTransitioned = false;
+    let textRevealed = false;
+    let isAudioEnabled = true;
+
+    // Web Audio Synthesizer for Bone-Rattling Explosion Shockwave
+    function playSynthesizedBlast() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        if (ctx.state === 'suspended') {
+          ctx.resume();
+        }
+
+        const now = ctx.currentTime;
+
+        // 1. Deep Sub-Bass Punch (140Hz -> 30Hz)
+        const subOsc = ctx.createOscillator();
+        const subGain = ctx.createGain();
+        subOsc.type = 'sine';
+        subOsc.frequency.setValueAtTime(140, now);
+        subOsc.frequency.exponentialRampToValueAtTime(28, now + 0.75);
+
+        subGain.gain.setValueAtTime(0.9, now);
+        subGain.gain.exponentialRampToValueAtTime(0.001, now + 1.4);
+
+        subOsc.connect(subGain);
+        subGain.connect(ctx.destination);
+        subOsc.start(now);
+        subOsc.stop(now + 1.4);
+
+        // 2. High-Voltage Electric Thunder Crackle (Filtered Noise)
+        const bufferSize = Math.floor(ctx.sampleRate * 1.5);
+        const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          output[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.4));
+        }
+
+        const noiseSrc = ctx.createBufferSource();
+        noiseSrc.buffer = noiseBuffer;
+
+        const noiseFilter = ctx.createBiquadFilter();
+        noiseFilter.type = 'lowpass';
+        noiseFilter.frequency.setValueAtTime(1800, now);
+        noiseFilter.frequency.exponentialRampToValueAtTime(90, now + 1.2);
+
+        const noiseGain = ctx.createGain();
+        noiseGain.gain.setValueAtTime(0.75, now);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 1.3);
+
+        noiseSrc.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(ctx.destination);
+
+        noiseSrc.start(now);
+        noiseSrc.stop(now + 1.3);
+      } catch (e) {
+        // AudioContext restricted before interaction
+      }
+    }
+
+    // Start Audio Playback
+    function enableAudio() {
+      if (!isAudioEnabled) return;
+      if (video) {
+        video.muted = false;
+      }
+      if (audio) {
+        audio.currentTime = video ? video.currentTime : 0;
+        audio.play().catch(() => { });
+      }
+      if (soundLabel) soundLabel.textContent = 'SOUND: ON';
+      if (soundIcon) soundIcon.textContent = '🔊';
+    }
+
+    // Toggle Sound Button
+    if (soundToggle) {
+      soundToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isAudioEnabled = !isAudioEnabled;
+        if (isAudioEnabled) {
+          if (video) video.muted = false;
+          if (audio) audio.play().catch(() => { });
+          soundIcon.textContent = '🔊';
+          soundLabel.textContent = 'SOUND: ON';
+        } else {
+          if (video) video.muted = true;
+          if (audio) audio.pause();
+          soundIcon.textContent = '🔇';
+          soundLabel.textContent = 'SOUND: OFF';
+        }
+      });
+    }
+
+    // Enable sound upon first interaction
+    const unlockAudio = () => {
+      enableAudio();
+      window.removeEventListener('click', unlockAudio);
+      window.removeEventListener('keydown', unlockAudio);
+      window.removeEventListener('touchstart', unlockAudio);
+    };
+    window.addEventListener('click', unlockAudio, { passive: true });
+    window.addEventListener('keydown', unlockAudio, { passive: true });
+    window.addEventListener('touchstart', unlockAudio, { passive: true });
+
+    // Trigger Welcome text at 5.0 SECONDS of video
+    function triggerWelcomeText() {
+      if (textRevealed) return;
+      textRevealed = true;
+
+      // 1. Reveal Welcome Text with smooth, cinematic bloom
+      if (textStage) {
+        textStage.classList.add('energy-active');
+      }
+
+      // 2. Play Audio & Synthesizer Impact
+      if (isAudioEnabled) {
+        playSynthesizedBlast();
+        if (audio && audio.paused) {
+          audio.currentTime = Math.min(5.0, video ? video.currentTime : 5.0);
+          audio.play().catch(() => { });
+        }
+      }
+
+      // 3. Keep text displayed longer ("tagalin" - 3.5 seconds reading window)
+      setTimeout(() => {
+        if (!hasTransitioned) {
+          transitionToDashboard();
+        }
+      }, 3500);
+    }
+
+    // Trigger smooth, realistic optical flash transition into dashboard
+    function transitionToDashboard() {
+      if (hasTransitioned) return;
+      hasTransitioned = true;
+
+      // Ensure text was shown
+      triggerWelcomeText();
+
+      // Add smooth realistic optic flash & camera warp class
+      entranceScreen.classList.add('warp-transition');
+
+      // Dismiss entrance and reveal dashboard with smooth timing
+      setTimeout(() => {
+        entranceScreen.classList.add('dismissed');
+
+        // Stop video & audio
+        if (video) video.pause();
+        if (audio) audio.pause();
+
+        // Clean scroll to dashboard top
+        window.scrollTo({ top: 0, behavior: 'instant' });
+
+        // Trigger fresh Hero fade-in animation
+        const heroSection = document.getElementById('home');
+        if (heroSection) {
+          heroSection.classList.remove('hero-animated');
+          void heroSection.offsetWidth;
+          heroSection.classList.add('hero-animated');
+        }
+      }, 950);
+    }
+
+    if (video) {
+      // Ensure video plays smoothly
+      video.play().then(() => {
+        if (audio) {
+          audio.play().catch(() => {
+            // Autoplay with audio was blocked by browser until user touches page
+          });
+        }
+      }).catch(() => { });
+
+      // Synchronize with EXACT 5.0 SECONDS of video
+      video.addEventListener('timeupdate', () => {
+        const currentTime = video.currentTime;
+
+        // Keep audio in sync with video
+        if (audio && !audio.paused && Math.abs(audio.currentTime - currentTime) > 0.3) {
+          audio.currentTime = currentTime;
+        }
+
+        // EXACT 5.0 SECONDS: The text blooms onto the screen!
+        if (currentTime >= 4.95 && !textRevealed) {
+          triggerWelcomeText();
+        }
+      });
+
+      // When video ends naturally, hold final frame while text is displayed
+      video.addEventListener('ended', () => {
+        if (!textRevealed) {
+          triggerWelcomeText();
+        }
+      });
+    }
+
+    // Fallback timer: If video stalls or delays, reveal text at 5.0s
+    setTimeout(() => {
+      if (!textRevealed) {
+        triggerWelcomeText();
+      }
+    }, 5000);
+
+    // Final safety transition after 8.8s
+    setTimeout(() => {
+      if (!hasTransitioned) {
+        transitionToDashboard();
+      }
+    }, 8800);
+
+    // Skip Button Handler
+    if (skipBtn) {
+      skipBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        transitionToDashboard();
+      });
+    }
+
+    // Click anywhere on entrance screen or press Space/Enter
+    entranceScreen.addEventListener('click', (e) => {
+      if (e.target.closest('#entranceSoundToggle')) return;
+      if (!textRevealed) {
+        // Fast-forward to 5s if user clicks early
+        if (video) video.currentTime = 5.0;
+        triggerWelcomeText();
+      } else {
+        transitionToDashboard();
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (!hasTransitioned && (e.key === ' ' || e.key === 'Enter' || e.key === 'Escape')) {
+        transitionToDashboard();
+      }
+    }, { once: true });
+  }
+
+  // Initialize Spark Entrance immediately
+  initSparkEntrance();
+
   // ─── 0. LAZY LOADING & OFFSCREEN SUSPENSION ENGINE ───
   // Pause heavy resources (video, CSS animations) when they leave the viewport
   if (typeof IntersectionObserver !== 'undefined') {
@@ -16,7 +271,7 @@
       const videoObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.play().catch(() => {}); // resume playback
+            entry.target.play().catch(() => { }); // resume playback
           } else {
             entry.target.pause(); // stop decoding frames when hidden
           }
@@ -27,7 +282,7 @@
 
     // 0B. Pause CSS animations on offscreen elements via .anim-paused class
     const animatedEls = document.querySelectorAll(
-      '.dock-radar-ring, .anime-lightning-aura, .portrait-electric-aura, .indicator-led'
+      '.dock-radar-ring, .anime-lightning-aura, .portrait-electric-aura'
     );
     if (animatedEls.length > 0) {
       const animObserver = new IntersectionObserver((entries) => {
@@ -399,7 +654,19 @@
     if (modalBadge) modalBadge.textContent = data.badge || 'PROJECT';
     if (modalTitle) modalTitle.textContent = data.title || 'Project Showcase';
     if (modalDescription) modalDescription.textContent = data.description || '';
-    if (modalLiveDemoBtn) modalLiveDemoBtn.href = data.link || '#';
+    if (modalLiveDemoBtn) {
+      const link = data.link && data.link !== '#' ? data.link : '';
+      if (link) {
+        modalLiveDemoBtn.href = link;
+        modalLiveDemoBtn.setAttribute('href', link);
+        modalLiveDemoBtn.setAttribute('target', '_blank');
+        modalLiveDemoBtn.setAttribute('rel', 'noopener noreferrer');
+        modalLiveDemoBtn.style.display = 'inline-flex';
+      } else {
+        modalLiveDemoBtn.href = '#';
+        modalLiveDemoBtn.style.display = 'none';
+      }
+    }
 
     projectModal.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -412,6 +679,17 @@
 
   if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeAllModals);
   if (modalCloseActionBtn) modalCloseActionBtn.addEventListener('click', closeAllModals);
+
+  if (modalLiveDemoBtn) {
+    modalLiveDemoBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const href = modalLiveDemoBtn.getAttribute('href');
+      if (href && href !== '#' && href.startsWith('http')) {
+        window.open(href, '_blank', 'noopener,noreferrer');
+        e.preventDefault();
+      }
+    });
+  }
 
   // Attach to project showcase cards
   document.querySelectorAll('.project-showcase-card').forEach((card) => {
@@ -527,9 +805,22 @@
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const id = entry.target.getAttribute('id');
-          dockIconLinks.forEach((link) => {
-            link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
-          });
+          if (id === 'about') {
+            const pSkills = document.getElementById('panelSkills');
+            const isSkillsActive = pSkills && pSkills.classList.contains('active');
+            dockIconLinks.forEach((link) => {
+              const href = link.getAttribute('href');
+              if (isSkillsActive) {
+                link.classList.toggle('active', href === '#skills');
+              } else {
+                link.classList.toggle('active', href === '#about');
+              }
+            });
+          } else {
+            dockIconLinks.forEach((link) => {
+              link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+            });
+          }
         }
       });
     }, observerOptions);
@@ -566,11 +857,12 @@
     });
   }
 
-  // ─── 13. 3D SPATIAL UI PROJECT CAROUSEL ENGINE ───
+  // ─── 13. SKEUOMORPHIC HARDWARE PROJECT CAROUSEL ENGINE ───
   const carouselCards = document.querySelectorAll('.spatial-project-card');
   const carouselPrevBtn = document.getElementById('carouselPrevBtn');
   const carouselNextBtn = document.getElementById('carouselNextBtn');
   const carouselCounter = document.getElementById('spatialCarouselCounter');
+  const channelBtns = document.querySelectorAll('.skeuo-ch-btn');
   let currentCarouselIndex = 0;
   const totalSlides = carouselCards.length;
 
@@ -593,10 +885,25 @@
       }
     });
 
+    // Update physical channel selector buttons
+    if (channelBtns.length > 0) {
+      channelBtns.forEach((btn, idx) => {
+        btn.classList.toggle('active', idx === currentCarouselIndex);
+      });
+    }
+
     if (carouselCounter) {
       carouselCounter.textContent = `0${currentCarouselIndex + 1} / 0${totalSlides}`;
     }
   }
+
+  // Physical channel push-buttons click
+  channelBtns.forEach((btn, idx) => {
+    btn.addEventListener('click', () => {
+      currentCarouselIndex = idx;
+      updateCarouselPositions();
+    });
+  });
 
   if (carouselPrevBtn) {
     carouselPrevBtn.addEventListener('click', () => {
@@ -615,6 +922,9 @@
   // Click on cards to bring to focus or open modal
   carouselCards.forEach((card, index) => {
     card.addEventListener('click', (e) => {
+      if (e.target.closest('.btn-spatial-demo')) {
+        return; // Allow direct navigation to live demo
+      }
       if (!card.classList.contains('active')) {
         currentCarouselIndex = index;
         updateCarouselPositions();
@@ -1089,7 +1399,7 @@
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener('click', function (e) {
       const targetId = this.getAttribute('href');
-      if (targetId && targetId !== '#' && !targetId.includes('Modal')) {
+      if (targetId && targetId.startsWith('#') && targetId.length > 1 && !targetId.includes('Modal')) {
         e.preventDefault();
 
         // Immediate active state feedback on floating dock buttons
@@ -1104,6 +1414,15 @@
           floatingDock.classList.remove('mobile-open');
         }
 
+        if (targetId === '#about') {
+          const aboutEl = document.querySelector('#about');
+          if (aboutEl) {
+            if (typeof switchBentoTab === 'function') switchBentoTab('who');
+            scrollToTarget(aboutEl, -24);
+          }
+          return;
+        }
+
         if (targetId === '#skills') {
           const aboutEl = document.querySelector('#about');
           if (aboutEl) {
@@ -1113,9 +1432,13 @@
           return;
         }
 
-        const targetEl = document.querySelector(targetId);
-        if (targetEl) {
-          scrollToTarget(targetEl, targetId === '#home' ? 0 : -24);
+        try {
+          const targetEl = document.querySelector(targetId);
+          if (targetEl) {
+            scrollToTarget(targetEl, targetId === '#home' ? 0 : -24);
+          }
+        } catch (err) {
+          // Ignore invalid selectors safely
         }
       }
     });
@@ -1132,7 +1455,86 @@
   const panelSkills = document.getElementById('panelSkills');
   const modeLabel = document.getElementById('consoleModeLabel');
 
+  // Skills Skeuomorphic Paging Elements
+  const skillsPages = document.querySelectorAll('.skills-hud-page');
+  const skillsPrevBtn = document.getElementById('skillsPrevBtn');
+  const skillsNextBtn = document.getElementById('skillsNextBtn');
+  const skillsPageCounter = document.getElementById('skillsPageCounter');
+  const skillsCategoryBadge = document.getElementById('skillsCategoryBadge');
+  const skillsHeadlineTitle = document.getElementById('skillsHeadlineTitle');
+  const skillsPips = document.querySelectorAll('.skeuo-led-pip');
+  let currentSkillsPage = 1;
+  const totalSkillsPages = skillsPages.length || 2;
+
+  function animateActiveSkillBars() {
+    const activePage = document.querySelector('.skills-hud-page.active');
+    if (!activePage) return;
+    const bars = activePage.querySelectorAll('.skill-bar-fill');
+    bars.forEach((bar) => {
+      const prog = bar.getAttribute('data-progress') || '80';
+      bar.style.width = '0%';
+      setTimeout(() => {
+        bar.style.width = prog + '%';
+      }, 50);
+    });
+  }
+
+  function setSkillsPage(page) {
+    if (page < 1) page = totalSkillsPages;
+    if (page > totalSkillsPages) page = 1;
+    currentSkillsPage = page;
+
+    skillsPages.forEach((pg) => {
+      if (parseInt(pg.getAttribute('data-page'), 10) === currentSkillsPage) {
+        pg.classList.add('active');
+      } else {
+        pg.classList.remove('active');
+      }
+    });
+
+    if (skillsPageCounter) {
+      skillsPageCounter.textContent = `0${currentSkillsPage} / 0${totalSkillsPages}`;
+    }
+
+    if (skillsPips) {
+      skillsPips.forEach((pip) => {
+        if (parseInt(pip.getAttribute('data-page'), 10) === currentSkillsPage) {
+          pip.classList.add('active');
+        } else {
+          pip.classList.remove('active');
+        }
+      });
+    }
+
+    if (currentSkillsPage === 1) {
+      if (skillsCategoryBadge) skillsCategoryBadge.textContent = '01 / 02 • PROGRAMMING';
+      if (skillsHeadlineTitle) skillsHeadlineTitle.textContent = 'PROGRAMMING & DEV';
+    } else {
+      if (skillsCategoryBadge) skillsCategoryBadge.textContent = '02 / 02 • HARDWARE & IT';
+      if (skillsHeadlineTitle) skillsHeadlineTitle.textContent = 'HARDWARE, IT & NETWORK';
+    }
+
+    animateActiveSkillBars();
+  }
+
+  if (skillsPrevBtn) {
+    skillsPrevBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      setSkillsPage(currentSkillsPage - 1);
+    });
+  }
+
+  if (skillsNextBtn) {
+    skillsNextBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      setSkillsPage(currentSkillsPage + 1);
+    });
+  }
+
   function switchBentoTab(mode) {
+    const dockSkillsLink = document.querySelector('.floating-nav-dock a[href="#skills"]');
+    const dockAboutLink = document.querySelector('.floating-nav-dock a[href="#about"]');
+
     if (mode === 'skills') {
       if (tabBtnWho) tabBtnWho.classList.remove('active');
       if (tabBtnSkills) tabBtnSkills.classList.add('active');
@@ -1140,20 +1542,24 @@
       if (panelSkills) panelSkills.classList.add('active');
       if (modeLabel) modeLabel.textContent = 'SKILLS ACTIVE';
 
-      // Re-trigger animated skill bar widths
-      document.querySelectorAll('#panelSkills .skill-bar-fill').forEach((bar) => {
-        const prog = bar.getAttribute('data-progress') || '80';
-        bar.style.width = '0%';
-        setTimeout(() => {
-          bar.style.width = prog + '%';
-        }, 60);
-      });
+      if (dockSkillsLink) {
+        if (dockAboutLink) dockAboutLink.classList.remove('active');
+        dockSkillsLink.classList.add('active');
+      }
+
+      // Re-trigger animated skill bar widths for active page
+      animateActiveSkillBars();
     } else {
       if (tabBtnSkills) tabBtnSkills.classList.remove('active');
       if (tabBtnWho) tabBtnWho.classList.add('active');
       if (panelSkills) panelSkills.classList.remove('active');
       if (panelWho) panelWho.classList.add('active');
       if (modeLabel) modeLabel.textContent = 'BIO ACTIVE';
+
+      if (dockAboutLink) {
+        if (dockSkillsLink) dockSkillsLink.classList.remove('active');
+        dockAboutLink.classList.add('active');
+      }
     }
   }
 
@@ -1161,5 +1567,40 @@
   if (tabBtnSkills) tabBtnSkills.addEventListener('click', () => switchBentoTab('skills'));
   if (btnSwitchToSkills) btnSwitchToSkills.addEventListener('click', () => switchBentoTab('skills'));
   if (btnSwitchToWho) btnSwitchToWho.addEventListener('click', () => switchBentoTab('who'));
+
+  // ─── 17. UNIVERSAL SCROLL FADE-IN REVEAL ENGINE ───
+  function initScrollReveal() {
+    const revealElements = document.querySelectorAll('.scroll-reveal');
+    if (revealElements.length === 0) return;
+
+    if (typeof IntersectionObserver !== 'undefined') {
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        root: null,
+        rootMargin: '0px 0px -40px 0px',
+        threshold: 0.1
+      });
+
+      revealElements.forEach((el) => {
+        // Elements inside hero are revealed by hero entrance animation;
+        // all other sections and cards are observed to fade in as user scrolls
+        if (el.closest('#home')) {
+          el.classList.add('is-revealed');
+        } else {
+          revealObserver.observe(el);
+        }
+      });
+    } else {
+      revealElements.forEach((el) => el.classList.add('is-revealed'));
+    }
+  }
+
+  initScrollReveal();
 
 })();

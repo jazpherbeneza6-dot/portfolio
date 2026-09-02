@@ -1,0 +1,434 @@
+/* ─── 10. PROJECTS SECTION: MODULAR HARDWARE UNITS ─── */
+.projects-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 0;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.projects-header-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.link-view-all-projects {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--text-silkscreen);
+  text-shadow: var(--shadow-letterpress);
+  padding: 8px 14px;
+  background: var(--grad-button-normal);
+  border-radius: 6px;
+  border: 1px solid #14171d;
+  border-top: 1px solid #4a5468;
+  box-shadow: var(--button-3d-shadow);
+  transition: all 0.15s ease;
+}
+
+.link-view-all-projects:hover {
+  background: var(--grad-button-hover);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* 3-Column Modular Rack Grid */
+.projects-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 44px;
+}
+
+.project-showcase-card {
+  background: var(--grad-chassis-brushed);
+  border: 2px solid #161922;
+  border-top-color: #3e4657;
+  border-radius: 12px;
+  box-shadow: var(--chassis-bevel);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.project-showcase-card:hover {
+  transform: translateY(-4px);
+}
+
+.project-card-thumb {
+  height: 200px;
+  background: #0d0f14;
+  border-bottom: 2px solid #161922;
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.project-card-body {
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.project-tag-pill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--text-silkscreen);
+  background: #11141b;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid #1b1f28;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+  align-self: flex-start;
+  margin-bottom: 10px;
+}
+
+.project-item-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  color: #f1f5f9;
+  text-shadow: var(--shadow-letterpress);
+  margin-bottom: 8px;
+}
+
+.project-item-desc {
+  font-size: 13.5px;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.project-card-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 6px;
+  background: var(--grad-button-normal);
+  border: 1px solid #14171d;
+  border-top: 1px solid #4a5468;
+  box-shadow: var(--button-3d-shadow);
+  color: #e2e8f0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8);
+  transition: all 0.15s ease;
+}
+
+.project-card-action-btn:hover {
+  background: var(--grad-button-hover);
+  color: #ffffff;
+  border-top-color: #5c677e;
+}
+
+.Image1 {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+
+}
+
+.project-card-action-btn:active {
+  box-shadow: var(--button-pressed-shadow);
+  transform: translateY(1px);
+}
+
+/* ─── 11. 3D SPATIAL CAROUSEL (GLASSMORPHISM DESIGN) ─── */
+.spatial-carousel-container {
+  background: var(--grad-chassis-brushed);
+  border: 2px solid #161922;
+  border-top-color: #3e4657;
+  border-radius: 18px;
+  box-shadow: var(--chassis-bevel);
+  padding: 18px 20px;
+  position: relative;
+}
+
+.spatial-counter-display {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-silkscreen);
+  background: #0f1116;
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: 1px solid #1a1e27;
+  box-shadow: var(--well-inset-shadow);
+  z-index: 15;
+}
+
+.spatial-carousel-viewport {
+  position: relative;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 48px;
+}
+
+.spatial-flank-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: var(--grad-button-normal);
+  border: 1.5px solid #14171d;
+  border-top: 1.5px solid #4a5468;
+  box-shadow: var(--button-3d-shadow);
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  transition: all 0.15s ease;
+}
+
+.spatial-flank-btn:hover {
+  background: var(--grad-button-hover);
+  color: #ffffff;
+  transform: translateY(calc(-50% - 2px));
+}
+
+.spatial-flank-btn:active {
+  box-shadow: var(--button-pressed-shadow);
+  transform: translateY(calc(-50% + 2px));
+}
+
+.flank-left {
+  left: 6px;
+}
+
+.flank-right {
+  right: 6px;
+}
+
+.spatial-carousel-stage {
+  position: relative;
+  width: 100%;
+  max-width: 1240px;
+  height: 460px;
+}
+
+.spatial-project-card {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s var(--ease-spring);
+  transform: scale(0.9) translateY(20px);
+}
+
+.spatial-project-card.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1) translateY(0);
+  z-index: 5;
+}
+
+/* Glassmorphism Inner Card Surface (Enlarged) */
+.spatial-card-inner {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
+  height: 100%;
+  background: rgba(16, 21, 35, 0.76);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 18px;
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 0 30px rgba(56, 189, 248, 0.08);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s ease;
+}
+
+.spatial-glass-sheen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 40%, rgba(255, 255, 255, 0.02) 100%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* High-Visibility Project Image Stage */
+.spatial-card-depth-img {
+  position: relative;
+  background: #07090e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-right: 1.5px solid rgba(255, 255, 255, 0.1);
+  padding: 24px;
+}
+
+.spatial-proj-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  transition: transform 0.35s ease;
+}
+
+.spatial-project-card:hover .spatial-proj-img {
+  transform: scale(1.03);
+}
+
+.spatial-floating-tag {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  background: rgba(14, 18, 28, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--text-silkscreen);
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  z-index: 4;
+}
+
+/* Frosted Content Panel */
+.spatial-card-depth-content {
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.spatial-mini-kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 1.5px;
+}
+
+.spatial-card-depth-content h4 {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.4vw, 30px);
+  font-weight: 800;
+  color: #f1f5f9;
+  text-shadow: var(--shadow-letterpress);
+  margin-top: 6px;
+}
+
+.spatial-card-depth-content p {
+  font-size: 14.5px;
+  color: #cbd5e1;
+  line-height: 1.7;
+  margin: 12px 0 20px 0;
+}
+
+.spatial-action-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.spatial-tech-pill {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(14, 18, 28, 0.85);
+  color: #94a3b8;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-spatial-demo {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 5;
+}
+
+.btn-spatial-demo:hover {
+  filter: brightness(1.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.6);
+  color: #ffffff;
+}
+
+.btn-spatial-inspect {
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 6px;
+  background: rgba(14, 18, 28, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  color: #cbd5e1;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 5;
+}
+
+.btn-spatial-inspect:hover {
+  background: rgba(30, 41, 59, 0.95);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.5);
+  transform: translateY(-1px);
+}

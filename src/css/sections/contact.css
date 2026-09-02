@@ -1,0 +1,189 @@
+/* ─── 12. CONTACT SECTION: CONTROL DESK ─── */
+.contact-banner-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 0;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.contact-card-container {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 36px;
+  background: var(--grad-chassis-brushed);
+  border: 2px solid #161922;
+  border-top-color: #3e4657;
+  border-radius: 14px;
+  box-shadow: var(--chassis-bevel);
+  padding: 40px;
+  position: relative;
+}
+
+.contact-lead-text {
+  font-size: 15px;
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.btn-send-message {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #d97706 0%, #b45309 50%, #78350f 100%);
+  color: #fffbeb;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: 1.5px solid #451a03;
+  border-top: 1.5px solid #fde68a;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.4) inset,
+    0 -2px 0 rgba(0, 0, 0, 0.6) inset,
+    0 6px 14px rgba(0, 0, 0, 0.6),
+    0 0 16px rgba(245, 158, 11, 0.3);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.15s ease;
+}
+
+.btn-send-message:hover {
+  background: linear-gradient(180deg, #f59e0b 0%, #c2410c 50%, #9a3412 100%);
+  transform: translateY(-2px);
+}
+
+.btn-send-message:active {
+  box-shadow: var(--button-pressed-shadow);
+  transform: translateY(2px);
+}
+
+.contact-right-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  justify-content: center;
+}
+
+.contact-info-pill {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #11141b;
+  border: 1.5px solid #1b1f29;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  box-shadow: var(--well-inset-shadow);
+  border-radius: 8px;
+  padding: 12px 18px;
+  transition: background 0.15s ease;
+}
+
+.contact-info-pill:hover {
+  background: #151922;
+}
+
+.contact-pill-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: var(--grad-button-normal);
+  border: 1px solid #14171d;
+  border-top: 1px solid #4a5468;
+  box-shadow: var(--button-3d-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-silkscreen);
+  flex-shrink: 0;
+}
+
+.contact-pill-val {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: #f1f5f9;
+  letter-spacing: 0.5px;
+}
+
+.contact-pill-label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 1px;
+}
+
+/* ─── 13. FOOTER ─── */
+.site-bottom-footer {
+  border-top: 2px solid #161922;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset;
+  padding: 28px 0;
+}
+
+.footer-layout-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-copy-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-monogram {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--text-silkscreen);
+}
+
+.footer-copyright-text {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #64748b;
+}
+
+.footer-motto-right {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* Floating Back To Top Button */
+.floating-back-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: var(--grad-button-normal);
+  border: 1.5px solid #14171d;
+  border-top: 1.5px solid #4a5468;
+  box-shadow: var(--button-3d-shadow);
+  color: #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 80;
+  transition: all 0.15s ease;
+}
+
+.floating-back-to-top:hover {
+  background: var(--grad-button-hover);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.floating-back-to-top:active {
+  box-shadow: var(--button-pressed-shadow);
+  transform: translateY(2px);
+}

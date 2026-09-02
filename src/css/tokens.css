@@ -1,0 +1,87 @@
+/* ==========================================================================
+   JAZPHER BENEZA — HIGH-FIDELITY SKEUOMORPHIC HARDWARE CONSOLE PORTFOLIO
+   Tactile Materials, Brushed Metals, Debossed Engravings, Analog VU Meters & 3D Controls
+   ========================================================================== */
+
+/* ─── 1. DESIGN TOKENS & SKEUOMORPHIC MATERIAL ENGINE ─── */
+:root {
+  /* Metallic Chassis & Physical Textures */
+  --bg-desk: #12141a;
+  --bg-metal-dark: #181b22;
+  --bg-metal-mid: #222630;
+  --bg-metal-light: #2c313e;
+  --bg-metal-highlight: #3c4354;
+  --bg-well-inset: #0e1015;
+
+  /* Physical Gradients (Brushed Titanium & Aluminum) */
+  --grad-chassis-brushed: linear-gradient(180deg, #282d38 0%, #1f222a 40%, #171920 100%);
+  --grad-faceplate: linear-gradient(180deg, #2b303d 0%, #20242e 50%, #1a1d25 100%);
+  --grad-faceplate-hover: linear-gradient(180deg, #323847 0%, #252a36 50%, #1e222b 100%);
+  --grad-button-normal: linear-gradient(180deg, #3c4353 0%, #2c313e 50%, #21252f 100%);
+  --grad-button-hover: linear-gradient(180deg, #485063 0%, #353b4b 50%, #272c38 100%);
+  --grad-button-active: linear-gradient(180deg, #181a21 0%, #222630 50%, #282c38 100%);
+  --grad-metal-dial: radial-gradient(circle at 35% 35%, #565f73 0%, #2d3340 50%, #1a1d25 90%);
+  --grad-chrome-rim: linear-gradient(135deg, #a0aec0 0%, #4a5568 25%, #cbd5e1 50%, #2d3748 75%, #94a3b8 100%);
+  --grad-brass-trim: linear-gradient(135deg, #f59e0b 0%, #b45309 40%, #fef3c7 60%, #78350f 100%);
+
+  /* Indicator Lamp & Jewel LED Accents */
+  --led-amber: #f59e0b;
+  --led-amber-glow: rgba(245, 158, 11, 0.6);
+  --led-emerald: #10b981;
+  --led-emerald-glow: rgba(16, 185, 129, 0.6);
+  --led-cyan: #06b6d4;
+  --led-cyan-glow: rgba(6, 182, 212, 0.6);
+  --led-ruby: #ef4444;
+  --led-ruby-glow: rgba(239, 68, 68, 0.6);
+  --led-blue: #3b82f6;
+  --led-blue-glow: rgba(59, 130, 246, 0.6);
+
+  /* Skeuomorphic Typography Palette */
+  --text-engraved: #e2e8f0;
+  --text-sub-engraved: #94a3b8;
+  --text-muted-dark: #64748b;
+  --text-silkscreen: #f59e0b;
+  --text-silkscreen-cyan: #38bdf8;
+  --text-silkscreen-green: #34d399;
+
+  /* Debossed & Embossed Shadow Systems */
+  --shadow-letterpress: 0 1px 0 rgba(255, 255, 255, 0.15), 0 -1px 0 rgba(0, 0, 0, 0.9);
+  --shadow-letterpress-light: 0 1px 0 rgba(255, 255, 255, 0.25), 0 -1px 1px rgba(0, 0, 0, 0.8);
+  --shadow-emboss-raised: 0 -1px 0 rgba(255, 255, 255, 0.2), 0 2px 4px rgba(0, 0, 0, 0.6);
+
+  /* Physical Bevels & Depth Shadows */
+  --chassis-bevel:
+    0 1px 0 rgba(255, 255, 255, 0.15) inset,
+    0 -1px 0 rgba(0, 0, 0, 0.85) inset,
+    1px 0 0 rgba(255, 255, 255, 0.08) inset,
+    -1px 0 0 rgba(0, 0, 0, 0.6) inset,
+    0 10px 30px -5px rgba(0, 0, 0, 0.85),
+    0 2px 6px rgba(0, 0, 0, 0.6);
+
+  --button-3d-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.25) inset,
+    0 -2px 0 rgba(0, 0, 0, 0.6) inset,
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    0 1px 2px rgba(0, 0, 0, 0.4);
+
+  --button-pressed-shadow:
+    0 3px 6px rgba(0, 0, 0, 0.8) inset,
+    0 1px 2px rgba(0, 0, 0, 0.9) inset,
+    0 1px 0 rgba(255, 255, 255, 0.1);
+
+  --well-inset-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.85) inset,
+    0 1px 2px rgba(0, 0, 0, 0.9) inset,
+    0 1px 0 rgba(255, 255, 255, 0.1);
+
+  /* Fonts */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Orbitron', 'Space Grotesk', sans-serif;
+  --font-title: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Transitions */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s var(--ease-spring);
+}

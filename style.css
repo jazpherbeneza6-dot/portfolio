@@ -735,46 +735,40 @@ button {
   min-height: 46px;
 }
 
-/* Debossed Stamped Monogram Logo */
+/* Pure Neon Brand Logo (No Card Frame) */
 .nav-brand-logo {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
   z-index: 2;
-  padding: 6px 14px;
-  background: linear-gradient(180deg, #2d3340 0%, #1c202a 100%);
-  border-radius: 6px;
-  border: 1px solid #13161c;
-  border-top-color: #4a5468;
-  box-shadow: var(--button-3d-shadow);
-  transition: var(--transition-fast);
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .nav-brand-logo:hover {
-  background: linear-gradient(180deg, #373e4d 0%, #232834 100%);
-  transform: translateY(-1px);
+  background: transparent;
+  transform: scale(1.08);
 }
 
 .nav-brand-logo:active {
-  transform: translateY(1px);
-  box-shadow: var(--button-pressed-shadow);
+  transform: scale(0.96);
+  box-shadow: none;
 }
 
-.logo-jb {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 900;
-  letter-spacing: 2px;
-  color: #f8fafc;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3), 0 -1px 1px rgba(0, 0, 0, 0.9);
+.brand-neon-logo-img {
+  height: 44px;
+  width: auto;
+  max-width: 68px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.7)) drop-shadow(0 0 16px rgba(234, 88, 12, 0.45));
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
 }
 
-.logo-sub {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--text-silkscreen);
-  letter-spacing: 1px;
+.nav-brand-logo:hover .brand-neon-logo-img {
+  filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.95)) drop-shadow(0 0 24px rgba(234, 88, 12, 0.7));
 }
 
 /* Physical Push-Button Channel Dock */

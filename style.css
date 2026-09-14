@@ -3697,16 +3697,37 @@ button {
 }
 
 .skeuo-tech-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6.5px;
   font-family: var(--font-mono);
   font-size: 10.5px;
   font-weight: 700;
   background: #0f1218;
   color: #cbd5e1;
-  padding: 5px 12px;
+  padding: 5px 11px;
   border-radius: 4px;
   border: 1px solid #1a202c;
   border-bottom-color: rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8), 0 1px 2px rgba(0, 0, 0, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  line-height: 1;
+}
+
+.skeuo-tech-chip:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #f8fafc;
+  background: #141822;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.5);
+  transform: translateY(-1px);
+}
+
+.skeuo-tech-chip .tech-icon-svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .skeuo-action-row {
@@ -4544,68 +4565,109 @@ button {
 .modal-hero-preview {
   position: relative;
   width: 100%;
-  height: 380px;
-  background: #07090c;
+  height: 440px;
+  background: #06080d;
   border-bottom: 2px solid #1c222e;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
+  padding: 14px;
 }
 
 .modal-img-tag {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  transition: opacity 0.2s ease, transform 0.3s ease;
+  object-fit: contain;
+  object-position: center center;
+  transition: opacity 0.18s ease;
+  user-select: none;
 }
 
-.modal-gallery-strip {
+/* Skeuomorphic Machined Flank Navigation Buttons */
+.modal-gallery-nav-btn {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #2a3449 0%, #151b27 100%);
+  border: 1px solid #3d4d6b;
+  border-top-color: #64748b;
+  color: #f1f5f9;
+  display: none;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 10px 14px;
-  background: linear-gradient(180deg, transparent 0%, rgba(7, 9, 12, 0.92) 25%, #07090c 100%);
-  z-index: 5;
-  flex-wrap: wrap;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.6);
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.modal-thumb-btn {
+.modal-gallery-prev {
+  left: 16px;
+}
+
+.modal-gallery-next {
+  right: 16px;
+}
+
+.modal-gallery-nav-btn:hover {
+  background: linear-gradient(180deg, #374460 0%, #1c2434 100%);
+  border-color: #f59e0b;
+  color: #f59e0b;
+  box-shadow:
+    0 0 18px rgba(245, 158, 11, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.modal-gallery-nav-btn:active {
+  transform: translateY(-50%) scale(0.95);
+  box-shadow:
+    inset 0 3px 6px rgba(0, 0, 0, 0.8),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Modal Gallery HUD Telemetry Badge */
+.modal-gallery-hud {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  background: #181e29;
-  border: 1px solid #2e394d;
-  border-top-color: #4a5b7a;
-  border-radius: 6px;
-  color: #94a3b8;
+  gap: 10px;
+  padding: 6px 16px;
+  background: rgba(10, 14, 22, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
   font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 800;
+  font-size: 11.5px;
+  font-weight: 700;
   letter-spacing: 0.5px;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
-  transition: all 0.15s ease;
+  z-index: 6;
+  pointer-events: none;
 }
 
-.modal-thumb-btn:hover {
-  background: #252e3e;
-  color: #f8fafc;
-  border-color: #55698c;
+.modal-gallery-caption {
+  color: #e2e8f0;
 }
 
-.modal-thumb-btn.active {
-  background: linear-gradient(180deg, #d97706 0%, #b45309 100%);
-  border-color: #f59e0b;
-  border-top-color: #fde68a;
-  color: #fff;
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+.modal-gallery-badge {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10.5px;
 }
 
 .modal-content-area {

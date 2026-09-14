@@ -641,52 +641,98 @@
   // ─── 7. PROJECT DETAIL MODAL HANDLER ───
   const projectModal = document.getElementById('projectDetailModal');
   const modalHeroImg = document.getElementById('modalHeroImg');
-  const modalGalleryStrip = document.getElementById('modalGalleryStrip');
   const modalBadge = document.getElementById('modalBadge');
   const modalTitle = document.getElementById('modalTitle');
   const modalDescription = document.getElementById('modalDescription');
   const modalLiveDemoBtn = document.getElementById('modalLiveDemoBtn');
   const modalCloseBtn = document.getElementById('modalCloseBtn');
   const modalCloseActionBtn = document.getElementById('modalCloseActionBtn');
+  const modalGalleryPrevBtn = document.getElementById('modalGalleryPrevBtn');
+  const modalGalleryNextBtn = document.getElementById('modalGalleryNextBtn');
+  const modalGalleryHud = document.getElementById('modalGalleryHud');
+  const modalGalleryCaption = document.getElementById('modalGalleryCaption');
+  const modalGalleryCounter = document.getElementById('modalGalleryCounter');
+
+  let currentModalGallery = [];
+  let currentModalGalleryIndex = 0;
+
+  function updateModalGalleryView(index) {
+    if (!currentModalGallery.length) return;
+    currentModalGalleryIndex = (index + currentModalGallery.length) % currentModalGallery.length;
+    const current = currentModalGallery[currentModalGalleryIndex];
+    if (modalHeroImg) {
+      modalHeroImg.style.opacity = '0.35';
+      setTimeout(() => {
+        modalHeroImg.src = current.src;
+        modalHeroImg.style.opacity = '1';
+      }, 100);
+    }
+    if (modalGalleryCaption) {
+      modalGalleryCaption.textContent = current.label;
+    }
+    if (modalGalleryCounter) {
+      modalGalleryCounter.textContent = `${String(currentModalGalleryIndex + 1).padStart(2, '0')} / ${String(currentModalGallery.length).padStart(2, '0')}`;
+    }
+  }
+
+  if (modalGalleryPrevBtn) {
+    modalGalleryPrevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      updateModalGalleryView(currentModalGalleryIndex - 1);
+    });
+  }
+
+  if (modalGalleryNextBtn) {
+    modalGalleryNextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      updateModalGalleryView(currentModalGalleryIndex + 1);
+    });
+  }
+
+  // Keyboard navigation for modal gallery
+  window.addEventListener('keydown', (e) => {
+    if (!projectModal || !projectModal.classList.contains('active')) return;
+    if (e.key === 'ArrowLeft') {
+      updateModalGalleryView(currentModalGalleryIndex - 1);
+    } else if (e.key === 'ArrowRight') {
+      updateModalGalleryView(currentModalGalleryIndex + 1);
+    } else if (e.key === 'Escape') {
+      closeAllModals();
+    }
+  });
 
   function openProjectModal(data) {
     if (!projectModal) return;
-    if (modalHeroImg) modalHeroImg.src = data.image || 'public/image/d.png';
     if (modalBadge) modalBadge.textContent = data.badge || 'PROJECT';
     if (modalTitle) modalTitle.textContent = data.title || 'Project Showcase';
     if (modalDescription) modalDescription.textContent = data.description || '';
 
-    // Handle multi-screenshot gallery if present
-    if (modalGalleryStrip) {
-      modalGalleryStrip.innerHTML = '';
-      if (data.gallery) {
-        const items = data.gallery.split(',');
-        items.forEach((itemStr, idx) => {
-          const parts = itemStr.split(':');
-          const src = parts[0];
-          const label = parts[1] || `Screen 0${idx + 1}`;
-          const thumbBtn = document.createElement('button');
-          thumbBtn.className = `modal-thumb-btn ${idx === 0 ? 'active' : ''}`;
-          thumbBtn.type = 'button';
-          thumbBtn.innerHTML = `<span>${label}</span>`;
-          thumbBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            modalGalleryStrip.querySelectorAll('.modal-thumb-btn').forEach((b) => b.classList.remove('active'));
-            thumbBtn.classList.add('active');
-            if (modalHeroImg) {
-              modalHeroImg.style.opacity = '0.3';
-              setTimeout(() => {
-                modalHeroImg.src = src;
-                modalHeroImg.style.opacity = '1';
-              }, 120);
-            }
-          });
-          modalGalleryStrip.appendChild(thumbBtn);
-        });
-        modalGalleryStrip.style.display = 'flex';
-      } else {
-        modalGalleryStrip.style.display = 'none';
-      }
+    currentModalGallery = [];
+    currentModalGalleryIndex = 0;
+
+    if (data.gallery) {
+      const items = data.gallery.split(',');
+      currentModalGallery = items.map((itemStr, idx) => {
+        const parts = itemStr.split(':');
+        return {
+          src: parts[0].trim(),
+          label: parts[1]?.trim() || `Screen 0${idx + 1}`
+        };
+      });
+    } else if (data.image) {
+      currentModalGallery = [{ src: data.image, label: 'Overview' }];
+    }
+
+    if (currentModalGallery.length > 1) {
+      if (modalGalleryPrevBtn) modalGalleryPrevBtn.style.display = 'flex';
+      if (modalGalleryNextBtn) modalGalleryNextBtn.style.display = 'flex';
+      if (modalGalleryHud) modalGalleryHud.style.display = 'inline-flex';
+      updateModalGalleryView(0);
+    } else {
+      if (modalGalleryPrevBtn) modalGalleryPrevBtn.style.display = 'none';
+      if (modalGalleryNextBtn) modalGalleryNextBtn.style.display = 'none';
+      if (modalGalleryHud) modalGalleryHud.style.display = 'none';
+      if (modalHeroImg) modalHeroImg.src = data.image || 'public/image/d.png';
     }
 
     if (modalLiveDemoBtn) {
@@ -972,6 +1018,7 @@
           badge: card.getAttribute('data-badge'),
           description: card.getAttribute('data-description'),
           image: card.getAttribute('data-image'),
+          gallery: card.getAttribute('data-gallery'),
           link: card.getAttribute('data-link')
         });
       }

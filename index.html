@@ -15,7 +15,7 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=3.4">
+  <link rel="stylesheet" href="style.css?v=3.5">
   <!-- GSAP & Three.js for Visuals -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -548,6 +548,50 @@
                         <div class="skill-bar-fill" data-progress="70" style="width: 70%;"></div>
                       </div>
                     </div>
+
+                    <!-- PHP 75% -->
+                    <div class="skill-hud-row">
+                      <div class="skill-hud-header">
+                        <div class="skill-name-group">
+                          <div class="skill-hud-icon php-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <ellipse cx="12" cy="12" rx="10" ry="7" />
+                              <path d="M7 10h1.5a1.5 1.5 0 0 1 0 3H7v2" />
+                              <path d="M11 10v5M11 12.5h2M13 10v5" />
+                              <path d="M15.5 10H17a1.5 1.5 0 0 1 0 3h-1.5v2" />
+                            </svg>
+                          </div>
+                          <span class="skill-title-text">PHP</span>
+                        </div>
+                        <span class="skill-percent-value">75%</span>
+                      </div>
+                      <div class="skill-bar-track">
+                        <div class="skill-bar-fill" data-progress="75" style="width: 75%;"></div>
+                      </div>
+                    </div>
+
+                    <!-- LARAVEL 70% -->
+                    <div class="skill-hud-row">
+                      <div class="skill-hud-header">
+                        <div class="skill-name-group">
+                          <div class="skill-hud-icon laravel-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M3 17l8 5l7-4v-8l-4-2.5l4-2.5l4 2.5v4l-11 6.5l-4-2.5v-7.5l-4-2.5z" />
+                              <path d="M11 18v4" />
+                              <path d="M7 15.5l7-4" />
+                              <path d="M14 9v4" />
+                            </svg>
+                          </div>
+                          <span class="skill-title-text">Laravel</span>
+                        </div>
+                        <span class="skill-percent-value">70%</span>
+                      </div>
+                      <div class="skill-bar-track">
+                        <div class="skill-bar-fill" data-progress="70" style="width: 70%;"></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -784,7 +828,7 @@
           <!-- Hardware Recessed Matrix Counter Window -->
           <div class="skeuo-matrix-counter">
             <span class="matrix-label">CH. SEL</span>
-            <span class="matrix-val" id="spatialCarouselCounter">01 / 05</span>
+            <span class="matrix-val" id="spatialCarouselCounter">01 / 06</span>
           </div>
         </div>
 
@@ -829,9 +873,30 @@
 
                   <div class="skeuo-panel-bottom">
                     <div class="skeuo-tech-stack">
-                      <span class="spatial-tech-pill skeuo-tech-chip">React</span>
-                      <span class="spatial-tech-pill skeuo-tech-chip">Firebase</span>
-                      <span class="spatial-tech-pill skeuo-tech-chip">Geolocation</span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#00d8ff" stroke-width="1.8" aria-hidden="true">
+                          <ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(30 12 12)" />
+                          <ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(90 12 12)" />
+                          <ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(150 12 12)" />
+                          <circle cx="12" cy="12" r="1.8" fill="#00d8ff" />
+                        </svg>
+                        <span>React</span>
+                      </span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M4.5 18.5L8.2 3.8a.7.7 0 0 1 1.3-.1l2.5 4.8-7.5 10z" fill="#FFA000"/>
+                          <path d="M4.5 18.5l9.2-8.8a.7.7 0 0 1 1.2.4L17 18.5l-6.2 3.5a1.8 1.8 0 0 1-1.6 0L4.5 18.5z" fill="#FFCA28"/>
+                          <path d="M12 8.5l-2.5-4.8a.7.7 0 0 0-1.3.1L4.5 18.5l7.5-10z" fill="#F57C00"/>
+                        </svg>
+                        <span>Firebase</span>
+                      </span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M12 2a7.5 7.5 0 0 0-7.5 7.5c0 5 7.5 12.5 7.5 12.5s7.5-7.5 7.5-12.5A7.5 7.5 0 0 0 12 2z"/>
+                          <circle cx="12" cy="9.5" r="2.5" fill="#38bdf8" stroke="none"/>
+                        </svg>
+                        <span>Geolocation</span>
+                      </span>
                     </div>
                     <div class="spatial-action-row skeuo-action-row">
                       <a href="https://safe-sight-admin.vercel.app/login" target="_blank" rel="noopener noreferrer"
@@ -887,9 +952,27 @@
 
                   <div class="skeuo-panel-bottom">
                     <div class="skeuo-tech-stack">
-                      <span class="spatial-tech-pill skeuo-tech-chip">Next.js</span>
-                      <span class="spatial-tech-pill skeuo-tech-chip">Tailwind</span>
-                      <span class="spatial-tech-pill skeuo-tech-chip">CHED Engine</span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <circle cx="12" cy="12" r="10" fill="#0f172a" stroke="#ffffff" stroke-width="1.2"/>
+                          <path d="M8 7.5v9M16 11.5v5M8 7.5l8.5 9.5" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                        <span>Next.js</span>
+                      </span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="#38bdf8" aria-hidden="true">
+                          <path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.336 6.182 14.975 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.336 13.382 8.975 12 6.001 12z"/>
+                        </svg>
+                        <span>Tailwind</span>
+                      </span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <rect x="4" y="4" width="16" height="16" rx="2"/>
+                          <rect x="9" y="9" width="6" height="6"/>
+                          <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/>
+                        </svg>
+                        <span>CHED Engine</span>
+                      </span>
                     </div>
                     <div class="spatial-action-row skeuo-action-row">
                       <a href="https://faculty-evaluation-system.vercel.app/login" target="_blank" rel="noopener noreferrer"
@@ -945,9 +1028,28 @@
 
                   <div class="skeuo-panel-bottom">
                     <div class="skeuo-tech-stack">
-                      <span class="spatial-tech-pill skeuo-tech-chip">HTML5</span>
-                      <span class="spatial-tech-pill skeuo-tech-chip">CSS3 / GSAP</span>
-                      <span class="spatial-tech-pill skeuo-tech-chip">E-Commerce</span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M4 3l1.8 17 6.2 2 6.2-2L20 3H4z" stroke="#e34f26" stroke-width="2" stroke-linejoin="round"/>
+                          <path d="M16.5 7.5H7.5l.4 4h8.2l-.5 5.5-3.6 1.2-3.6-1.2-.2-2" stroke="#e34f26" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                        <span>HTML5</span>
+                      </span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <path d="M4 3l1.8 17 6.2 2 6.2-2L20 3H4z" stroke="#264de4" stroke-width="2" stroke-linejoin="round"/>
+                          <path d="M7.5 7.5h9l-.4 4.5H8l.3 3.5 3.7 1.2 3.7-1.2.3-3" stroke="#264de4" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                        <span>CSS3 / GSAP</span>
+                      </span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                          <line x1="3" y1="6" x2="21" y2="6"/>
+                          <path d="M16 10a4 4 0 0 1-8 0"/>
+                        </svg>
+                        <span>E-Commerce</span>
+                      </span>
                     </div>
                     <div class="spatial-action-row skeuo-action-row">
                       <a href="https://norco-io.vercel.app/index.html" target="_blank" rel="noopener noreferrer"
@@ -1004,9 +1106,30 @@
 
                   <div class="skeuo-panel-bottom">
                     <div class="skeuo-tech-stack">
-                      <span class="spatial-tech-pill skeuo-tech-chip">Database</span>
-                      <span class="spatial-tech-pill skeuo-tech-chip">Fullstack</span>
-                      <span class="spatial-tech-pill skeuo-tech-chip">Inventory</span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                          <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                        </svg>
+                        <span>Database</span>
+                      </span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                          <polyline points="2 17 12 22 22 17"/>
+                          <polyline points="2 12 12 17 22 12"/>
+                        </svg>
+                        <span>Fullstack</span>
+                      </span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                          <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                          <line x1="12" y1="22.08" x2="12" y2="12"/>
+                        </svg>
+                        <span>Inventory</span>
+                      </span>
                     </div>
                     <div class="spatial-action-row skeuo-action-row">
                       <a href="https://library-management-system-port.vercel.app/index.html" target="_blank" rel="noopener noreferrer"
@@ -1064,12 +1187,115 @@
 
                   <div class="skeuo-panel-bottom">
                     <div class="skeuo-tech-stack">
-                      <span class="spatial-tech-pill skeuo-tech-chip">JavaScript</span>
-                      <span class="spatial-tech-pill skeuo-tech-chip">Three.js</span>
-                      <span class="spatial-tech-pill skeuo-tech-chip">Vercel</span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <rect x="3" y="3" width="18" height="18" rx="3" fill="#f7df1e"/>
+                          <path d="M9 16.5c.6.4 1.2.6 1.8.6 1.1 0 1.7-.6 1.7-1.6v-4.5h-1.5v4.4c0 .4-.2.6-.6.6-.3 0-.6-.1-.9-.2l-.5 1.3zm5.7.1c.9 0 1.5-.2 2.1-.6l-.6-1.3c-.4.3-.9.5-1.4.5-.7 0-1.1-.3-1.1-.9 0-.6.5-.9 1.4-1.3 1.3-.5 2-1.1 2-2.3 0-1.3-1-2.2-2.5-2.2-.8 0-1.5.2-2 .5l.5 1.3c.4-.2.9-.4 1.4-.4.6 0 1.1.4 1.1.9 0 .5-.4.8-1.2 1.1-1.4.6-2.2 1.2-2.2 2.4 0 1.4 1.1 2.3 2.5 2.3z" fill="#000000"/>
+                        </svg>
+                        <span>JavaScript</span>
+                      </span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#e2e8f0" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M12 2.5l8.5 4.9v9.8L12 22.1 3.5 17.2V7.4L12 2.5z"/>
+                          <path d="M12 2.5v19.6M3.5 7.4l17 9.8M3.5 17.2l17-9.8"/>
+                        </svg>
+                        <span>Three.js</span>
+                      </span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="#ffffff" aria-hidden="true">
+                          <polygon points="12 4 21 19.5 3 19.5"/>
+                        </svg>
+                        <span>Vercel</span>
+                      </span>
                     </div>
                     <div class="spatial-action-row skeuo-action-row">
                       <a href="https://allyana-s-food-house.vercel.app/" target="_blank" rel="noopener noreferrer"
+                        class="btn-spatial-demo btn-skeuo-primary" onclick="event.stopPropagation()">
+                        <span class="btn-led-dot"></span>
+                        <span>LAUNCH DEMO</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                          <polyline points="15 3 21 3 21 9"></polyline>
+                          <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                      </a>
+                      <button class="btn-spatial-inspect btn-skeuo-secondary" type="button">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="12" y1="16" x2="12" y2="12"></line>
+                          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        <span>TELEMETRY</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Slide 6: Aroma Artisan POS -->
+            <div class="spatial-project-card skeuo-project-card hidden-right" data-index="5" data-title="Aroma Artisan Cafe &amp; Roastery POS"
+              data-badge="POS TERMINAL • RESTAURANT MANAGEMENT"
+              data-description="Enterprise Point-of-Sale terminal &amp; cafe management suite featuring real-time ordering, live sales telemetry, inventory management, customer CRM, and billing settlement."
+              data-image="public/image/aroma-pos.png"
+              data-gallery="public/image/aroma-pos.png:POS Terminal,public/image/aroma-login.png:Sign In Terminal,public/image/aroma-reports.png:Sales Analytics,public/image/aroma-orders.png:Order Pipeline,public/image/aroma-checkout.png:Receipt &amp; Billing,public/image/aroma-inventory.png:Menu Products,public/image/aroma-tables.png:Customer CRM"
+              data-link="https://aroma-artisan-cafe-roastery.vercel.app/index.php">
+              <div class="spatial-card-inner skeuo-card-inner">
+                <!-- Monitor Screen Well (Left) -->
+                <div class="spatial-card-depth-img skeuo-monitor-well">
+                  <div class="skeuo-screen-glare"></div>
+                  <div class="skeuo-screen-scanlines"></div>
+                  <img src="public/image/aroma-pos.png" alt="Aroma Artisan POS" class="spatial-proj-img skeuo-screen-img" loading="lazy" decoding="async">
+                  <div class="spatial-floating-tag skeuo-metal-tag">
+                    <span class="tag-pip"></span>
+                    <span>POS &amp; ROASTERY</span>
+                  </div>
+                </div>
+
+                <!-- Instrumentation Control Faceplate (Right) -->
+                <div class="spatial-card-depth-content skeuo-instrument-panel">
+                  <div class="skeuo-panel-top">
+                    <div class="skeuo-kicker-row">
+                      <span class="spatial-mini-kicker skeuo-silkscreen-kicker">// PRODUCTION UNIT 06</span>
+                    </div>
+                    <h4 class="skeuo-title">Aroma Artisan POS</h4>
+                    <p class="skeuo-desc">Enterprise Point-of-Sale terminal &amp; cafe management suite featuring real-time ordering, live sales telemetry, inventory management, customer CRM, and billing settlement.</p>
+                  </div>
+
+                  <div class="skeuo-panel-bottom">
+                    <div class="skeuo-tech-stack">
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <ellipse cx="12" cy="12" rx="10" ry="7" />
+                          <path d="M7 10h1.5a1.5 1.5 0 0 1 0 3H7v2" />
+                          <path d="M11 10v5M11 12.5h2M13 10v5" />
+                          <path d="M15.5 10H17a1.5 1.5 0 0 1 0 3h-1.5v2" />
+                        </svg>
+                        <span>PHP</span>
+                      </span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <rect x="3" y="3" width="18" height="18" rx="3" fill="#f7df1e"/>
+                          <path d="M9 16.5c.6.4 1.2.6 1.8.6 1.1 0 1.7-.6 1.7-1.6v-4.5h-1.5v4.4c0 .4-.2.6-.6.6-.3 0-.6-.1-.9-.2l-.5 1.3zm5.7.1c.9 0 1.5-.2 2.1-.6l-.6-1.3c-.4.3-.9.5-1.4.5-.7 0-1.1-.3-1.1-.9 0-.6.5-.9 1.4-1.3 1.3-.5 2-1.1 2-2.3 0-1.3-1-2.2-2.5-2.2-.8 0-1.5.2-2 .5l.5 1.3c.4-.2.9-.4 1.4-.4.6 0 1.1.4 1.1.9 0 .5-.4.8-1.2 1.1-1.4.6-2.2 1.2-2.2 2.4 0 1.4 1.1 2.3 2.5 2.3z" fill="#000000"/>
+                        </svg>
+                        <span>JavaScript</span>
+                      </span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#ff6384" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M18 20V10M12 20V4M6 20v-6"/>
+                          <path d="M3 20h18"/>
+                        </svg>
+                        <span>Chart.js</span>
+                      </span>
+                      <span class="spatial-tech-pill skeuo-tech-chip">
+                        <svg class="tech-icon-svg" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                        </svg>
+                        <span>Cloud / Vercel</span>
+                      </span>
+                    </div>
+                    <div class="spatial-action-row skeuo-action-row">
+                      <a href="https://aroma-artisan-cafe-roastery.vercel.app/index.php" target="_blank" rel="noopener noreferrer"
                         class="btn-spatial-demo btn-skeuo-primary" onclick="event.stopPropagation()">
                         <span class="btn-led-dot"></span>
                         <span>LAUNCH DEMO</span>
@@ -1194,9 +1420,25 @@
         </svg>
       </button>
       <div class="modal-hero-preview">
+        <button class="modal-gallery-nav-btn modal-gallery-prev" id="modalGalleryPrevBtn" aria-label="Previous screenshot" title="Previous screenshot" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
         <img id="modalHeroImg" src="public/image/d.png" alt="Project preview" class="modal-img-tag" loading="lazy"
           decoding="async">
-        <div class="modal-gallery-strip" id="modalGalleryStrip" style="display: none;"></div>
+
+        <button class="modal-gallery-nav-btn modal-gallery-next" id="modalGalleryNextBtn" aria-label="Next screenshot" title="Next screenshot" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+
+        <div class="modal-gallery-hud" id="modalGalleryHud" style="display: none;">
+          <span class="modal-gallery-caption" id="modalGalleryCaption">Overview</span>
+          <span class="modal-gallery-badge" id="modalGalleryCounter">01 / 07</span>
+        </div>
       </div>
       <div class="modal-content-area">
         <div class="modal-tag-badge" id="modalBadge">KOTLIN</div>
